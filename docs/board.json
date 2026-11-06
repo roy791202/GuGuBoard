@@ -1,8 +1,168 @@
 {
-    "version":  1,
-    "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-03T15:11:33+08:00",
-    "items":  [
-
-              ]
+  "version": 1,
+  "project": "GuGuBoard",
+  "updatedAt": "2026-11-07T12:00:00+08:00",
+  "items": [
+    {
+      "id": "E-DL",
+      "level": "Epic",
+      "title": "派工器補強（精簡版，取代 dispatch-plan 16 張工單）",
+      "parentId": null,
+      "status": "Backlog",
+      "light": "Gray",
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00",
+      "remark": "前提：serve-ext.ps1 已有定時派工（Update-DispatchTick）、profile 啟動 CLI、逾時、紅燈停機、每次執行一次性 token（不可核准）、log 與停止 API。只補 4 個實際缺口。\n舊單對應：SCH-01/UI-01→T-DL-1；RUN-02/RUN-03→T-DL-2；CMP-01/CMP-02→T-DL-3；SCH-02/RUN-01→T-DL-4。\n延後（真的需要時再開）：Webhook 與 HMAC（同一台機器不需要）、跨主機 fencing／outbox、completion 冪等、每次執行獨立 worktree 與多並行、GOV 三方身分（現有不可核准 token 已防止自我核准）、UI-02/UI-03/INT-01。\n測試：Pester 5，放在 tests/dispatch/，指令 Invoke-Pester tests/dispatch -CI。"
+    },
+    {
+      "id": "F-DL",
+      "level": "Feature",
+      "title": "定時派工可靠性",
+      "parentId": "E-DL",
+      "status": "Backlog",
+      "light": "Gray",
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00"
+    },
+    {
+      "id": "S-DL-1",
+      "level": "Story",
+      "title": "作為管理者，我想要設定派工開始時間，並避免多個執行共用同一份工作目錄",
+      "parentId": "F-DL",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": { "storyPoints": 1 },
+      "acceptance": [
+        "notBefore 未到不派工；到期（含等於）照現有規則派工",
+        "notBefore 沒有時區時拒絕儲存，舊設定不變",
+        "maxConcurrent 固定為 1，介面顯示原因"
+      ],
+      "bdd": [
+        { "id": "S-DL-1-1", "title": "Given notBefore 是未來時間 When 派工 tick 執行 Then 不啟動任何執行", "status": "None" },
+        { "id": "S-DL-1-2", "title": "Given notBefore 等於現在 When 派工 tick 執行 Then 依現有規則領取並啟動一張 Task", "status": "None" },
+        { "id": "S-DL-1-3", "title": "Given 送出不含時區的 notBefore When 儲存派工設定 Then 回 400 E_BAD_TIME 且設定檔不變", "status": "None" },
+        { "id": "S-DL-1-4", "title": "Given 送出 maxConcurrent=3 When 儲存派工設定 Then 存成 1", "status": "None" }
+      ],
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00"
+    },
+    {
+      "id": "T-DL-1",
+      "level": "Task",
+      "title": "派工開始時間閘門與並行上限",
+      "parentId": "S-DL-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": { "hours": 2 },
+      "dependsOn": [],
+      "scenarioIds": ["S-DL-1-1", "S-DL-1-2", "S-DL-1-3", "S-DL-1-4"],
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00",
+      "remark": "可改：serve-ext.ps1 的 Get-DispatchCfg、Update-DispatchTick、Invoke-DispatchApi（/dispatch/config）；board.html 派工設定表單（搜尋 intervalSec）；新增 tests/dispatch/schedule.Tests.ps1。\n做法：設定加 notBefore（ISO 8601，必須含 offset；null 表示立即）。tick 在 Get-Date < notBefore 時跳過，到期時間相等也算到期。/dispatch/config 收到不含時區的值回 400 E_BAD_TIME，不寫檔。maxConcurrent 一律存成 1，因為所有執行共用 $Pj.dir；表單把欄位設成唯讀並顯示「目前所有執行共用同一工作目錄，暫時只能 1」。\n不要做：cron 語法、補跑錯過的 tick、其他設定欄位。\n完成：4 個情境的 Pester 測試全綠，貼出 Invoke-Pester 輸出。"
+    },
+    {
+      "id": "S-DL-2",
+      "level": "Story",
+      "title": "作為管理者，我想要停止或逾時時整個 AI 程序樹都結束，以免殘留程序繼續改檔或耗用 token",
+      "parentId": "F-DL",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": { "storyPoints": 2 },
+      "acceptance": [
+        "逾時與手動停止都會結束父程序與所有子程序",
+        "無法確認結束時不釋放 claim，避免同一張工單再被派出去"
+      ],
+      "bdd": [
+        { "id": "S-DL-2-1", "title": "Given 執行中的 CLI 有子程序 When 達到 timeoutMin Then 父子程序都已結束且 claim 釋放", "status": "None" },
+        { "id": "S-DL-2-2", "title": "Given 執行中的 CLI 有子程序 When 管理者呼叫 /dispatch/kill Then 父子程序都已結束且狀態為 killed", "status": "None" },
+        { "id": "S-DL-2-3", "title": "Given 程序樹無法在 10 秒內結束 When 逾時 Then 執行狀態為 stuck 且下一次 tick 不會再派這張工單", "status": "None" }
+      ],
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00"
+    },
+    {
+      "id": "T-DL-2",
+      "level": "Task",
+      "title": "逾時與停止時終止整個程序樹",
+      "parentId": "S-DL-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": { "hours": 2 },
+      "dependsOn": [],
+      "scenarioIds": ["S-DL-2-1", "S-DL-2-2", "S-DL-2-3"],
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00",
+      "remark": "現況：Update-DispatchTick 的逾時分支與 /dispatch/kill 都只呼叫 $r.proc.Kill()，只會結束父程序；claude/codex CLI 產生的 node、git 子程序會留下來繼續跑。\n可改：serve-ext.ps1 新增 Stop-RunTree($r)，給上述兩處使用；新增 tests/dispatch/kill.Tests.ps1。\n做法：PowerShell 7 用 $r.proc.Kill($true)，Windows PowerShell 5.1 用 taskkill /T /F /PID。之後 WaitForExit(10000)，並確認子程序也已消失。確認失敗時把狀態設成 stuck，保留 claim（until 延長到很遠的時間），Push-All 通知，由人處理。\n測試 fixture：建立一個 profile，exe 為 powershell，執行一支會啟動子程序再 sleep 600 的 ps1。\n完成：3 個情境的測試全綠，並列出測試後確認沒有殘留程序的指令與輸出。"
+    },
+    {
+      "id": "S-DL-3",
+      "level": "Story",
+      "title": "作為管理者，我想要執行結束但 AI 沒回報時工單自動暫停，以免同一張工單被無限重派耗盡 token",
+      "parentId": "F-DL",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": { "storyPoints": 2 },
+      "acceptance": [
+        "執行結束後工單仍是 Todo 或 In Progress，就暫停並寫出原因",
+        "AI 已經移到 In Review 的工單不動",
+        "派工器永遠不會設定 Green 或 Blue"
+      ],
+      "bdd": [
+        { "id": "S-DL-3-1", "title": "Given 執行 exit 0 但工單仍是 In Progress When 執行結束 Then 工單變黃燈、paused，lightReason 含 exit code，並追加 history", "status": "None" },
+        { "id": "S-DL-3-2", "title": "Given 執行逾時且工單仍是 Todo When 執行結束 Then 工單 paused 並寫 pausedReason，下一次 tick 不再派這張", "status": "None" },
+        { "id": "S-DL-3-3", "title": "Given AI 已把工單移到 In Review When 執行結束 Then 工單內容完全不變", "status": "None" }
+      ],
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00"
+    },
+    {
+      "id": "T-DL-3",
+      "level": "Task",
+      "title": "執行結束後核對工單狀態並阻止重派",
+      "parentId": "S-DL-3",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": { "hours": 3 },
+      "dependsOn": [],
+      "scenarioIds": ["S-DL-3-1", "S-DL-3-2", "S-DL-3-3"],
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00",
+      "remark": "現況（會燒 token 的 bug）：Complete-Run 只看 exit code 就釋放 claim。工單如果還是 Todo 或 In Progress，Test-ClaimCandidate 仍然會選中它，下一次 tick（預設 60 秒）會再派同一張，失敗就一直重跑。\n可改：serve-ext.ps1 的 Complete-Run（或新增 Test-RunOutcome 由它呼叫）；新增 tests/dispatch/outcome.Tests.ps1。\n做法：釋放 claim 前讀工單。In Review、Done、Released 不動。In Progress：設 light=Yellow、lightReason=\"派工執行結束但工單未完成（狀態 <status>，exit=<code>，<runStatus>）\"、paused=true、pausedReason 同樣內容。Todo：維持 Gray，設 paused=true 和 pausedReason。兩種情況都要追加 history {at, from, to, by:\"dispatcher\", note} 和一筆含 log 檔名的 note。寫入一律走 Write-BoardChecked，讓 L1–L7 驗證生效。絕不設定 Green 或 Blue。\n完成：3 個情境的測試全綠；另外證明 S-DL-3-2 執行後再跑一次 Update-DispatchTick 時，不會啟動新的執行。"
+    },
+    {
+      "id": "S-DL-4",
+      "level": "Story",
+      "title": "作為管理者，我想要看板伺服器重啟後自動收拾中斷的執行，不留下孤兒程序或卡住的 claim",
+      "parentId": "F-DL",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": { "storyPoints": 3 },
+      "acceptance": [
+        "重啟時仍在跑的派工程序會被終止，工單依 T-DL-3 的規則暫停",
+        "PID 被其他程序重用時不能誤殺",
+        "token 撤銷、claim 釋放"
+      ],
+      "bdd": [
+        { "id": "S-DL-4-1", "title": "Given 有執行紀錄且該程序仍在跑 When 伺服器重啟 Then 程序樹被終止、工單暫停、token 撤銷、claim 釋放", "status": "None" },
+        { "id": "S-DL-4-2", "title": "Given 紀錄的 PID 已被其他程序重用（StartTime 不同） When 伺服器重啟 Then 不終止該程序，只把執行標為 interrupted", "status": "None" },
+        { "id": "S-DL-4-3", "title": "Given 沒有執行紀錄 When 伺服器重啟 Then 不做任何變更", "status": "None" }
+      ],
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00"
+    },
+    {
+      "id": "T-DL-4",
+      "level": "Task",
+      "title": "執行紀錄持久化與重啟後對帳",
+      "parentId": "S-DL-4",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": { "hours": 4 },
+      "dependsOn": ["T-DL-2", "T-DL-3"],
+      "scenarioIds": ["S-DL-4-1", "S-DL-4-2", "S-DL-4-3"],
+      "createdAt": "2026-11-07T12:00:00+08:00",
+      "updatedAt": "2026-11-07T12:00:00+08:00",
+      "remark": "現況：$runs 只存在記憶體。伺服器重啟後，CLI 變成孤兒繼續跑，claim 會卡到 until 過期，介面上也看不到這個執行。\n可改：serve-ext.ps1 的 Start-DispatchRun、Complete-Run，再加一個啟動時呼叫的 Resume-DispatchRuns；新增 tests/dispatch/restart.Tests.ps1。\n做法：Start-DispatchRun 成功後，把 {runId, project, ticket, pid, startTime（Process.StartTime 的 ISO 值）, log, tokenId} 寫進 ConfigDir 的 runs-<project>.json；Complete-Run 時移除這筆。啟動時逐筆讀回：PID 存在且 StartTime 相同，就用 T-DL-2 的 Stop-RunTree 終止；PID 不存在或 StartTime 不同，就不碰任何程序。兩種情況都標成 interrupted，交給 T-DL-3 的核對、撤銷 token、釋放 claim，並在 log 尾端註記。\n不要做：接管仍在跑的程序繼續監看（太複雜，終止後重派比較可預期）。\n完成：3 個情境的測試全綠。"
+    }
+  ]
 }
