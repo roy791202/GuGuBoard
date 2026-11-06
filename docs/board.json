@@ -1,7 +1,7 @@
 {
   "version": 1,
   "project": "GuGuBoard",
-  "updatedAt": "2026-11-07T12:00:00+08:00",
+  "updatedAt": "2026-11-07T12:05:00+08:00",
   "items": [
     {
       "id": "E-DL",
@@ -106,8 +106,15 @@
         }
       ],
       "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T02:25:00+08:00",
-      "remark": "可改：serve-ext.ps1 的 Get-DispatchCfg、Update-DispatchTick、Invoke-DispatchApi（/dispatch/config）；board.html 派工設定表單（搜尋 intervalSec）；新增 tests/dispatch/schedule.Tests.ps1。\n做法：設定加 notBefore（ISO 8601，必須含 offset；null 表示立即）。tick 在 Get-Date < notBefore 時跳過，到期時間相等也算到期。/dispatch/config 收到不含時區的值回 400 E_BAD_TIME，不寫檔。maxConcurrent 一律存成 1，因為所有執行共用 $Pj.dir；表單把欄位設成唯讀並顯示「目前所有執行共用同一工作目錄，暫時只能 1」。\n不要做：cron 語法、補跑錯過的 tick、其他設定欄位。\n完成：4 個情境的 Pester 測試全綠，貼出 Invoke-Pester 輸出。"
+      "updatedAt": "2026-11-07T02:55:00+08:00",
+      "remark": "可改：serve-ext.ps1 的 Get-DispatchCfg、Update-DispatchTick、Invoke-DispatchApi（/dispatch/config）；board.html 派工設定表單（搜尋 intervalSec）；新增 tests/dispatch/schedule.Tests.ps1。\n做法：設定加 notBefore（ISO 8601，必須含 offset；null 表示立即）。tick 在 Get-Date < notBefore 時跳過，到期時間相等也算到期。/dispatch/config 收到不含時區的值回 400 E_BAD_TIME，不寫檔。maxConcurrent 一律存成 1，因為所有執行共用 $Pj.dir；表單把欄位設成唯讀並顯示「目前所有執行共用同一工作目錄，暫時只能 1」。\n不要做：cron 語法、補跑錯過的 tick、其他設定欄位。\n完成：4 個情境的 Pester 測試全綠，貼出 Invoke-Pester 輸出。",
+      "notes": [
+        {
+          "at": "2026-11-07T02:55:00+08:00",
+          "by": "reviewer-AB",
+          "text": "獨立驗證 A（實測）與 B（審查）：ACCEPT；建議補強的測試斷言已採納"
+        }
+      ]
     },
     {
       "id": "S-DL-2",
@@ -181,10 +188,24 @@
           "to": "In Review / Green",
           "by": "claude-dev-agent",
           "note": "READY_FOR_TDD：tests/dispatch/kill.Tests.ps1 3/3 通過；測試後確認沒有殘留程序"
+        },
+        {
+          "at": "2026-11-07T02:45:00+08:00",
+          "from": "In Review / Green",
+          "to": "In Progress / Yellow",
+          "by": "reviewer",
+          "note": "退回：MAJOR-3 非 Windows 時 Stop-RunTree 謊報終止"
+        },
+        {
+          "at": "2026-11-07T02:55:00+08:00",
+          "from": "In Progress / Yellow",
+          "to": "In Review / Green",
+          "by": "claude-dev-agent",
+          "note": "修正：Stop-RunTree 改用 Kill($true)／列舉失敗回 false 標 stuck；重驗通過"
         }
       ],
       "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T02:25:00+08:00",
+      "updatedAt": "2026-11-07T02:55:00+08:00",
       "remark": "現況：Update-DispatchTick 的逾時分支與 /dispatch/kill 都只呼叫 $r.proc.Kill()，只會結束父程序；claude/codex CLI 產生的 node、git 子程序會留下來繼續跑。\n可改：serve-ext.ps1 新增 Stop-RunTree($r)，給上述兩處使用；新增 tests/dispatch/kill.Tests.ps1。\n做法：PowerShell 7 用 $r.proc.Kill($true)，Windows PowerShell 5.1 用 taskkill /T /F /PID。之後 WaitForExit(10000)，並確認子程序也已消失。確認失敗時把狀態設成 stuck，保留 claim（until 延長到很遠的時間），Push-All 通知，由人處理。\n測試 fixture：建立一個 profile，exe 為 powershell，執行一支會啟動子程序再 sleep 600 的 ps1。\n完成：3 個情境的測試全綠，並列出測試後確認沒有殘留程序的指令與輸出。"
     },
     {
@@ -241,7 +262,7 @@
       "tdd": "Green",
       "tests": {
         "status": "Green",
-        "passed": 4,
+        "passed": 7,
         "failed": 0
       },
       "owner": "claude-dev-agent",
@@ -260,10 +281,24 @@
           "to": "In Review / Green",
           "by": "claude-dev-agent",
           "note": "READY_FOR_TDD：tests/dispatch/outcome.Tests.ps1 4/4 通過；暫停寫不進看板時改為停掉派工器"
+        },
+        {
+          "at": "2026-11-07T02:45:00+08:00",
+          "from": "In Review / Green",
+          "to": "In Progress / Yellow",
+          "by": "reviewer",
+          "note": "退回：BLOCKER history/notes 巢狀、MAJOR-1 紅燈降黃、MAJOR-2 例外路徑無限重派"
+        },
+        {
+          "at": "2026-11-07T02:55:00+08:00",
+          "from": "In Progress / Yellow",
+          "to": "In Review / Green",
+          "by": "claude-dev-agent",
+          "note": "修正：history/notes 不走 Get-V、保留紅燈交紅燈停機、例外也停派工器；新增 3 測試重驗通過"
         }
       ],
       "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T02:25:00+08:00",
+      "updatedAt": "2026-11-07T02:55:00+08:00",
       "remark": "現況（會燒 token 的 bug）：Complete-Run 只看 exit code 就釋放 claim。工單如果還是 Todo 或 In Progress，Test-ClaimCandidate 仍然會選中它，下一次 tick（預設 60 秒）會再派同一張，失敗就一直重跑。\n可改：serve-ext.ps1 的 Complete-Run（或新增 Test-RunOutcome 由它呼叫）；新增 tests/dispatch/outcome.Tests.ps1。\n做法：釋放 claim 前讀工單。In Review、Done、Released 不動。In Progress：設 light=Yellow、lightReason=\"派工執行結束但工單未完成（狀態 <status>，exit=<code>，<runStatus>）\"、paused=true、pausedReason 同樣內容。Todo：維持 Gray，設 paused=true 和 pausedReason。兩種情況都要追加 history {at, from, to, by:\"dispatcher\", note} 和一筆含 log 檔名的 note。寫入一律走 Write-BoardChecked，讓 L1–L7 驗證生效。絕不設定 Green 或 Blue。\n完成：3 個情境的測試全綠；另外證明 S-DL-3-2 執行後再跑一次 Update-DispatchTick 時，不會啟動新的執行。"
     },
     {
@@ -342,10 +377,24 @@
           "to": "In Review / Green",
           "by": "claude-dev-agent",
           "note": "READY_FOR_TDD：tests/dispatch/restart.Tests.ps1 3/3 通過；對帳在啟動後第一次 tick 執行"
+        },
+        {
+          "at": "2026-11-07T02:45:00+08:00",
+          "from": "In Review / Green",
+          "to": "In Progress / Yellow",
+          "by": "reviewer-A",
+          "note": "退回：依賴的 BLOCKER 使已有 history 的工單暫停失敗"
+        },
+        {
+          "at": "2026-11-07T02:55:00+08:00",
+          "from": "In Progress / Yellow",
+          "to": "In Review / Green",
+          "by": "claude-dev-agent",
+          "note": "修正：隨 T-DL-3 修正；Resume 每筆 try、殺不掉保留 stuck；重驗通過"
         }
       ],
       "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T02:25:00+08:00",
+      "updatedAt": "2026-11-07T02:55:00+08:00",
       "remark": "現況：$runs 只存在記憶體。伺服器重啟後，CLI 變成孤兒繼續跑，claim 會卡到 until 過期，介面上也看不到這個執行。\n可改：serve-ext.ps1 的 Start-DispatchRun、Complete-Run，再加一個啟動時呼叫的 Resume-DispatchRuns；新增 tests/dispatch/restart.Tests.ps1。\n做法：Start-DispatchRun 成功後，把 {runId, project, ticket, pid, startTime（Process.StartTime 的 ISO 值）, log, tokenId} 寫進 ConfigDir 的 runs-<project>.json；Complete-Run 時移除這筆。啟動時逐筆讀回：PID 存在且 StartTime 相同，就用 T-DL-2 的 Stop-RunTree 終止；PID 不存在或 StartTime 不同，就不碰任何程序。兩種情況都標成 interrupted，交給 T-DL-3 的核對、撤銷 token、釋放 claim，並在 log 尾端註記。\n不要做：接管仍在跑的程序繼續監看（太複雜，終止後重派比較可預期）。\n完成：3 個情境的測試全綠。"
     }
   ]

@@ -49,6 +49,22 @@ function Set-TicketStatus($Pj, [string]$Status, [string]$Light) {
   $b = Read-BoardObj $Pj; $it = Find-Item $b 'T-1'; $it['status'] = $Status; $it['light'] = $Light
   [IO.File]::WriteAllText($Pj.json, (ConvertTo-BoardText $b), [Text.UTF8Encoding]::new($false))
 }
+function Set-TicketFields($Pj, [hashtable]$Fields) {   # 直接改工單欄位（模擬 AI 或既有看板內容）
+  $b = Read-BoardObj $Pj; $it = Find-Item $b 'T-1'; foreach ($k in $Fields.Keys) { $it[$k] = $Fields[$k] }
+  [IO.File]::WriteAllText($Pj.json, (ConvertTo-BoardText $b), [Text.UTF8Encoding]::new($false))
+}
+function Add-TicketHistory($Pj, [string]$Note) {   # 給工單預先放一筆 history（展平舊陣列，避免巢狀）
+  $b = Read-BoardObj $Pj; $it = Find-Item $b 'T-1'
+  $h = @(); if ($it.Contains('history') -and $null -ne $it['history']) { $h = @($it['history']) }
+  $it['history'] = @($h + [ordered]@{ at = (Get-NowIso); from = 'Todo / Gray'; to = 'In Progress / Green'; by = 'user'; note = $Note })
+  [IO.File]::WriteAllText($Pj.json, (ConvertTo-BoardText $b), [Text.UTF8Encoding]::new($false))
+}
+function Add-TicketNote($Pj, [string]$Text) {
+  $b = Read-BoardObj $Pj; $it = Find-Item $b 'T-1'
+  $n = @(); if ($it.Contains('notes') -and $null -ne $it['notes']) { $n = @($it['notes']) }
+  $it['notes'] = @($n + [ordered]@{ at = (Get-NowIso); by = 'user'; text = $Text })
+  [IO.File]::WriteAllText($Pj.json, (ConvertTo-BoardText $b), [Text.UTF8Encoding]::new($false))
+}
 function New-FakeProfile([string]$Script, [string[]]$ScriptArgs = @(), [int]$TimeoutMin = 30) {
   [ordered]@{ id = 'fake'; label = 'fake'; exe = 'powershell'; args = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $Fixtures $Script)) + $ScriptArgs; role = 'dev-agent'; timeoutMin = $TimeoutMin }
 }

@@ -9,6 +9,7 @@ Describe 'T-DL-4 重啟後對帳' {
 
   It 'S-DL-4-1 有執行紀錄且程序仍在跑：程序樹被終止、工單暫停、token 撤銷、claim 釋放' {
     $Pj = New-TestProject 'Todo' 'Gray'; $pf = Join-Path $ConfigDir ([guid]::NewGuid().ToString('N') + '.pid')
+    Add-TicketHistory $Pj '既有一筆 history'; Add-TicketNote $Pj '既有一筆 note'   # 真實工單通常已有 history／notes
     Enable-Dispatch $Pj (New-FakeProfile 'spawn-child.ps1' @('-PidFile', $pf))
     Invoke-Tick $Pj
     $r = @(Get-ProjectRuns $Pj)[0]; $parent = $r.proc.Id; $tok = $r.tokenId
