@@ -1229,14 +1229,14 @@ async function admExtra(j){const b=$("admBody");if(!b||!proj)return;const sec=el
   /* 派工器 */
   sec.append(el("h3",null,tr_("派工器（push，預設關閉）")));const dp=el("div");dp.id="dispBox";sec.append(dp);
   const loadDisp=async()=>{const r=await gj(P()+"dispatch");dp.replaceChildren();if(!r.ok){dp.append(el("div","nh",errMsg(r.j)));return;}const c=r.j.config;
-    const en=chk("啟用派工器",c.enabled);en.cb.id="dEn";const sr=chk("紅燈／阻塞時停止並通知",c.stopOnRed!==false);const iv=mkInp(c.intervalSec,null,"number");iv.id="dIv";const mx=mkInp(c.maxConcurrent,null,"number");mx.id="dMax";
+    const en=chk("啟用派工器",c.enabled);en.cb.id="dEn";const sr=chk("紅燈／阻塞時停止並通知",c.stopOnRed!==false);const iv=mkInp(c.intervalSec,null,"number");iv.id="dIv";const mx=mkInp(1,null,"number");mx.id="dMax";mx.readOnly=true;mx.title=tr_("目前所有執行共用同一工作目錄，暫時只能 1");const nb=mkInp(c.notBefore||"","2026-11-08T09:00:00+08:00","text");nb.id="dNb";nb.setAttribute("aria-label",tr_("開始時間"));
     const pf=sel_((c.profiles||[]).map(p=>[p.id,p.label||p.id]),c.profile);pf.id="dProf";const pt=el("textarea");pt.id="dProfiles";pt.rows=6;pt.style.width="100%";pt.value=JSON.stringify(c.profiles,null,1);
     const sv=el("button",null,tr_("儲存"));sv.id="dSave";const m=el("div","ferr");
-    sv.onclick=async()=>{let pl;try{pl=JSON.parse(pt.value);}catch(_){m.textContent="profiles 不是合法 JSON";return;}const x=await pjPost(P()+"dispatch/config",{enabled:en.cb.checked,stopOnRed:sr.cb.checked,intervalSec:+iv.value,maxConcurrent:+mx.value,profiles:pl,profile:pf.value});m.textContent=x.ok?"":errMsg(x.j);if(x.ok)loadDisp();};
+    sv.onclick=async()=>{let pl;try{pl=JSON.parse(pt.value);}catch(_){m.textContent="profiles 不是合法 JSON";return;}const x=await pjPost(P()+"dispatch/config",{enabled:en.cb.checked,stopOnRed:sr.cb.checked,intervalSec:+iv.value,notBefore:nb.value.trim()||null,profiles:pl,profile:pf.value});m.textContent=x.ok?"":errMsg(x.j);if(x.ok)loadDisp();};
     if(c.stoppedReason)dp.append(el("div","gone","⛔ 已自動停止："+c.stoppedReason));
     dp.append(el("div","nh","依間隔領取「可領取」的工單（L1–L7 規則、相依、指派、未被領取），用 profile 的指令（args 陣列，不經過 shell）啟動 CLI；token 放在環境變數 AIPM_AGENT_TOKEN，不能核准 Done／佈署。Copilot、Windsurf 只能 pull。"),
-      en,sr,el("div",null),tr_("間隔（秒）")+" ",iv," "+tr_("同時執行上限")+" ",mx," profile ",pf,pt,sv,m);
-    const rt=el("table","adm");rt.id="runList";(r.j.runs||[]).forEach(x=>{const tr=el("tr");const kb=el("button",null,tr_("停止"));kb.className="runk";kb.disabled=x.status!=="running";kb.onclick=async()=>{if(!confirm("停止 "+x.id+"？"))return;await pjPost(P()+"dispatch/kill",{run:x.id});loadDisp();};
+      en,sr,el("div",null),tr_("間隔（秒）")+" ",iv," "+tr_("同時執行上限")+" ",mx," "+tr_("開始時間（含時區，空白＝立即）")+" ",nb," profile ",pf,el("div","nh",tr_("同時執行上限暫時固定 1：所有執行共用同一工作目錄。執行結束但工單沒完成（沒移到 In Review）時，工單會自動暫停，不會再被派出。")),pt,sv,m);
+    const rt=el("table","adm");rt.id="runList";(r.j.runs||[]).forEach(x=>{const tr=el("tr");const kb=el("button",null,tr_("停止"));kb.className="runk";kb.disabled=x.status!=="running"&&x.status!=="stuck";kb.onclick=async()=>{if(!confirm("停止 "+x.id+"？"))return;await pjPost(P()+"dispatch/kill",{run:x.id});loadDisp();};
       const lb=el("button",null,tr_("看 log"));lb.className="runl";lb.onclick=()=>viewLog(x.id+".log");tr.append(el("td","mono",x.id),el("td",null,x.ticket),el("td",null,x.profile),el("td",null,x.status+(x.exit!=null?"（"+x.exit+"）":"")),el("td",null,when(x.start)),(()=>{const d=el("td");d.append(lb," ",kb);return d;})());rt.append(tr);});
     dp.append(el("h4",null,tr_("執行紀錄")),rt);const lv=el("pre","mono runlog");lv.id="runLog";dp.append(lv);
     const known=new Set((r.j.runs||[]).map(x=>x.id+".log"));(r.j.logs||[]).filter(f=>!known.has(f)).slice(0,20).forEach(f=>{const a=el("button","small",f);a.onclick=()=>viewLog(f);dp.append(a," ");});};

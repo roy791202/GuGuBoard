@@ -427,9 +427,18 @@ $DEFAULT_PROFILES = @(
 # Copilot、Windsurf 等只在編輯器裡執行的工具沒有 CLI：只能用「複製 AI 提示詞」＋ pull（claim）
 function Get-DispatchFile([string]$pid_) { Join-Path $ConfigDir "dispatch-$pid_.json" }
 function Get-DispatchCfg([string]$pid_) {
-  $c = [ordered]@{ enabled = $false; intervalSec = 60; maxConcurrent = 1; profile = 'claude'; profiles = $DEFAULT_PROFILES; stoppedReason = '' }
+  $c = [ordered]@{ enabled = $false; intervalSec = 60; maxConcurrent = 1; notBefore = $null; profile = 'claude'; profiles = $DEFAULT_PROFILES; stoppedReason = '' }
   $f = Get-DispatchFile $pid_; if (Test-Path -LiteralPath $f) { try { $o = Get-Content -LiteralPath $f -Raw -Encoding UTF8 | ConvertFrom-Json; foreach ($p in $o.PSObject.Properties) { $c[$p.Name] = $p.Value } } catch {} }
+  $c.maxConcurrent = 1   # 所有執行共用專案工作目錄（$Pj.dir），在每次執行有獨立 worktree 之前只能 1
+  if ($c.notBefore -is [datetime]) { $c.notBefore = ([DateTimeOffset]$c.notBefore).ToString('yyyy-MM-dd\THH\:mm\:sszzz', [Globalization.CultureInfo]::InvariantCulture) }   # PowerShell 7 的 ConvertFrom-Json 會把日期字串轉成 DateTime
   $c
+}
+# notBefore：ISO 8601 且必須含時區（Z 或 ±hh:mm）；回傳 DateTimeOffset，格式不對回傳 $null
+function ConvertTo-NotBefore($v) {
+  if ($v -is [datetime]) { if ($v.Kind -eq [DateTimeKind]::Unspecified) { return $null }; return [DateTimeOffset]$v }   # 沒有時區的字串在 PowerShell 7 會變成 Unspecified
+  $s = [string]$v; if ($s -notmatch '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$') { return $null }
+  $d = [DateTimeOffset]::MinValue
+  if ([DateTimeOffset]::TryParse($s, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$d)) { return $d }; $null
 }
 function Save-DispatchCfg([string]$pid_, $c) { Initialize-ConfigDir; ([pscustomobject]$c) | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Get-DispatchFile $pid_) -Encoding UTF8 }
 function Test-Profile($p) {
@@ -455,16 +464,107 @@ function Start-DispatchRun($Pj, $cfg, $prof, [string]$ticket) {
   try { $p = [Diagnostics.Process]::Start($psi); $p.StandardInput.Close() } catch { [IO.File]::WriteAllText($log, "無法啟動 $($prof.exe)：$($_.Exception.Message)`n", [Text.UTF8Encoding]::new($false)); Remove-Claim $Pj.id $ticket; return $null }
   $runs[$rid] = @{ id = $rid; project = $Pj.id; ticket = $ticket; profile = [string]$prof.id; proc = $p; out = $p.StandardOutput.ReadToEndAsync(); err = $p.StandardError.ReadToEndAsync(); start = Get-Date; timeoutMin = [int]$prof.timeoutMin; log = $log; tokenId = $t.rec.id; status = 'running' }
   [IO.File]::WriteAllText($log, "# $rid`n# 指令：$($prof.exe) $(($a | ForEach-Object { if ($_.Length -gt 80) { $_.Substring(0, 80) + '…' } else { $_ } }) -join ' ')`n# 開始：$(Get-NowIso)`n", [Text.UTF8Encoding]::new($false))
+  Save-RunRecords $Pj.id
   Write-Host "$(Get-Date -f HH:mm:ss) [$($Pj.id)] 派工：$ticket → $($prof.id)"; Push-All 'dispatch' @{ p = $Pj.id; run = $rid; status = 'running' } $Pj.id
   $rid
 }
 function Remove-Claim([string]$pid_, [string]$ticket) { $cl = Get-Claims $pid_; if ($cl.ContainsKey($ticket)) { $cl.Remove($ticket); Save-Claims $pid_ } }
+function Revoke-RunToken([string]$tokenId) { $l = @(Read-AgentTokens); foreach ($t in $l) { if ($t.id -eq $tokenId) { $t.revoked = $true } }; Save-AgentTokens $l }   # 每次執行用完即撤銷
+
+# ---- 執行紀錄持久化（T-DL-4）：伺服器重啟後才知道哪些 CLI 可能還在跑 ----
+$DispState = @{ resumed = $false }
+function Get-RunRecordFile([string]$pid_) { Join-Path $ConfigDir "runs-$pid_.json" }
+function Get-ProcStartIso($p) { try { $p.StartTime.ToString('o') } catch { '' } }
+function Save-RunRecords([string]$pid_) {   # 只存還沒結束（running／stuck）的執行
+  Initialize-ConfigDir
+  $l = @($runs.Values | Where-Object { $_.project -eq $pid_ -and $_.status -in 'running', 'stuck' } | ForEach-Object {
+      [ordered]@{ id = $_.id; project = $_.project; ticket = $_.ticket; pid = $(try { $_.proc.Id } catch { 0 }); startTime = $(if ($_.startTime) { $_.startTime } else { Get-ProcStartIso $_.proc }); log = $_.log; tokenId = $_.tokenId; status = $_.status } })
+  [IO.File]::WriteAllText((Get-RunRecordFile $pid_), (ConvertTo-Json -InputObject @($l) -Depth 4), [Text.UTF8Encoding]::new($false))
+}
+function Resume-DispatchRuns {   # 啟動後第一次 tick：收拾上一次伺服器留下的執行（不接管，終止後交給核對流程）
+  foreach ($Pj in @($projects.Values)) {
+    $f = Get-RunRecordFile $Pj.id; if (-not (Test-Path -LiteralPath $f)) { continue }
+    $recs = @(); try { $recs = @(Get-Content -LiteralPath $f -Raw -Encoding UTF8 | ConvertFrom-Json | Where-Object { $_ }) } catch { Write-Warning "[$($Pj.id)] 無法讀取執行紀錄 $f" }
+    foreach ($rec in $recs) {
+      if ($runs.ContainsKey([string]$rec.id)) { continue }
+      $note = '伺服器重啟時程序已不存在'
+      $p = $null; try { $p = [Diagnostics.Process]::GetProcessById([int]$rec.pid) } catch {}
+      if ($p) {
+        $st = [string]$rec.startTime; if ($st -and $rec.startTime -is [datetime]) { $st = $rec.startTime.ToString('o') }
+        if ($st -and (Get-ProcStartIso $p) -eq $st) { $note = $(if (Stop-RunTree $p) { '伺服器重啟時程序仍在執行，已終止整個程序樹' } else { '伺服器重啟時程序仍在執行，但無法確認已終止（需要人處理）' }) }
+        else { $note = "PID $($rec.pid) 已被其他程序使用，未終止" }
+      }
+      try { [IO.File]::AppendAllText([string]$rec.log, "`n# 結束：$(Get-NowIso)　狀態：interrupted　$note`n", [Text.UTF8Encoding]::new($false)) } catch {}
+      if ($rec.tokenId) { Revoke-RunToken ([string]$rec.tokenId) }
+      Set-TicketAfterRun $Pj ([string]$rec.ticket) 'interrupted' '?' ([string]$rec.log)
+      Remove-Claim $Pj.id ([string]$rec.ticket)
+      Write-Host "$(Get-Date -f HH:mm:ss) [$($Pj.id)] 派工：$($rec.ticket) 上次執行中斷（$note）"
+    }
+    Save-RunRecords $Pj.id
+  }
+}
+
+# ---- 終止整個程序樹（T-DL-2）：AI CLI 會再啟動 node、git 等子程序，只 Kill 父程序會留下它們 ----
+function Get-ProcTreeIds([int]$rootId) {
+  $all = @(Get-CimInstance Win32_Process -Property ProcessId, ParentProcessId, CreationDate -ErrorAction SilentlyContinue)
+  $by = @{}; foreach ($x in $all) { $by[[int]$x.ProcessId] = $x }
+  $ids = [Collections.Generic.List[int]]::new(); $ids.Add($rootId); $i = 0
+  while ($i -lt $ids.Count) {
+    $pp = $ids[$i]; $pc = $by[$pp]
+    foreach ($x in $all) {   # 子程序必須比父程序晚建立，避免 PID 重用時誤認
+      $cid = [int]$x.ProcessId
+      if ([int]$x.ParentProcessId -eq $pp -and $cid -ne $pp -and -not $ids.Contains($cid) -and (-not $pc -or -not $pc.CreationDate -or $x.CreationDate -ge $pc.CreationDate)) { $ids.Add($cid) }
+    }
+    $i++
+  }
+  $ids.ToArray()
+}
+function Stop-RunTree($proc, [int]$waitMs = 10000) {   # 回傳 $true＝整棵樹都已結束
+  $ids = @($proc.Id); try { $ids = @(Get-ProcTreeIds $proc.Id) } catch {}
+  try { $proc.Kill() } catch {}
+  foreach ($id in $ids) { if ($id -ne $proc.Id) { try { Stop-Process -Id $id -Force -ErrorAction Stop } catch {} } }
+  $deadline = (Get-Date).AddMilliseconds($waitMs)
+  do {
+    $alive = @($ids | Where-Object { $id = $_; if ($id -eq $proc.Id) { try { -not $proc.HasExited } catch { $false } } else { [bool](Get-Process -Id $id -ErrorAction SilentlyContinue) } })
+    if (-not $alive.Count) { return $true }
+    Start-Sleep -Milliseconds 200
+  } while ((Get-Date) -lt $deadline)
+  $false
+}
+function Stop-Run($r, [string]$status) {   # 逾時／手動停止；無法確認結束就標 stuck，保留 claim 讓同一張不被重派
+  if (Stop-RunTree $r.proc) { Complete-Run $r $status; return }
+  $r.status = 'stuck'; Revoke-RunToken $r.tokenId
+  $cl = Get-Claims $r.project; if ($cl.ContainsKey($r.ticket)) { $cl[$r.ticket].until = (Get-Date).AddYears(10); Save-Claims $r.project }
+  [IO.File]::AppendAllText($r.log, "`n# $(Get-NowIso)　無法確認程序樹已結束（$status），標為 stuck，需要人處理`n", [Text.UTF8Encoding]::new($false))
+  $Pj = $projects[$r.project]; if ($Pj) { Set-TicketAfterRun $Pj $r.ticket 'stuck' '?' $r.log }
+  Save-RunRecords $r.project
+  Push-All 'dispatch' @{ p = $r.project; run = $r.id; status = 'stuck' } $r.project
+}
+
+# ---- 執行結束後核對工單（T-DL-3）：工單還沒完成就暫停，避免下一次 tick 重派同一張而無限耗用 token ----
+function Set-TicketAfterRun($Pj, [string]$ticket, [string]$runStatus, $code, [string]$log) {
+  $b = Read-BoardObj $Pj; $it = Find-Item $b $ticket; if (-not $it) { return }
+  $st = [string]$it['status']; if ($st -cnotin 'Todo', 'In Progress') { return }   # In Review／Done 等：AI 已交付或有人處理，不動
+  $why = "派工執行結束但工單未完成（狀態 $st，exit=$code，$runStatus）"; $now = Get-NowIso; $from = "$st / $($it['light'])"
+  if ([string](Get-V $it 'updatedAt') -ceq $now) { Start-Sleep -Milliseconds (1005 - (Get-Date).Millisecond); $now = Get-NowIso }   # updatedAt 只到秒；同一秒內再改會被 L7 判成沒更新
+  if ($st -ceq 'In Progress') { $it['light'] = 'Yellow'; $it['lightReason'] = $why }
+  $it['paused'] = $true; $it['pausedReason'] = $why; $it['updatedAt'] = $now
+  $it['history'] = @(@(Get-V $it 'history' | Where-Object { $_ }) + @([ordered]@{ at = $now; from = $from; to = "$st / $($it['light'])"; by = 'dispatcher'; note = $why }))
+  $it['notes'] = @(@(Get-V $it 'notes' | Where-Object { $_ }) + @([ordered]@{ at = $now; by = 'dispatcher'; text = "$why；log：$(Split-Path -Leaf $log)" }))
+  $errs = @(Write-BoardChecked $Pj $b 'dev-agent' 'dispatch-outcome')
+  if ($errs.Count) {   # 工單暫停不了就停掉整個專案的派工器，寧可停也不要無限重派
+    Write-Warning "[$($Pj.id)] 無法暫停工單 ${ticket}：$($errs -join '；')"
+    $c = Get-DispatchCfg $Pj.id; if ($c.enabled) { $c.enabled = $false; $c.stoppedReason = "工單 $ticket 執行結束但無法自動暫停，派工器已停止（需要人處理）"; Save-DispatchCfg $Pj.id $c; Push-All 'dispatch' @{ p = $Pj.id; stopped = $c.stoppedReason } $Pj.id }
+  }
+}
 function Complete-Run($r, [string]$status) {
   $r.status = $status; $o = ''; $e = ''; try { if ($r.out.Wait(2000)) { $o = $r.out.Result } } catch {}; try { if ($r.err.Wait(2000)) { $e = $r.err.Result } } catch {}
   $code = $(try { $r.proc.ExitCode } catch { -1 })
   [IO.File]::AppendAllText($r.log, "`n## stdout`n$o`n## stderr`n$e`n# 結束：$(Get-NowIso)　狀態：$status　exit=$code`n", [Text.UTF8Encoding]::new($false))
-  $l = @(Read-AgentTokens); foreach ($t in $l) { if ($t.id -eq $r.tokenId) { $t.revoked = $true } }; Save-AgentTokens $l   # 每次執行用完即撤銷
+  Revoke-RunToken $r.tokenId
+  $Pj = $projects[$r.project]; if ($Pj) { try { Set-TicketAfterRun $Pj $r.ticket $status $code $r.log } catch { Write-Warning "[$($r.project)] 核對工單 $($r.ticket) 失敗：$($_.Exception.Message)" } }
   Remove-Claim $r.project $r.ticket; $r.exit = $code; $r.end = Get-Date
+  Save-RunRecords $r.project
   Push-All 'dispatch' @{ p = $r.project; run = $r.id; status = $status } $r.project
 }
 function Stop-DispatchOnRed($Pj, [string]$id) {
@@ -473,15 +573,17 @@ function Stop-DispatchOnRed($Pj, [string]$id) {
   [void](Send-Notify $Pj 'dispatch-stop' $c.stoppedReason '派工器已停止' $null); Push-All 'dispatch' @{ p = $Pj.id; stopped = $c.stoppedReason } $Pj.id
 }
 function Update-DispatchTick {
+  if (-not $DispState.resumed) { $DispState.resumed = $true; try { Resume-DispatchRuns } catch { Write-Warning "派工器：重啟對帳失敗：$($_.Exception.Message)" } }
   foreach ($r in @($runs.Values | Where-Object { $_.status -eq 'running' })) {
     if ($r.proc.HasExited) { Complete-Run $r $(if ($r.proc.ExitCode -eq 0) { 'done' } else { 'failed' }) }
-    elseif (((Get-Date) - $r.start).TotalMinutes -ge $r.timeoutMin) { try { $r.proc.Kill() } catch {}; [void]$r.proc.WaitForExit(3000); Complete-Run $r 'timeout' }
+    elseif (((Get-Date) - $r.start).TotalMinutes -ge $r.timeoutMin) { Stop-Run $r 'timeout' }
   }
   foreach ($Pj in $projects.Values) {
     $c = Get-DispatchCfg $Pj.id; if (-not $c.enabled) { continue }
+    if ($c.notBefore) { $nb = ConvertTo-NotBefore $c.notBefore; if (-not $nb -or [DateTimeOffset]::Now -lt $nb) { continue } }   # 開始時間未到（或格式壞掉）就不派；到期時間相等算到期
     if ($Pj.dispNext -and (Get-Date) -lt $Pj.dispNext) { continue }; $Pj.dispNext = (Get-Date).AddSeconds([Math]::Max(5, [int]$c.intervalSec))
-    $running = @($runs.Values | Where-Object { $_.project -eq $Pj.id -and $_.status -eq 'running' }).Count
-    if ($running -ge [Math]::Max(1, [int]$c.maxConcurrent)) { continue }
+    $running = @($runs.Values | Where-Object { $_.project -eq $Pj.id -and $_.status -in 'running', 'stuck' }).Count   # stuck 的程序可能還在改檔，也算在上限內
+    if ($running -ge 1) { continue }
     $prof = @($c.profiles) | Where-Object { $_.id -eq $c.profile } | Select-Object -First 1; if (-not $prof -or (Test-Profile $prof)) { continue }
     $b = Read-BoardObj $Pj
     if (@($b['items'] | Where-Object { (IsObj $_) -and $_['light'] -ceq 'Red' -and $_['status'] -cin 'In Progress', 'In Review' }).Count -and $c.stopOnRed -ne $false) { Stop-DispatchOnRed $Pj (@($b['items'] | Where-Object { (IsObj $_) -and $_['light'] -ceq 'Red' })[0]['id']); continue }
@@ -501,12 +603,18 @@ function Invoke-DispatchApi($req, $res, $s, $Pj, [string]$sub) {
   if ($req.HttpMethod -ne 'POST') { return Send-Err $res 405 'E_METHOD' }
   if (-not $req.IsLocal -or (Test-External $req)) { return Send-Err $res 403 'E_NOT_LOCAL' }
   $in = Read-BodyMax $req 65536; if (-not $in) { return Send-Err $res 400 'E_BAD_REQUEST' }
-  if ($sub -eq '/dispatch/kill') { $r = $runs[[string]$in.run]; if (-not $r -or $r.project -ne $Pj.id) { return Send-Err $res 404 'E_NOT_FOUND' }; if ($r.status -eq 'running') { try { $r.proc.Kill() } catch {}; [void]$r.proc.WaitForExit(3000); Complete-Run $r 'killed' }; return Send-Json $res @{ ok = $true } }
+  if ($sub -eq '/dispatch/kill') { $r = $runs[[string]$in.run]; if (-not $r -or $r.project -ne $Pj.id) { return Send-Err $res 404 'E_NOT_FOUND' }; if ($r.status -in 'running', 'stuck') { Stop-Run $r 'killed' }; return Send-Json $res @{ ok = $true; status = $r.status } }
   if ($sub -eq '/dispatch/config') {
     $c = Get-DispatchCfg $Pj.id
+    if ($in.PSObject.Properties['notBefore']) {   # 先驗證，錯了整筆不存
+      if ($null -eq $in.notBefore -or [string]$in.notBefore -eq '') { $c.notBefore = $null }
+      elseif (-not (ConvertTo-NotBefore $in.notBefore)) { return Send-Json $res @{ error = 'E_BAD_TIME'; message = '開始時間必須是含時區的 ISO 8601，例如 2026-11-08T09:00:00+08:00' } 400 }
+      elseif ($in.notBefore -is [datetime]) { $c.notBefore = ([DateTimeOffset]$in.notBefore).ToString('yyyy-MM-dd\THH\:mm\:sszzz', [Globalization.CultureInfo]::InvariantCulture) }
+      else { $c.notBefore = [string]$in.notBefore }
+    }
     foreach ($k in 'enabled', 'stopOnRed') { if ($in.PSObject.Properties[$k]) { $c[$k] = ($in.$k -eq $true) } }
     if ([string]$in.intervalSec -match '^\d{1,5}$') { $c.intervalSec = [Math]::Max(5, [int]$in.intervalSec) }
-    if ([string]$in.maxConcurrent -match '^\d{1,2}$') { $c.maxConcurrent = [Math]::Min(8, [Math]::Max(1, [int]$in.maxConcurrent)) }
+    $c.maxConcurrent = 1   # 共用工作目錄，暫時固定 1（傳入的值忽略）
     if ($in.profiles) { $pl = @(); foreach ($p in @($in.profiles)) { $e = Test-Profile $p; if ($e) { return Send-Json $res @{ error = 'E_PROFILE'; message = $e } 400 }; $tm = 30; if ([string]$p.timeoutMin -match '^\d{1,4}$') { $tm = [Math]::Min(600, [Math]::Max(1, [int]$p.timeoutMin)) }
       $pl += [ordered]@{ id = [string]$p.id; label = [string]$p.label; exe = [string]$p.exe; args = @($p.args | ForEach-Object { [string]$_ }); role = [string]$p.role; timeoutMin = $tm } }; $c.profiles = $pl }
     if ($in.profile) { if (-not (@($c.profiles) | Where-Object { $_.id -eq [string]$in.profile })) { return Send-Json $res @{ error = 'E_PROFILE'; message = '找不到 profile' } 400 }; $c.profile = [string]$in.profile }
