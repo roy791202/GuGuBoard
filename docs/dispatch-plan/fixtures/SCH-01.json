@@ -1,0 +1,46 @@
+{
+  "task": "SCH-01",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-SCH-01-1",
+      "given": "有效排程在開始前一秒",
+      "when": "評估派工",
+      "then": "不產生事件",
+      "test": "TDD-SCH-01-1",
+      "level": "L2",
+      "result": "PASS"
+    },
+    {
+      "id": "S-SCH-01-2",
+      "given": "有效排程剛好到期",
+      "when": "連續評估兩次",
+      "then": "只保存一個派工意圖",
+      "test": "TDD-SCH-01-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-SCH-01-3",
+      "given": "時間未含時區或間隔小於五秒",
+      "when": "儲存設定",
+      "then": "拒絕設定且保留舊值",
+      "test": "TDD-SCH-01-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

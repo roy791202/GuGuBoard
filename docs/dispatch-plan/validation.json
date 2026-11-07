@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "layer": "planning-artifact structural consistency only",
+  "modules": 6,
+  "tasks": 16,
+  "scenarios": 48,
+  "productTests": "NOT RUN",
+  "validRED": "See red/gate-status.json and driver-evidence/all.json",
+  "boardImport": "NOT RUN",
+  "readyForImplementation": false
+}

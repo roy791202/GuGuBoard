@@ -1,0 +1,1862 @@
+{
+  "mutationControls": [
+    {
+      "case": "TDD-RUN-02-1",
+      "positiveControl": "run-claim-script",
+      "positiveStatus": "PASS",
+      "mutation": "claim-wrong-owner",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "lease owner is a real authenticated contender"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "two contenders cross actual barrier",
+          "actual": 2,
+          "expected": 2,
+          "pass": true
+        },
+        {
+          "assertion": "independently authenticated workers",
+          "actual": 2,
+          "expected": 2,
+          "pass": true
+        },
+        {
+          "assertion": "one valid lease",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "one real process start",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "lease owner is a real authenticated contender",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "one real process adapter start",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "started process owned by winning generation",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "two contenders cross actual barrier",
+          "actual": 2,
+          "expected": 2,
+          "pass": true
+        },
+        {
+          "assertion": "independently authenticated workers",
+          "actual": 2,
+          "expected": 2,
+          "pass": true
+        },
+        {
+          "assertion": "one valid lease",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "one real process start",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "lease owner is a real authenticated contender",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "one real process adapter start",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "started process owned by winning generation",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "positiveEvidence": {
+        "id": "TDD-RUN-02-1",
+        "bdd": "S-RUN-02-1",
+        "status": "PASS",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "two contenders cross actual barrier",
+            "actual": 2,
+            "expected": 2,
+            "pass": true
+          },
+          {
+            "assertion": "independently authenticated workers",
+            "actual": 2,
+            "expected": 2,
+            "pass": true
+          },
+          {
+            "assertion": "one valid lease",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "one real process start",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "lease owner is a real authenticated contender",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "one real process adapter start",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "started process owned by winning generation",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Board",
+            "method": "Claim",
+            "args": {
+              "ticket": "FIX-1",
+              "owner": "worker-a"
+            }
+          },
+          {
+            "kind": "port",
+            "port": "Process",
+            "method": "Start",
+            "args": {
+              "ticket": "FIX-1",
+              "runId": "control-worker-a",
+              "owner": "worker-a",
+              "generation": 1
+            }
+          },
+          {
+            "kind": "port",
+            "port": "Board",
+            "method": "Claim",
+            "args": {
+              "ticket": "FIX-1",
+              "owner": "worker-b"
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "RunNext",
+            "pid": "control-thread-3192",
+            "trustedPrincipal": {
+              "actor": "worker-a",
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "mode": "run-claim-script",
+            "request": {}
+          },
+          {
+            "operation": "RunNext",
+            "pid": "control-thread-26372",
+            "trustedPrincipal": {
+              "actor": "worker-b",
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            },
+            "mode": "run-claim-script",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {
+            "FIX-1": {
+              "generation": 1,
+              "owner": "worker-a",
+              "until": 1794014100
+            }
+          },
+          "runs": [
+            {
+              "pid": 32444,
+              "created": 134384586274557034,
+              "descendant": 14576,
+              "descendantCreated": 134384586276237712,
+              "ticket": "FIX-1",
+              "runId": "control-worker-a",
+              "owner": "worker-a",
+              "generation": 1,
+              "session": "session-32444",
+              "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-02-1-4pno9ifp\\workspaces\\47ffa2e0d5a876ae",
+              "completionSignal": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-02-1-4pno9ifp\\tree-0.json.done"
+            }
+          ],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:59282"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "generations": {
+            "FIX-1": 1
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+          "scenarioDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      },
+      "mutantEvidence": {
+        "id": "TDD-RUN-02-1",
+        "bdd": "S-RUN-02-1",
+        "status": "BEHAVIOR_RED",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "two contenders cross actual barrier",
+            "actual": 2,
+            "expected": 2,
+            "pass": true
+          },
+          {
+            "assertion": "independently authenticated workers",
+            "actual": 2,
+            "expected": 2,
+            "pass": true
+          },
+          {
+            "assertion": "one valid lease",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "one real process start",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "lease owner is a real authenticated contender",
+            "actual": false,
+            "expected": true,
+            "pass": false
+          },
+          {
+            "assertion": "one real process adapter start",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "started process owned by winning generation",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Board",
+            "method": "Claim",
+            "args": {
+              "ticket": "FIX-1",
+              "owner": "attacker"
+            }
+          },
+          {
+            "kind": "port",
+            "port": "Board",
+            "method": "Claim",
+            "args": {
+              "ticket": "FIX-1",
+              "owner": "attacker"
+            }
+          },
+          {
+            "kind": "port",
+            "port": "Process",
+            "method": "Start",
+            "args": {
+              "ticket": "FIX-1",
+              "runId": "control-worker-a",
+              "owner": "attacker",
+              "generation": 1
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "RunNext",
+            "pid": "control-thread-12812",
+            "trustedPrincipal": {
+              "actor": "worker-b",
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            },
+            "mode": "claim-wrong-owner",
+            "request": {}
+          },
+          {
+            "operation": "RunNext",
+            "pid": "control-thread-1768",
+            "trustedPrincipal": {
+              "actor": "worker-a",
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "mode": "claim-wrong-owner",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {
+            "FIX-1": {
+              "generation": 1,
+              "owner": "attacker",
+              "until": 1794014100
+            }
+          },
+          "runs": [
+            {
+              "pid": 26436,
+              "created": 134384586285105044,
+              "descendant": 31068,
+              "descendantCreated": 134384586286559966,
+              "ticket": "FIX-1",
+              "runId": "control-worker-a",
+              "owner": "attacker",
+              "generation": 1,
+              "session": "session-26436",
+              "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-02-1-qaa4_c70\\workspaces\\47ffa2e0d5a876ae",
+              "completionSignal": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-02-1-qaa4_c70\\tree-0.json.done"
+            }
+          ],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:59284"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "generations": {
+            "FIX-1": 1
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+          "scenarioDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      }
+    },
+    {
+      "case": "TDD-RUN-02-3",
+      "positiveControl": "run-claim-script",
+      "positiveStatus": "PASS",
+      "mutation": "start-without-claim",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "no process",
+        "no running job without matching authoritative lease",
+        "observable operation result"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "empty board creates no lease",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "no process",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "Idle",
+          "expected": "Idle",
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "empty board creates no lease",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "no process",
+          "actual": 1,
+          "expected": 0,
+          "pass": false
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "Started",
+          "expected": "Idle",
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "positiveEvidence": {
+        "id": "TDD-RUN-02-3",
+        "bdd": "S-RUN-02-3",
+        "status": "PASS",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "empty board creates no lease",
+            "actual": 0,
+            "expected": 0,
+            "pass": true
+          },
+          {
+            "assertion": "no process",
+            "actual": 0,
+            "expected": 0,
+            "pass": true
+          },
+          {
+            "assertion": "observable operation result",
+            "actual": "Idle",
+            "expected": "Idle",
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [],
+        "invocations": [
+          {
+            "operation": "RunNext",
+            "pid": "control-thread-24396",
+            "trustedPrincipal": {
+              "actor": "dev-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-dev",
+              "role": "dev-agent"
+            },
+            "mode": "run-claim-script",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {},
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:59285"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+          "scenarioDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      },
+      "mutantEvidence": {
+        "id": "TDD-RUN-02-3",
+        "bdd": "S-RUN-02-3",
+        "status": "BEHAVIOR_RED",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "empty board creates no lease",
+            "actual": 0,
+            "expected": 0,
+            "pass": true
+          },
+          {
+            "assertion": "no process",
+            "actual": 1,
+            "expected": 0,
+            "pass": false
+          },
+          {
+            "assertion": "observable operation result",
+            "actual": "Started",
+            "expected": "Idle",
+            "pass": false
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": false,
+            "expected": true,
+            "pass": false
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Process",
+            "method": "Start",
+            "args": {
+              "ticket": "FIX-2",
+              "owner": "wrong",
+              "generation": -1
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "RunNext",
+            "pid": "control-thread-24396",
+            "trustedPrincipal": {
+              "actor": "dev-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-dev",
+              "role": "dev-agent"
+            },
+            "mode": "start-without-claim",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {},
+          "leases": {},
+          "runs": [
+            {
+              "pid": 9240,
+              "created": 134384586300429783,
+              "descendant": 15180,
+              "descendantCreated": 134384586301690264,
+              "ticket": "FIX-2",
+              "runId": "run-1",
+              "owner": "wrong",
+              "generation": -1,
+              "session": "session-9240",
+              "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-02-3-25qtz_uz\\workspaces\\4e65d3fbe8ad6535",
+              "completionSignal": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-02-3-25qtz_uz\\tree-0.json.done"
+            }
+          ],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:59286"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+          "scenarioDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      }
+    }
+  ],
+  "date": "2026-11-07T01:10:30.521864+08:00",
+  "fixtureControls": {
+    "rpcPortInvocation": "PASS",
+    "rpcInjectedFault": "PASS",
+    "storeFault": "PASS",
+    "claimBarrier": "PASS",
+    "httpTimeout": "PASS",
+    "httpDisconnect": "PASS",
+    "realChildLifecycle": "PASS",
+    "durableReopen": "PASS",
+    "signedBytes": "PASS"
+  },
+  "results": [
+    {
+      "id": "TDD-RUN-02-1",
+      "bdd": "S-RUN-02-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "two contenders cross actual barrier",
+          "actual": 2,
+          "expected": 2,
+          "pass": true
+        },
+        {
+          "assertion": "independently authenticated workers",
+          "actual": 2,
+          "expected": 2,
+          "pass": true
+        },
+        {
+          "assertion": "one valid lease",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "one real process start",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "lease owner is a real authenticated contender",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "one real process adapter start",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "started process owned by winning generation",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RunNext",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "worker-a",
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "pid": 5264,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RunNext",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "worker-b",
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          },
+          "pid": 30524,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:59277"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        }
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+        "scenarioDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    },
+    {
+      "id": "TDD-RUN-02-2",
+      "bdd": "S-RUN-02-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "actual start fault reached",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "compensating release called",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "no leaked lease",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "claim reached before start failure",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "compensation matches start owner and generation",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "failed start is reported",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RunNext",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "dev-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-dev",
+            "role": "dev-agent"
+          },
+          "pid": 24304,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {
+        "Process.Start": 0
+      },
+      "missingFaultPaths": [
+        "Process.Start"
+      ],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:59279"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        }
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+        "scenarioDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [
+        {
+          "point": "Process.Start",
+          "count": 1
+        }
+      ],
+      "failureHandlingQualified": false
+    },
+    {
+      "id": "TDD-RUN-02-3",
+      "bdd": "S-RUN-02-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "empty board creates no lease",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "no process",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Idle",
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RunNext",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "dev-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-dev",
+            "role": "dev-agent"
+          },
+          "pid": 32532,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {},
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:59281"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        }
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+        "scenarioDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    }
+  ],
+  "red": 3,
+  "passed": 0,
+  "invalid": 0,
+  "productionChanged": false,
+  "independentAcceptance": "NOT RUN",
+  "provenance": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "files": {
+      "run_drivers.py": "377d34a9e1a207a9b25e924709a41e88d9dafb324f46818e1af76795c9b9bf96",
+      "driver_support.py": "c7c981b3864f5f77c59631c76b399424f5deb49dae1effb6313f494feff43e89",
+      "Bridge.ps1": "56e8b7ff25d8896787f57a5dc7f84a9d7c409ee504d25ccabf6fe9a3f373c9c0",
+      "Skeleton.ps1": "f6e1a4e1aa4a6a425601ae3d3c4a97393d477727e020226fb52269b39829ea2e",
+      "ui-skeleton.html": "ab42c60cc6e7fb5594bbc4b42b786dcea681f383934354f84fac2b668f4eabcf",
+      "browser-driver.cjs": "643270765fe2c1060b487982b33c26f926baa061e5ddd251fb489f933b118937",
+      "PortProbe.ps1": "ae510e95f7ce884924a162a2e2cd1afbb96dd8c348d851b374c9e39ce8c67edb",
+      "cases.json": "fff710be1578de3982037b9aff563d48383d450710a7ed207f77c3329b6b5db3",
+      "review_strengthening.py": "01d23b9bb935b6778986dba0de653b42fc488c904fdafdeb626eda15235639ba",
+      "mutation_controls.py": "41cc7e62b54af302d70834d8ac7e6831d4ac0774380e4f2a0c41ab24d8ca4875",
+      "review-fixtures.json": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140",
+      "review-case-inventory.json": "35e115237367bd88a859d978f1bf2221e8d6b1e42b53ececefd7c2d6521c68bb",
+      "fixture_contract_tests.py": "c0ba92595e41ef6ec97b885264573a45b06056764a9cc280e2e9c85996ce2e02",
+      "qualify_review_fixes.py": "bfb16226f2e4fa9f5d256857d983b3cb5481023bbd56de87d8d1db1792f6f3a4",
+      "Run-Red.ps1": "328a0b6bcce557e03f1daf3562c6ce645118cfc2f5bd4a3f8df904ae73bebfde"
+    }
+  },
+  "qualification": "RED against test-only empty application skeleton. Unreached fault ports demonstrate missing orchestration, not exercised fault handling. Real browser drives test-only UI, not product UI."
+}

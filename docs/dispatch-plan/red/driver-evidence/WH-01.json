@@ -1,0 +1,285 @@
+{
+  "date": "2026-11-07T00:09:04.909082+08:00",
+  "fixtureControls": {
+    "storeFault": "PASS",
+    "claimBarrier": "PASS",
+    "httpTimeout": "PASS",
+    "httpDisconnect": "PASS",
+    "realChildLifecycle": "PASS",
+    "durableReopen": "PASS",
+    "signedBytes": "PASS"
+  },
+  "results": [
+    {
+      "id": "TDD-WH-01-1",
+      "bdd": "S-WH-01-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "real HTTP received request",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "durable delivery receipt",
+          "actual": "pending",
+          "expected": "delivered",
+          "pass": false
+        },
+        {
+          "assertion": "not work completion",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "DeliverPending",
+          "pid": 29992,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "status": "pending",
+            "attempt": 0
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-WH-01-2",
+      "bdd": "S-WH-01-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "timeout peer contacted",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "retry state persisted",
+          "actual": "pending",
+          "expected": "retry",
+          "pass": false
+        },
+        {
+          "assertion": "event preserved",
+          "actual": "evt-1",
+          "expected": "evt-1",
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "DeliverPending",
+          "pid": 21996,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "status": "pending",
+            "attempt": 0
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-WH-01-3",
+      "bdd": "S-WH-01-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "no rejected network contact",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "config unchanged",
+          "actual": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "expected": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ConfigureTarget",
+          "pid": 10272,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "status": "pending",
+            "attempt": 0
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    }
+  ],
+  "red": 3,
+  "passed": 0,
+  "invalid": 0,
+  "productionChanged": false,
+  "independentAcceptance": "NOT RUN",
+  "qualification": "RED against test-only empty application skeleton. Unreached fault ports demonstrate missing orchestration, not exercised fault handling. Real browser drives test-only UI, not product UI."
+}

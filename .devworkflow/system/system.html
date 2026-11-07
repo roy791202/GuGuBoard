@@ -1,0 +1,147 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>GuGuBoard 定時派工、Webhook 與 AI Runner</title><style>body{font:16px system-ui;max-width:1100px;margin:40px auto;padding:20px;background:#f4f6fa;color:#17253b}section{background:white;padding:20px;margin:16px 0;border-radius:10px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:15px system-ui;line-height:1.7}a{color:#2157ae}</style><h1>GuGuBoard 定時派工、Webhook 與 AI Runner</h1><p>規劃與測試套件｜詳細規格已同意｜測試層級見各節證據｜禁止派工</p><section><h2>Hexagonal System Boundary</h2><svg role="img" aria-label="Hexagonal System Boundary" viewBox="0 0 700 310" style="width:100%"><rect x="20" y="15" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="45" fill="#17253b" font-size="16">Driving adapters: UI / Timer / HTTP</text><path d="M350 63 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="90" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="120" fill="#17253b" font-size="16">Input Ports</text><path d="M350 138 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="165" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="195" fill="#17253b" font-size="16">Application → Domain Core</text><path d="M350 213 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="240" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="270" fill="#17253b" font-size="16">Output Ports ← Driven Adapters</text></svg><p>箭頭向內表示控制或契約依賴；方括號為模組權威狀態。模組之間僅經 Ports；交易範圍見下方規格。</p></section><section><h2>Module Dependency / State Boundaries</h2><svg role="img" aria-label="Module Dependency / State Boundaries" viewBox="0 0 700 310" style="width:100%"><rect x="20" y="15" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="45" fill="#17253b" font-size="16">Scheduling [schedule + outbox]</text><path d="M350 63 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="90" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="120" fill="#17253b" font-size="16">Webhook [delivery] → Runner [inbox + run]</text><path d="M350 138 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="165" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="195" fill="#17253b" font-size="16">Completion [journal] → Next Claim</text><path d="M350 213 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="240" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="270" fill="#17253b" font-size="16">Verification → Review → Approval + Merge</text></svg><p>箭頭向內表示控制或契約依賴；方括號為模組權威狀態。模組之間僅經 Ports；交易範圍見下方規格。</p></section><section><h2>title</h2>GuGuBoard 定時派工、Webhook 與 AI Runner</section><section><h2>intent</h2>開發交付確認後自動接下一張；獨立驗證、審查、核准及合併關卡保留</section><section><h2>moduleNavigation</h2><ul><li><dl><dt><b>id</b></dt><dd>dispatch-scheduling</dd><dt><b>html</b></dt><dd><a href="../../.devworkflow/modules/dispatch-scheduling/module.html">.devworkflow/modules/dispatch-scheduling/module.html</a></dd></dl></li><li><dl><dt><b>id</b></dt><dd>webhook-delivery</dd><dt><b>html</b></dt><dd><a href="../../.devworkflow/modules/webhook-delivery/module.html">.devworkflow/modules/webhook-delivery/module.html</a></dd></dl></li><li><dl><dt><b>id</b></dt><dd>ai-runner</dd><dt><b>html</b></dt><dd><a href="../../.devworkflow/modules/ai-runner/module.html">.devworkflow/modules/ai-runner/module.html</a></dd></dl></li><li><dl><dt><b>id</b></dt><dd>work-completion</dd><dt><b>html</b></dt><dd><a href="../../.devworkflow/modules/work-completion/module.html">.devworkflow/modules/work-completion/module.html</a></dd></dl></li><li><dl><dt><b>id</b></dt><dd>verification-approval</dd><dt><b>html</b></dt><dd><a href="../../.devworkflow/modules/verification-approval/module.html">.devworkflow/modules/verification-approval/module.html</a></dd></dl></li><li><dl><dt><b>id</b></dt><dd>dispatch-integration</dd><dt><b>html</b></dt><dd><a href="../../.devworkflow/modules/dispatch-integration/module.html">.devworkflow/modules/dispatch-integration/module.html</a></dd></dl></li></ul></section><section><h2>workflow</h2>Due → Outbox → Webhook → Inbox → Claim → Run → Completion Confirmed → Next Claim；In Review → Independent Verify → Independent Review → Authorized Approval + Merged PR → Done</section><section><h2>tasks</h2><ul><li><dl><dt><b>id</b></dt><dd>SCH-01</dd><dt><b>module</b></dt><dd>dispatch-scheduling</dd><dt><b>path</b></dt><dd>tasks/dispatch-scheduling/SCH-01.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>SCH-02</dd><dt><b>module</b></dt><dd>dispatch-scheduling</dd><dt><b>path</b></dt><dd>tasks/dispatch-scheduling/SCH-02.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>UI-01</dd><dt><b>module</b></dt><dd>dispatch-scheduling</dd><dt><b>path</b></dt><dd>tasks/dispatch-scheduling/UI-01.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>WH-01</dd><dt><b>module</b></dt><dd>webhook-delivery</dd><dt><b>path</b></dt><dd>tasks/webhook-delivery/WH-01.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>WH-02</dd><dt><b>module</b></dt><dd>webhook-delivery</dd><dt><b>path</b></dt><dd>tasks/webhook-delivery/WH-02.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>UI-02</dd><dt><b>module</b></dt><dd>webhook-delivery</dd><dt><b>path</b></dt><dd>tasks/webhook-delivery/UI-02.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>RUN-01</dd><dt><b>module</b></dt><dd>ai-runner</dd><dt><b>path</b></dt><dd>tasks/ai-runner/RUN-01.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>RUN-02</dd><dt><b>module</b></dt><dd>ai-runner</dd><dt><b>path</b></dt><dd>tasks/ai-runner/RUN-02.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>RUN-03</dd><dt><b>module</b></dt><dd>ai-runner</dd><dt><b>path</b></dt><dd>tasks/ai-runner/RUN-03.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>RUN-04</dd><dt><b>module</b></dt><dd>ai-runner</dd><dt><b>path</b></dt><dd>tasks/ai-runner/RUN-04.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>CMP-01</dd><dt><b>module</b></dt><dd>work-completion</dd><dt><b>path</b></dt><dd>tasks/work-completion/CMP-01.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>CMP-02</dd><dt><b>module</b></dt><dd>work-completion</dd><dt><b>path</b></dt><dd>tasks/work-completion/CMP-02.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>GOV-01</dd><dt><b>module</b></dt><dd>verification-approval</dd><dt><b>path</b></dt><dd>tasks/verification-approval/GOV-01.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>GOV-02</dd><dt><b>module</b></dt><dd>verification-approval</dd><dt><b>path</b></dt><dd>tasks/verification-approval/GOV-02.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>UI-03</dd><dt><b>module</b></dt><dd>verification-approval</dd><dt><b>path</b></dt><dd>tasks/verification-approval/UI-03.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li><li><dl><dt><b>id</b></dt><dd>INT-01</dd><dt><b>module</b></dt><dd>dispatch-integration</dd><dt><b>path</b></dt><dd>tasks/dispatch-integration/INT-01.json</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd></dl></li></ul></section><section><h2>gate</h2>Current source: 2 safety PASS / 46 subject RED; independent R3 quality review pending; no automatic qualification</section><section><h2>results</h2>文件驗證見 validation.json；測試骨架 RED 分級見 docs/dispatch-plan/red/gate-status.json；無 build/package/runtime acceptance 證據</section><script type="application/json" id="module-spec">{
+  "title": "GuGuBoard 定時派工、Webhook 與 AI Runner",
+  "intent": "開發交付確認後自動接下一張；獨立驗證、審查、核准及合併關卡保留",
+  "moduleNavigation": [
+    {
+      "id": "dispatch-scheduling",
+      "html": ".devworkflow/modules/dispatch-scheduling/module.html"
+    },
+    {
+      "id": "webhook-delivery",
+      "html": ".devworkflow/modules/webhook-delivery/module.html"
+    },
+    {
+      "id": "ai-runner",
+      "html": ".devworkflow/modules/ai-runner/module.html"
+    },
+    {
+      "id": "work-completion",
+      "html": ".devworkflow/modules/work-completion/module.html"
+    },
+    {
+      "id": "verification-approval",
+      "html": ".devworkflow/modules/verification-approval/module.html"
+    },
+    {
+      "id": "dispatch-integration",
+      "html": ".devworkflow/modules/dispatch-integration/module.html"
+    }
+  ],
+  "workflow": "Due → Outbox → Webhook → Inbox → Claim → Run → Completion Confirmed → Next Claim；In Review → Independent Verify → Independent Review → Authorized Approval + Merged PR → Done",
+  "tasks": [
+    {
+      "id": "SCH-01",
+      "module": "dispatch-scheduling",
+      "path": "tasks/dispatch-scheduling/SCH-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "SCH-02",
+      "module": "dispatch-scheduling",
+      "path": "tasks/dispatch-scheduling/SCH-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "UI-01",
+      "module": "dispatch-scheduling",
+      "path": "tasks/dispatch-scheduling/UI-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "WH-01",
+      "module": "webhook-delivery",
+      "path": "tasks/webhook-delivery/WH-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "WH-02",
+      "module": "webhook-delivery",
+      "path": "tasks/webhook-delivery/WH-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "UI-02",
+      "module": "webhook-delivery",
+      "path": "tasks/webhook-delivery/UI-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "RUN-01",
+      "module": "ai-runner",
+      "path": "tasks/ai-runner/RUN-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "RUN-02",
+      "module": "ai-runner",
+      "path": "tasks/ai-runner/RUN-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "RUN-03",
+      "module": "ai-runner",
+      "path": "tasks/ai-runner/RUN-03.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "RUN-04",
+      "module": "ai-runner",
+      "path": "tasks/ai-runner/RUN-04.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "CMP-01",
+      "module": "work-completion",
+      "path": "tasks/work-completion/CMP-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "CMP-02",
+      "module": "work-completion",
+      "path": "tasks/work-completion/CMP-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "GOV-01",
+      "module": "verification-approval",
+      "path": "tasks/verification-approval/GOV-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "GOV-02",
+      "module": "verification-approval",
+      "path": "tasks/verification-approval/GOV-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "UI-03",
+      "module": "verification-approval",
+      "path": "tasks/verification-approval/UI-03.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "INT-01",
+      "module": "dispatch-integration",
+      "path": "tasks/dispatch-integration/INT-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    }
+  ],
+  "gate": "Current source: 2 safety PASS / 46 subject RED; independent R3 quality review pending; no automatic qualification",
+  "results": "文件驗證見 validation.json；測試骨架 RED 分級見 docs/dispatch-plan/red/gate-status.json；無 build/package/runtime acceptance 證據"
+}</script></html>

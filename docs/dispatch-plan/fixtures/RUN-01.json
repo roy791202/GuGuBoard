@@ -1,0 +1,46 @@
+{
+  "task": "RUN-01",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-RUN-01-1",
+      "given": "事件有效且佇列有空位",
+      "when": "接收兩次相同事件",
+      "then": "只保存一筆工作",
+      "test": "TDD-RUN-01-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-RUN-01-2",
+      "given": "事件已被竄改或超過五分鐘",
+      "when": "接收事件",
+      "then": "拒絕且不啟動工作",
+      "test": "TDD-RUN-01-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-RUN-01-3",
+      "given": "接收儲存失敗或佇列已滿",
+      "when": "接收事件",
+      "then": "不回覆成功且不遺失已接受工作",
+      "test": "TDD-RUN-01-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "task": "RUN-03",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-RUN-03-1",
+      "given": "工作仍在執行且持有租約",
+      "when": "到達五分鐘續租點",
+      "then": "延長租約",
+      "test": "TDD-RUN-03-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-RUN-03-2",
+      "given": "續租無法在安全期限內確認",
+      "when": "處理租約失效",
+      "then": "停止整個受控程序樹且隔離工作區",
+      "test": "TDD-RUN-03-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-RUN-03-3",
+      "given": "Runner 重啟且舊程序狀態未知",
+      "when": "執行恢復對帳",
+      "then": "先隔離並確認舊程序停止再允許新執行",
+      "test": "TDD-RUN-03-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

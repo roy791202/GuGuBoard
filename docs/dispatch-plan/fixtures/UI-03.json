@@ -1,0 +1,46 @@
+{
+  "task": "UI-03",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-UI-03-1",
+      "given": "程序已結束但交付未確認",
+      "when": "檢視工單",
+      "then": "分別呈現程序與交付狀態",
+      "test": "TDD-UI-03-1",
+      "level": "L3",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-UI-03-2",
+      "given": "尚未合併工單",
+      "when": "檢視關卡",
+      "then": "完成控制停用並說明原因",
+      "test": "TDD-UI-03-2",
+      "level": "L3",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-UI-03-3",
+      "given": "沒有執行紀錄",
+      "when": "檢視紀錄",
+      "then": "呈現空狀態且不顯示成功",
+      "test": "TDD-UI-03-3",
+      "level": "L3",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

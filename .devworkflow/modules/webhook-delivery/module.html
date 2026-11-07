@@ -1,0 +1,1575 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Webhook 投遞</title><style>body{font:16px system-ui;max-width:1100px;margin:40px auto;padding:20px;background:#f4f6fa;color:#17253b}section{background:white;padding:20px;margin:16px 0;border-radius:10px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:15px system-ui;line-height:1.7}a{color:#2157ae}</style><h1>Webhook 投遞</h1><p>規劃與測試套件｜詳細規格已同意｜測試層級見各節證據｜禁止派工</p><section><h2>Hexagonal System Boundary</h2><svg role="img" aria-label="Hexagonal System Boundary" viewBox="0 0 700 310" style="width:100%"><rect x="20" y="15" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="45" fill="#17253b" font-size="16">Driving adapters: UI / Timer / HTTP</text><path d="M350 63 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="90" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="120" fill="#17253b" font-size="16">Input Ports</text><path d="M350 138 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="165" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="195" fill="#17253b" font-size="16">Application → Domain Core</text><path d="M350 213 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="240" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="270" fill="#17253b" font-size="16">Output Ports ← Driven Adapters</text></svg><p>箭頭向內表示控制或契約依賴；方括號為模組權威狀態。模組之間僅經 Ports；交易範圍見下方規格。</p></section><section><h2>Module Dependency / State Boundaries</h2><svg role="img" aria-label="Module Dependency / State Boundaries" viewBox="0 0 700 310" style="width:100%"><rect x="20" y="15" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="45" fill="#17253b" font-size="16">Scheduling [schedule + outbox]</text><path d="M350 63 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="90" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="120" fill="#17253b" font-size="16">Webhook [delivery] → Runner [inbox + run]</text><path d="M350 138 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="165" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="195" fill="#17253b" font-size="16">Completion [journal] → Next Claim</text><path d="M350 213 v27 m-5 -7 l5 7 5 -7" fill="none" stroke="#537cb0"/><rect x="20" y="240" width="660" height="48" rx="8" fill="#e6eefb" stroke="#537cb0"/><text x="35" y="270" fill="#17253b" font-size="16">Verification → Review → Approval + Merge</text></svg><p>箭頭向內表示控制或契約依賴；方括號為模組權威狀態。模組之間僅經 Ports；交易範圍見下方規格。</p></section><section><h2>title</h2>Webhook 投遞</section><section><h2>module</h2>webhook-delivery</section><section><h2>purpose</h2>擁有投遞紀錄與重試；不擁有工單執行</section><section><h2>status</h2><dl><dt><b>architecture</b></dt><dd>DETAILED_SPEC_APPROVED; executable envelope still pending</dd><dt><b>scope</b></dt><dd>APPROVED</dd><dt><b>skeleton</b></dt><dd>TEST ONLY; production NOT CREATED</dd><dt><b>red</b></dt><dd>Current source: 2 safety PASS / 46 subject RED; independent R3 quality review pending; no automatic qualification</dd><dt><b>implementation</b></dt><dd>NOT STARTED</dd><dt><b>moduleHealth</b></dt><dd>NOT_READY</dd></dl></section><section><h2>architecture</h2><dl><dt><b>context</b></dt><dd>GuGuBoard 管理者、排程服務、Webhook、Windows Runner、AI CLI、獨立驗證與 Git PR provider</dd><dt><b>domain</b></dt><dd>純政策與不變量，不依賴平台</dd><dt><b>application</b></dt><dd>協調以下 input/output ports</dd><dt><b>inputPorts</b></dt><dd><ul><li>DeliverPending</li><li>RetryDue</li><li>TestDelivery</li></ul></dd><dt><b>outputPorts</b></dt><dd><ul><li>HttpDelivery</li><li>DeliveryStore</li><li>SecretProvider</li><li>Clock</li></ul></dd><dt><b>drivingAdapters</b></dt><dd><ul><li>管理 UI／API</li><li>受控計時器或 Webhook ingress</li><li>Contract tests</li></ul></dd><dt><b>drivenAdapters</b></dt><dd><ul><li>持久化</li><li>HTTP／Agent API</li><li>Windows 程序或測試 doubles：依實際 Port 選用</li></ul></dd><dt><b>hexagonalDiagram</b></dt><dd>外部 UI／Timer／HTTP → Input Ports → Application → Domain；Application → Output Ports ← Infrastructure implements</dd><dt><b>dependencyDiagram</b></dt><dd>Presentation → Command → Application → Domain；Adapters → Ports；內層不引用外層</dd><dt><b>stateOwnership</b></dt><dd>擁有投遞紀錄與重試；不擁有工單執行</dd><dt><b>mutationBoundary</b></dt><dd>僅對應 use case 可經儲存 Port 變更其權威狀態</dd><dt><b>transactionBoundary</b></dt><dd>事件識別固定；成功接收後才標示 delivered</dd><dt><b>externalBoundary</b></dt><dd>AI 輸出與網路輸入不可信；驗證身分與證據來源</dd><dt><b>forbidden</b></dt><dd><ul><li>Domain → HTTP／Filesystem／Process</li><li>UI → shell／直接寫狀態</li><li>跨模組直接讀寫內部狀態</li></ul></dd></dl></section><section><h2>contractsAndInvariants</h2><ul><li>C01：有效租約為執行授權；同工單最多一個有效執行者。舊程序停止無法確認時隔離並阻擋再啟動。</li><li>C02：Webhook 至少一次投遞；接收端依 eventId 與 payload digest 去重；同 ID 不同內容拒絕。</li><li>C03：HTTP 202 只代表 durable inbox 已保存；不表示工作、交付或驗收完成。</li><li>C04：exit 0 不代表成功交付；成功需要測試、證據、工單、runId、lease generation、checkout SHA。</li><li>C05：同 completionId 同內容可重送；不同內容衝突；Confirm 前不得接下一張。</li><li>C06：開發只能 In Review／READY_FOR_TDD；Done 需獨立驗證、獨立審查、授權核准及 PR 合併。</li><li>C07：依賴仍需 Done／Released；回報交付不解除依賴。</li><li>C08：排程與候選選擇在領單端再驗證；Webhook 不帶執行權；既有派工器與新 Runner 不得同時驅動同專案。</li><li>C09：角色、工作階段與版本來自可信記錄，不能採信 AI 自填身分。驗證證據綁定候選 tree；合併 tree 不同須重驗。</li><li>C10：錯誤分類 Validation／Unauthorized／Conflict／Unavailable／Timeout／LeaseLost／ReplanRequired；失敗不回傳 succeeded=true。</li></ul></section><section><h2>bddCoverage</h2><ul><li><dl><dt><b>id</b></dt><dd>S-WH-01-1</dd><dt><b>given</b></dt><dd>有一筆待投遞事件</dd><dt><b>when</b></dt><dd>接收端可靠接收</dd><dt><b>then</b></dt><dd>事件標示已接收而非工作完成</dd><dt><b>test</b></dt><dd>TDD-WH-01-1</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-WH-01-2</dd><dt><b>given</b></dt><dd>接收端逾時</dd><dt><b>when</b></dt><dd>投遞事件</dd><dt><b>then</b></dt><dd>保留待重試紀錄</dd><dt><b>test</b></dt><dd>TDD-WH-01-2</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-WH-01-3</dd><dt><b>given</b></dt><dd>目標不在允許清單</dd><dt><b>when</b></dt><dd>儲存目標</dd><dt><b>then</b></dt><dd>拒絕目標且不連線</dd><dt><b>test</b></dt><dd>TDD-WH-01-3</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-WH-02-1</dd><dt><b>given</b></dt><dd>事件已失敗一次</dd><dt><b>when</b></dt><dd>到達下一重試時間</dd><dt><b>then</b></dt><dd>使用相同事件識別重新投遞</dd><dt><b>test</b></dt><dd>TDD-WH-02-1</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-WH-02-2</dd><dt><b>given</b></dt><dd>事件已連續失敗五次</dd><dt><b>when</b></dt><dd>評估重試</dd><dt><b>then</b></dt><dd>停止自動重試並顯示人工處理</dd><dt><b>test</b></dt><dd>TDD-WH-02-2</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-WH-02-3</dd><dt><b>given</b></dt><dd>服務在重試前重啟</dd><dt><b>when</b></dt><dd>恢復投遞</dd><dt><b>then</b></dt><dd>保留次數與下次時間</dd><dt><b>test</b></dt><dd>TDD-WH-02-3</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-UI-02-1</dd><dt><b>given</b></dt><dd>管理者設定金鑰</dd><dt><b>when</b></dt><dd>重新開啟設定</dd><dt><b>then</b></dt><dd>只顯示金鑰參照且不回傳秘密</dd><dt><b>test</b></dt><dd>TDD-UI-02-1</dd><dt><b>level</b></dt><dd>L3</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-UI-02-2</dd><dt><b>given</b></dt><dd>管理者發出測試事件</dd><dt><b>when</b></dt><dd>檢視結果</dd><dt><b>then</b></dt><dd>顯示連線結果且不啟動正式工單</dd><dt><b>test</b></dt><dd>TDD-UI-02-2</dd><dt><b>level</b></dt><dd>L3</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-UI-02-3</dd><dt><b>given</b></dt><dd>Runner 離線</dd><dt><b>when</b></dt><dd>檢視設定</dd><dt><b>then</b></dt><dd>顯示離線狀態且可暫停投遞</dd><dt><b>test</b></dt><dd>TDD-UI-02-3</dd><dt><b>level</b></dt><dd>L3</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li></ul></section><section><h2>coverageCategories</h2><dl><dt><b>B1</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B2</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B3</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B4</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B5</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B6</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B7</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B8</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B9</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B10</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B11</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd><dt><b>B12</b></dt><dd><dl><dt><b>status</b></dt><dd>Applicable</dd><dt><b>evidence</b></dt><dd>規劃情境及失敗注入；實際 coverage 待 executable tests</dd><dt><b>deferred</b></dt><dd>跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關</dd></dl></dd></dl></section><section><h2>tddStrategy</h2><dl><dt><b>levels</b></dt><dd><ul><li>L0 Unit</li><li>L1 Component</li><li>L2 Module Contract</li><li>L3 Adapter Integration</li><li>L4 Cross-module</li><li>L5 System</li></ul></dd><dt><b>red</b></dt><dd>Current source: 2 safety PASS / 46 subject RED; independent R3 quality review pending; no automatic qualification</dd><dt><b>pendingAutomation</b></dt><dd><ul><li>凍結產品 input/output ports 與 scope</li><li>產品實作後確認每個故障點實際命中及補償斷言</li><li>獨立測試品質審查與產品 UI/CLI 驗收</li></ul></dd></dl></section><section><h2>tasks</h2><ul><li><dl><dt><b>id</b></dt><dd>WH-01</dd><dt><b>module</b></dt><dd>webhook-delivery</dd><dt><b>parentStory</b></dt><dd>S-WH-01</dd><dt><b>title</b></dt><dd>可靠投遞</dd><dt><b>intent</b></dt><dd>可靠投遞</dd><dt><b>layer</b></dt><dd>Application</dd><dt><b>estimateHours</b></dt><dd>6</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>tdd</b></dt><dd>Red</dd><dt><b>ci</b></dt><dd>NOT RUN</dd><dt><b>prUrl</b></dt><dd></dd><dt><b>dependsOn</b></dt><dd><ul><li>SCH-01</li></ul></dd><dt><b>contracts</b></dt><dd><ul><li>C01：有效租約為執行授權；同工單最多一個有效執行者。舊程序停止無法確認時隔離並阻擋再啟動。</li><li>C02：Webhook 至少一次投遞；接收端依 eventId 與 payload digest 去重；同 ID 不同內容拒絕。</li><li>C03：HTTP 202 只代表 durable inbox 已保存；不表示工作、交付或驗收完成。</li><li>C04：exit 0 不代表成功交付；成功需要測試、證據、工單、runId、lease generation、checkout SHA。</li><li>C05：同 completionId 同內容可重送；不同內容衝突；Confirm 前不得接下一張。</li><li>C06：開發只能 In Review／READY_FOR_TDD；Done 需獨立驗證、獨立審查、授權核准及 PR 合併。</li><li>C07：依賴仍需 Done／Released；回報交付不解除依賴。</li><li>C08：排程與候選選擇在領單端再驗證；Webhook 不帶執行權；既有派工器與新 Runner 不得同時驅動同專案。</li><li>C09：角色、工作階段與版本來自可信記錄，不能採信 AI 自填身分。驗證證據綁定候選 tree；合併 tree 不同須重驗。</li><li>C10：錯誤分類 Validation／Unauthorized／Conflict／Unavailable／Timeout／LeaseLost／ReplanRequired；失敗不回傳 succeeded=true。</li></ul></dd><dt><b>bdd</b></dt><dd><ul><li><dl><dt><b>id</b></dt><dd>S-WH-01-1</dd><dt><b>given</b></dt><dd>有一筆待投遞事件</dd><dt><b>when</b></dt><dd>接收端可靠接收</dd><dt><b>then</b></dt><dd>事件標示已接收而非工作完成</dd><dt><b>test</b></dt><dd>TDD-WH-01-1</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-WH-01-2</dd><dt><b>given</b></dt><dd>接收端逾時</dd><dt><b>when</b></dt><dd>投遞事件</dd><dt><b>then</b></dt><dd>保留待重試紀錄</dd><dt><b>test</b></dt><dd>TDD-WH-01-2</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-WH-01-3</dd><dt><b>given</b></dt><dd>目標不在允許清單</dd><dt><b>when</b></dt><dd>儲存目標</dd><dt><b>then</b></dt><dd>拒絕目標且不連線</dd><dt><b>test</b></dt><dd>TDD-WH-01-3</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li></ul></dd><dt><b>fixtures</b></dt><dd>fixtures/WH-01.json</dd><dt><b>testPlan</b></dt><dd><dl><dt><b>command</b></dt><dd>pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task WH-01</dd><dt><b>redCriterion</b></dt><dd>測試可載入且 fixture 正確；僅因缺少上述 observable behavior 失敗。缺套件、編譯錯誤與 pending stub 不算 RED。</dd><dt><b>failureInjection</b></dt><dd>在所有 Output Port 回傳可控失敗；比較前後持久化快照、事件數、啟動次數與工單狀態</dd><dt><b>acceptance</b></dt><dd><ul><li>所有列出 Then 均有可執行斷言</li><li>測試意圖不變且 focused 與 module contract GREEN</li><li>相鄰回歸全部 GREEN 或逐項分類</li><li>獨立實測與審查；無越界修改</li></ul></dd></dl></dd><dt><b>scope</b></dt><dd><dl><dt><b>allowedNow</b></dt><dd><ul><li>docs/dispatch-plan/tasks/webhook-delivery/WH-01.json</li><li>docs/dispatch-plan/bdd/S-WH-01.feature</li><li>docs/dispatch-plan/fixtures/WH-01.json</li></ul></dd><dt><b>productionAllowed</b></dt><dd><ul></ul></dd><dt><b>protected</b></dt><dd><ul><li>serve-board.ps1</li><li>serve-ext.ps1</li><li><a href="../../board.html">board.html</a></li><li>.ai-pm/**</li><li>.ai-board/**</li><li>.ai-hooks/**</li><li>.githooks/**</li><li>.github/**</li></ul></dd><dt><b>gate</b></dt><dd>具體產品路徑、介面與 RED 尚未凍結；禁止由本工單開始實作</dd></dl></dd><dt><b>regression</b></dt><dd><ul><li>L0 pure policies</li><li>L1 public component</li><li>L2 module ports</li><li>L3 real adapters</li><li>L4 adjacent modules</li><li>L5 system acceptance</li></ul></dd><dt><b>roles</b></dt><dd><dl><dt><b>developer</b></dt><dd>UNASSIGNED</dd><dt><b>verifier</b></dt><dd>UNASSIGNED distinct identity/session</dd><dt><b>reviewer</b></dt><dd>UNASSIGNED distinct identity/session</dd></dl></dd><dt><b>history</b></dt><dd><ul><li><dl><dt><b>at</b></dt><dd>2026-11-06T00:00:00+08:00</dd><dt><b>from</b></dt><dd>None</dd><dt><b>to</b></dt><dd>Backlog</dd><dt><b>by</b></dt><dd>planning-assistant</dd><dt><b>reason</b></dt><dd>建立文件工單，未匯入正式看板</dd></dl></li></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>WH-02</dd><dt><b>module</b></dt><dd>webhook-delivery</dd><dt><b>parentStory</b></dt><dd>S-WH-02</dd><dt><b>title</b></dt><dd>有界重試與恢復</dd><dt><b>intent</b></dt><dd>有界重試與恢復</dd><dt><b>layer</b></dt><dd>Application</dd><dt><b>estimateHours</b></dt><dd>6</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>tdd</b></dt><dd>Red</dd><dt><b>ci</b></dt><dd>NOT RUN</dd><dt><b>prUrl</b></dt><dd></dd><dt><b>dependsOn</b></dt><dd><ul><li>WH-01</li></ul></dd><dt><b>contracts</b></dt><dd><ul><li>C01：有效租約為執行授權；同工單最多一個有效執行者。舊程序停止無法確認時隔離並阻擋再啟動。</li><li>C02：Webhook 至少一次投遞；接收端依 eventId 與 payload digest 去重；同 ID 不同內容拒絕。</li><li>C03：HTTP 202 只代表 durable inbox 已保存；不表示工作、交付或驗收完成。</li><li>C04：exit 0 不代表成功交付；成功需要測試、證據、工單、runId、lease generation、checkout SHA。</li><li>C05：同 completionId 同內容可重送；不同內容衝突；Confirm 前不得接下一張。</li><li>C06：開發只能 In Review／READY_FOR_TDD；Done 需獨立驗證、獨立審查、授權核准及 PR 合併。</li><li>C07：依賴仍需 Done／Released；回報交付不解除依賴。</li><li>C08：排程與候選選擇在領單端再驗證；Webhook 不帶執行權；既有派工器與新 Runner 不得同時驅動同專案。</li><li>C09：角色、工作階段與版本來自可信記錄，不能採信 AI 自填身分。驗證證據綁定候選 tree；合併 tree 不同須重驗。</li><li>C10：錯誤分類 Validation／Unauthorized／Conflict／Unavailable／Timeout／LeaseLost／ReplanRequired；失敗不回傳 succeeded=true。</li></ul></dd><dt><b>bdd</b></dt><dd><ul><li><dl><dt><b>id</b></dt><dd>S-WH-02-1</dd><dt><b>given</b></dt><dd>事件已失敗一次</dd><dt><b>when</b></dt><dd>到達下一重試時間</dd><dt><b>then</b></dt><dd>使用相同事件識別重新投遞</dd><dt><b>test</b></dt><dd>TDD-WH-02-1</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-WH-02-2</dd><dt><b>given</b></dt><dd>事件已連續失敗五次</dd><dt><b>when</b></dt><dd>評估重試</dd><dt><b>then</b></dt><dd>停止自動重試並顯示人工處理</dd><dt><b>test</b></dt><dd>TDD-WH-02-2</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-WH-02-3</dd><dt><b>given</b></dt><dd>服務在重試前重啟</dd><dt><b>when</b></dt><dd>恢復投遞</dd><dt><b>then</b></dt><dd>保留次數與下次時間</dd><dt><b>test</b></dt><dd>TDD-WH-02-3</dd><dt><b>level</b></dt><dd>L2</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li></ul></dd><dt><b>fixtures</b></dt><dd>fixtures/WH-02.json</dd><dt><b>testPlan</b></dt><dd><dl><dt><b>command</b></dt><dd>pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task WH-02</dd><dt><b>redCriterion</b></dt><dd>測試可載入且 fixture 正確；僅因缺少上述 observable behavior 失敗。缺套件、編譯錯誤與 pending stub 不算 RED。</dd><dt><b>failureInjection</b></dt><dd>在所有 Output Port 回傳可控失敗；比較前後持久化快照、事件數、啟動次數與工單狀態</dd><dt><b>acceptance</b></dt><dd><ul><li>所有列出 Then 均有可執行斷言</li><li>測試意圖不變且 focused 與 module contract GREEN</li><li>相鄰回歸全部 GREEN 或逐項分類</li><li>獨立實測與審查；無越界修改</li></ul></dd></dl></dd><dt><b>scope</b></dt><dd><dl><dt><b>allowedNow</b></dt><dd><ul><li>docs/dispatch-plan/tasks/webhook-delivery/WH-02.json</li><li>docs/dispatch-plan/bdd/S-WH-02.feature</li><li>docs/dispatch-plan/fixtures/WH-02.json</li></ul></dd><dt><b>productionAllowed</b></dt><dd><ul></ul></dd><dt><b>protected</b></dt><dd><ul><li>serve-board.ps1</li><li>serve-ext.ps1</li><li><a href="../../board.html">board.html</a></li><li>.ai-pm/**</li><li>.ai-board/**</li><li>.ai-hooks/**</li><li>.githooks/**</li><li>.github/**</li></ul></dd><dt><b>gate</b></dt><dd>具體產品路徑、介面與 RED 尚未凍結；禁止由本工單開始實作</dd></dl></dd><dt><b>regression</b></dt><dd><ul><li>L0 pure policies</li><li>L1 public component</li><li>L2 module ports</li><li>L3 real adapters</li><li>L4 adjacent modules</li><li>L5 system acceptance</li></ul></dd><dt><b>roles</b></dt><dd><dl><dt><b>developer</b></dt><dd>UNASSIGNED</dd><dt><b>verifier</b></dt><dd>UNASSIGNED distinct identity/session</dd><dt><b>reviewer</b></dt><dd>UNASSIGNED distinct identity/session</dd></dl></dd><dt><b>history</b></dt><dd><ul><li><dl><dt><b>at</b></dt><dd>2026-11-06T00:00:00+08:00</dd><dt><b>from</b></dt><dd>None</dd><dt><b>to</b></dt><dd>Backlog</dd><dt><b>by</b></dt><dd>planning-assistant</dd><dt><b>reason</b></dt><dd>建立文件工單，未匯入正式看板</dd></dl></li></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>UI-02</dd><dt><b>module</b></dt><dd>webhook-delivery</dd><dt><b>parentStory</b></dt><dd>S-UI-02</dd><dt><b>title</b></dt><dd>Webhook 與 Runner 設定介面</dd><dt><b>intent</b></dt><dd>Webhook 與 Runner 設定介面</dd><dt><b>layer</b></dt><dd>Presentation</dd><dt><b>estimateHours</b></dt><dd>6</dd><dt><b>status</b></dt><dd>Backlog</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>tdd</b></dt><dd>Red</dd><dt><b>ci</b></dt><dd>NOT RUN</dd><dt><b>prUrl</b></dt><dd></dd><dt><b>dependsOn</b></dt><dd><ul><li>WH-02</li><li>RUN-01</li></ul></dd><dt><b>contracts</b></dt><dd><ul><li>C01：有效租約為執行授權；同工單最多一個有效執行者。舊程序停止無法確認時隔離並阻擋再啟動。</li><li>C02：Webhook 至少一次投遞；接收端依 eventId 與 payload digest 去重；同 ID 不同內容拒絕。</li><li>C03：HTTP 202 只代表 durable inbox 已保存；不表示工作、交付或驗收完成。</li><li>C04：exit 0 不代表成功交付；成功需要測試、證據、工單、runId、lease generation、checkout SHA。</li><li>C05：同 completionId 同內容可重送；不同內容衝突；Confirm 前不得接下一張。</li><li>C06：開發只能 In Review／READY_FOR_TDD；Done 需獨立驗證、獨立審查、授權核准及 PR 合併。</li><li>C07：依賴仍需 Done／Released；回報交付不解除依賴。</li><li>C08：排程與候選選擇在領單端再驗證；Webhook 不帶執行權；既有派工器與新 Runner 不得同時驅動同專案。</li><li>C09：角色、工作階段與版本來自可信記錄，不能採信 AI 自填身分。驗證證據綁定候選 tree；合併 tree 不同須重驗。</li><li>C10：錯誤分類 Validation／Unauthorized／Conflict／Unavailable／Timeout／LeaseLost／ReplanRequired；失敗不回傳 succeeded=true。</li></ul></dd><dt><b>bdd</b></dt><dd><ul><li><dl><dt><b>id</b></dt><dd>S-UI-02-1</dd><dt><b>given</b></dt><dd>管理者設定金鑰</dd><dt><b>when</b></dt><dd>重新開啟設定</dd><dt><b>then</b></dt><dd>只顯示金鑰參照且不回傳秘密</dd><dt><b>test</b></dt><dd>TDD-UI-02-1</dd><dt><b>level</b></dt><dd>L3</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-UI-02-2</dd><dt><b>given</b></dt><dd>管理者發出測試事件</dd><dt><b>when</b></dt><dd>檢視結果</dd><dt><b>then</b></dt><dd>顯示連線結果且不啟動正式工單</dd><dt><b>test</b></dt><dd>TDD-UI-02-2</dd><dt><b>level</b></dt><dd>L3</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li><li><dl><dt><b>id</b></dt><dd>S-UI-02-3</dd><dt><b>given</b></dt><dd>Runner 離線</dd><dt><b>when</b></dt><dd>檢視設定</dd><dt><b>then</b></dt><dd>顯示離線狀態且可暫停投遞</dd><dt><b>test</b></dt><dd>TDD-UI-02-3</dd><dt><b>level</b></dt><dd>L3</dd><dt><b>result</b></dt><dd>BEHAVIOR_RED</dd></dl></li></ul></dd><dt><b>fixtures</b></dt><dd>fixtures/UI-02.json</dd><dt><b>testPlan</b></dt><dd><dl><dt><b>command</b></dt><dd>pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task UI-02</dd><dt><b>redCriterion</b></dt><dd>測試可載入且 fixture 正確；僅因缺少上述 observable behavior 失敗。缺套件、編譯錯誤與 pending stub 不算 RED。</dd><dt><b>failureInjection</b></dt><dd>在所有 Output Port 回傳可控失敗；比較前後持久化快照、事件數、啟動次數與工單狀態</dd><dt><b>acceptance</b></dt><dd><ul><li>所有列出 Then 均有可執行斷言</li><li>測試意圖不變且 focused 與 module contract GREEN</li><li>相鄰回歸全部 GREEN 或逐項分類</li><li>獨立實測與審查；無越界修改</li></ul></dd></dl></dd><dt><b>scope</b></dt><dd><dl><dt><b>allowedNow</b></dt><dd><ul><li>docs/dispatch-plan/tasks/webhook-delivery/UI-02.json</li><li>docs/dispatch-plan/bdd/S-UI-02.feature</li><li>docs/dispatch-plan/fixtures/UI-02.json</li></ul></dd><dt><b>productionAllowed</b></dt><dd><ul></ul></dd><dt><b>protected</b></dt><dd><ul><li>serve-board.ps1</li><li>serve-ext.ps1</li><li><a href="../../board.html">board.html</a></li><li>.ai-pm/**</li><li>.ai-board/**</li><li>.ai-hooks/**</li><li>.githooks/**</li><li>.github/**</li></ul></dd><dt><b>gate</b></dt><dd>具體產品路徑、介面與 RED 尚未凍結；禁止由本工單開始實作</dd></dl></dd><dt><b>regression</b></dt><dd><ul><li>L0 pure policies</li><li>L1 public component</li><li>L2 module ports</li><li>L3 real adapters</li><li>L4 adjacent modules</li><li>L5 system acceptance</li></ul></dd><dt><b>roles</b></dt><dd><dl><dt><b>developer</b></dt><dd>UNASSIGNED</dd><dt><b>verifier</b></dt><dd>UNASSIGNED distinct identity/session</dd><dt><b>reviewer</b></dt><dd>UNASSIGNED distinct identity/session</dd></dl></dd><dt><b>history</b></dt><dd><ul><li><dl><dt><b>at</b></dt><dd>2026-11-06T00:00:00+08:00</dd><dt><b>from</b></dt><dd>None</dd><dt><b>to</b></dt><dd>Backlog</dd><dt><b>by</b></dt><dd>planning-assistant</dd><dt><b>reason</b></dt><dd>建立文件工單，未匯入正式看板</dd></dl></li></ul></dd></dl></li></ul></section><section><h2>risks</h2><ul><li>既有 claim/report 尚不足以提供 generation fencing 與 completion idempotency，需先核准相容擴充</li><li>目前無產品層實測、無可執行產品綁定、不可派工</li><li>不得以文件檢查取代行為證據</li><li>Empty-skeleton RED is not fault-handling verification or product UI acceptance; inspect per-case reachability</li></ul></section><section><h2>decisions</h2><ul><li>六角形＋洋蔥；不引入 CQRS 或通用工作流引擎</li><li>保留既有 API；新增能力需詳細契約核准</li><li>本套件不修改正式看板</li></ul></section><section><h2>metadata</h2><dl><dt><b>date</b></dt><dd>2026-11-07</dd><dt><b>revision</b></dt><dd>1</dd><dt><b>source</b></dt><dd>embedded ModuleSpec; regenerate using build_plan.py</dd></dl></section><section><h2>redEvidence</h2><dl><dt><b>date</b></dt><dd>2026-11-07</dd><dt><b>scopeApproval</b></dt><dd>APPROVED</dd><dt><b>detailedSpecificationApproval</b></dt><dd>APPROVED by user this turn</dd><dt><b>branch</b></dt><dd>master</dd><dt><b>head</b></dt><dd>ab2392318eb6e919fb5e4527100c9741b8ca3a16</dd><dt><b>testFramework</b></dt><dd>PowerShell input skeleton + Python standard-library executable ports/drivers + isolated Playwright 1.56.1 / installed Chrome</dd><dt><b>productionChanges</b></dt><dd>False</dd><dt><b>independentVerification</b></dt><dd>NOT RUN</dd><dt><b>approvalGate</b></dt><dd>PRESERVED</dd><dt><b>contractSkeletonCases</b></dt><dd>48</dd><dt><b>qualifiedBehaviorRED</b></dt><dd><ul></ul></dd><dt><b>remainingCases</b></dt><dd><ul><li>TDD-SCH-01-1</li><li>TDD-SCH-01-2</li><li>TDD-SCH-01-3</li><li>TDD-SCH-02-1</li><li>TDD-SCH-02-2</li><li>TDD-SCH-02-3</li><li>TDD-WH-01-1</li><li>TDD-WH-01-2</li><li>TDD-WH-01-3</li><li>TDD-WH-02-1</li><li>TDD-WH-02-2</li><li>TDD-WH-02-3</li><li>TDD-RUN-01-1</li><li>TDD-RUN-01-2</li><li>TDD-RUN-01-3</li><li>TDD-RUN-02-1</li><li>TDD-RUN-02-2</li><li>TDD-RUN-02-3</li><li>TDD-RUN-03-1</li><li>TDD-RUN-03-2</li><li>TDD-RUN-03-3</li><li>TDD-CMP-01-1</li><li>TDD-CMP-01-2</li><li>TDD-CMP-01-3</li><li>TDD-CMP-02-1</li><li>TDD-CMP-02-2</li><li>TDD-CMP-02-3</li><li>TDD-RUN-04-1</li><li>TDD-RUN-04-2</li><li>TDD-RUN-04-3</li><li>TDD-GOV-01-1</li><li>TDD-GOV-01-2</li><li>TDD-GOV-01-3</li><li>TDD-GOV-02-1</li><li>TDD-GOV-02-2</li><li>TDD-GOV-02-3</li><li>TDD-UI-01-1</li><li>TDD-UI-01-2</li><li>TDD-UI-01-3</li><li>TDD-UI-02-1</li><li>TDD-UI-02-2</li><li>TDD-UI-02-3</li><li>TDD-UI-03-1</li><li>TDD-UI-03-2</li><li>TDD-UI-03-3</li><li>TDD-INT-01-1</li><li>TDD-INT-01-2</li><li>TDD-INT-01-3</li></ul></dd><dt><b>notReadyReasons</b></dt><dd><ul><li>Independent R3 test-quality review pending</li><li>Production Skeleton, Port/error/storage contracts and productionAllowed not frozen</li><li>Unimplemented subject has unreachable fault paths; no product failure-handling acceptance</li><li>Product UI, real CLI/Adapters/install/regression NOT RUN</li></ul></dd><dt><b>readyForImplementation</b></dt><dd>False</dd><dt><b>commands</b></dt><dd><dl><dt><b>all</b></dt><dd>pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1</dd><dt><b>scheduler</b></dt><dd>pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task SCH-01</dd></dl></dd><dt><b>executionExitCodes</b></dt><dd><dl><dt><b>0</b></dt><dd>all selected contract assertions pass</dd><dt><b>1</b></dt><dd>behavior assertions differ</dd><dt><b>2</b></dt><dd>invalid RED: infrastructure or fixture failure</dd></dl></dd><dt><b>qualifiedLayer</b></dt><dd>Current source: 2 safety PASS / 46 subject RED; independent R3 quality review pending; no automatic qualification</dd><dt><b>canonicalEvidence</b></dt><dd>review-fixes-r3-evidence/all.json</dd><dt><b>newlyQualifiedCases</b></dt><dd>45</dd><dt><b>pendingFaultHandlingVerification</b></dt><dd><ul><li><dl><dt><b>id</b></dt><dd>TDD-SCH-02-3</dd><dt><b>unreached</b></dt><dd><ul><li>Store.Commit</li></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-RUN-01-3</dd><dt><b>unreached</b></dt><dd><ul><li>Store.Commit</li></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-RUN-02-2</dd><dt><b>unreached</b></dt><dd><ul><li>Process.Start</li></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-RUN-03-2</dd><dt><b>unreached</b></dt><dd><ul><li>Board.Renew</li><li>Process.Stop</li></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-CMP-02-1</dd><dt><b>unreached</b></dt><dd><ul><li>Completion.ResponseAfterCommit</li></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-CMP-02-2</dd><dt><b>unreached</b></dt><dd><ul><li>Board.Release</li></ul></dd></dl></li></ul></dd><dt><b>qualityReviewStatus</b></dt><dd>PENDING_R3</dd><dt><b>executionCounts</b></dt><dd><dl><dt><b>passed</b></dt><dd>2</dd><dt><b>red</b></dt><dd>46</dd><dt><b>invalid</b></dt><dd>0</dd></dl></dd><dt><b>positiveControls</b></dt><dd>21</dd><dt><b>mutantsKilled</b></dt><dd>21</dd><dt><b>priorIndependentReview</b></dt><dd><dl><dt><b>report</b></dt><dd>independent-review-r2-2026-11-07.md</dd><dt><b>status</b></dt><dd>Historical source review; repairs now require R3 review</dd></dl></dd></dl></section><section><h2>behaviorEvidence</h2><ul><li><dl><dt><b>id</b></dt><dd>TDD-WH-01-1</dd><dt><b>status</b></dt><dd>BEHAVIOR_RED</dd><dt><b>checks</b></dt><dd><ul><li><dl><dt><b>assertion</b></dt><dd>real HTTP received request</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>1</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>durable delivery receipt</dd><dt><b>actual</b></dt><dd>pending</dd><dt><b>expected</b></dt><dd>delivered</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>not work completion</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>0</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>no running job without matching authoritative lease</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>development cannot mark any task Done or Blue</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>delivery preserves all tickets</dd><dt><b>actual</b></dt><dd><dl><dt><b>FIX-1</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul></ul></dd></dl></dd><dt><b>FIX-2</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul></ul></dd></dl></dd><dt><b>FIX-3</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul><li>FIX-1</li></ul></dd></dl></dd></dl></dd><dt><b>expected</b></dt><dd><dl><dt><b>FIX-1</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul></ul></dd></dl></dd><dt><b>FIX-2</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul></ul></dd></dl></dd><dt><b>FIX-3</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul><li>FIX-1</li></ul></dd></dl></dd></dl></dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>subject error boundary is structured</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li></ul></dd><dt><b>missingFaultPaths</b></dt><dd><ul></ul></dd><dt><b>notes</b></dt><dd><ul></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-WH-01-2</dd><dt><b>status</b></dt><dd>BEHAVIOR_RED</dd><dt><b>checks</b></dt><dd><ul><li><dl><dt><b>assertion</b></dt><dd>timeout peer contacted</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>1</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>retry state persisted</dd><dt><b>actual</b></dt><dd>pending</dd><dt><b>expected</b></dt><dd>retry</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>event preserved</dd><dt><b>actual</b></dt><dd>evt-1</dd><dt><b>expected</b></dt><dd>evt-1</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>no running job without matching authoritative lease</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>development cannot mark any task Done or Blue</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>timeout classified</dd><dt><b>actual</b></dt><dd>None</dd><dt><b>expected</b></dt><dd>Timeout</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>timeout increments attempt</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>1</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>timeout persists next retry</dd><dt><b>actual</b></dt><dd>None</dd><dt><b>expected</b></dt><dd>1794013210</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>subject error boundary is structured</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li></ul></dd><dt><b>missingFaultPaths</b></dt><dd><ul></ul></dd><dt><b>notes</b></dt><dd><ul></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-WH-01-3</dd><dt><b>status</b></dt><dd>BEHAVIOR_RED</dd><dt><b>checks</b></dt><dd><ul><li><dl><dt><b>assertion</b></dt><dd>no rejected network contact</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>0</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>config unchanged</dd><dt><b>actual</b></dt><dd><dl><dt><b>enabled</b></dt><dd>False</dd><dt><b>intervalSec</b></dt><dd>60</dd><dt><b>maxConcurrent</b></dt><dd>1</dd><dt><b>revision</b></dt><dd>1</dd></dl></dd><dt><b>expected</b></dt><dd><dl><dt><b>enabled</b></dt><dd>False</dd><dt><b>intervalSec</b></dt><dd>60</dd><dt><b>maxConcurrent</b></dt><dd>1</dd><dt><b>revision</b></dt><dd>1</dd></dl></dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>observable operation result</dd><dt><b>actual</b></dt><dd>NotImplemented</dd><dt><b>expected</b></dt><dd>Validation</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>no running job without matching authoritative lease</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>development cannot mark any task Done or Blue</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>rejected target cannot invoke HTTP transport</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>0</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>observable operation result</dd><dt><b>actual</b></dt><dd>NotImplemented</dd><dt><b>expected</b></dt><dd>Validation</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>complete authoritative snapshot unchanged</dd><dt><b>actual</b></dt><dd><dl><dt><b>outbox</b></dt><dd><ul><li><dl><dt><b>eventId</b></dt><dd>evt-1</dd><dt><b>body</b></dt><dd>{&quot;schemaVersion&quot;:1,&quot;eventId&quot;:&quot;evt-1&quot;,&quot;projectId&quot;:&quot;fixture-guguboard&quot;,&quot;scheduleRevision&quot;:1,&quot;occurredAt&quot;:&quot;2026-11-07T09:00:00+08:00&quot;,&quot;eventType&quot;:&quot;wakeup&quot;,&quot;targetRunnerId&quot;:&quot;runner-1&quot;}</dd><dt><b>headers</b></dt><dd><dl><dt><b>Content-Type</b></dt><dd>application/json</dd><dt><b>X-Key-Id</b></dt><dd>test-only</dd><dt><b>X-Timestamp</b></dt><dd>1794013200</dd><dt><b>X-Signature</b></dt><dd>447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139</dd></dl></dd><dt><b>url</b></dt><dd>http://127.0.0.1:61441/events</dd><dt><b>status</b></dt><dd>pending</dd><dt><b>attempt</b></dt><dd>0</dd></dl></li></ul></dd><dt><b>inbox</b></dt><dd><ul></ul></dd><dt><b>journal</b></dt><dd><dl></dl></dd><dt><b>tickets</b></dt><dd><dl><dt><b>FIX-1</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul></ul></dd></dl></dd><dt><b>FIX-2</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul></ul></dd></dl></dd><dt><b>FIX-3</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul><li>FIX-1</li></ul></dd></dl></dd></dl></dd><dt><b>leases</b></dt><dd><dl></dl></dd><dt><b>runs</b></dt><dd><ul></ul></dd><dt><b>config</b></dt><dd><dl><dt><b>enabled</b></dt><dd>False</dd><dt><b>intervalSec</b></dt><dd>60</dd><dt><b>maxConcurrent</b></dt><dd>1</dd><dt><b>revision</b></dt><dd>1</dd></dl></dd><dt><b>cursor</b></dt><dd>0</dd><dt><b>verifications</b></dt><dd><ul></ul></dd><dt><b>reviews</b></dt><dd><ul></ul></dd><dt><b>approvals</b></dt><dd><ul></ul></dd><dt><b>runLedger</b></dt><dd><dl><dt><b>run-1</b></dt><dd><dl><dt><b>runId</b></dt><dd>run-1</dd><dt><b>ticketId</b></dt><dd>FIX-1</dd><dt><b>projectId</b></dt><dd>fixture-guguboard</dd><dt><b>owner</b></dt><dd>dev-1</dd><dt><b>developerSession</b></dt><dd>session-dev</dd><dt><b>leaseGeneration</b></dt><dd>1</dd><dt><b>checkoutSha</b></dt><dd>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</dd><dt><b>tree</b></dt><dd>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</dd><dt><b>workspace</b></dt><dd>fixture-workspace-1</dd></dl></dd></dl></dd><dt><b>principals</b></dt><dd><dl><dt><b>dev-1</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-dev</dd></dl></dd><dt><b>qa-1</b></dt><dd><dl><dt><b>role</b></dt><dd>verifier</dd><dt><b>session</b></dt><dd>session-qa</dd></dl></dd><dt><b>review-1</b></dt><dd><dl><dt><b>role</b></dt><dd>reviewer</dd><dt><b>session</b></dt><dd>session-review</dd></dl></dd><dt><b>human-1</b></dt><dd><dl><dt><b>role</b></dt><dd>admin</dd><dt><b>session</b></dt><dd>session-human</dd></dl></dd><dt><b>viewer-1</b></dt><dd><dl><dt><b>role</b></dt><dd>viewer</dd><dt><b>session</b></dt><dd>session-viewer</dd></dl></dd><dt><b>worker-a</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-worker-a</dd></dl></dd><dt><b>worker-b</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-worker-b</dd></dl></dd></dl></dd><dt><b>pr</b></dt><dd><dl><dt><b>id</b></dt><dd>fixture-pr</dd><dt><b>merged</b></dt><dd>True</dd><dt><b>candidateTree</b></dt><dd>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</dd><dt><b>mergedTree</b></dt><dd>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</dd></dl></dd><dt><b>evidence</b></dt><dd><dl><dt><b>fixture://evidence</b></dt><dd><dl><dt><b>digest</b></dt><dd>ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e</dd><dt><b>exists</b></dt><dd>True</dd></dl></dd><dt><b>fixture://qa</b></dt><dd><dl><dt><b>exists</b></dt><dd>True</dd></dl></dd><dt><b>fixture://review</b></dt><dd><dl><dt><b>exists</b></dt><dd>True</dd></dl></dd></dl></dd><dt><b>roleGrants</b></dt><dd><dl><dt><b>dev-1</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-dev</dd></dl></dd><dt><b>qa-1</b></dt><dd><dl><dt><b>role</b></dt><dd>verifier</dd><dt><b>session</b></dt><dd>session-qa</dd></dl></dd><dt><b>review-1</b></dt><dd><dl><dt><b>role</b></dt><dd>reviewer</dd><dt><b>session</b></dt><dd>session-review</dd></dl></dd><dt><b>human-1</b></dt><dd><dl><dt><b>role</b></dt><dd>admin</dd><dt><b>session</b></dt><dd>session-human</dd></dl></dd><dt><b>viewer-1</b></dt><dd><dl><dt><b>role</b></dt><dd>viewer</dd><dt><b>session</b></dt><dd>session-viewer</dd></dl></dd><dt><b>worker-a</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-worker-a</dd></dl></dd><dt><b>worker-b</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-worker-b</dd></dl></dd></dl></dd><dt><b>httpPolicy</b></dt><dd><dl><dt><b>allowedOrigins</b></dt><dd><ul><li>http://127.0.0.1:61441</li></ul></dd><dt><b>timeoutSec</b></dt><dd>10</dd><dt><b>followRedirects</b></dt><dd>False</dd></dl></dd></dl></dd><dt><b>expected</b></dt><dd><dl><dt><b>outbox</b></dt><dd><ul><li><dl><dt><b>eventId</b></dt><dd>evt-1</dd><dt><b>body</b></dt><dd>{&quot;schemaVersion&quot;:1,&quot;eventId&quot;:&quot;evt-1&quot;,&quot;projectId&quot;:&quot;fixture-guguboard&quot;,&quot;scheduleRevision&quot;:1,&quot;occurredAt&quot;:&quot;2026-11-07T09:00:00+08:00&quot;,&quot;eventType&quot;:&quot;wakeup&quot;,&quot;targetRunnerId&quot;:&quot;runner-1&quot;}</dd><dt><b>headers</b></dt><dd><dl><dt><b>Content-Type</b></dt><dd>application/json</dd><dt><b>X-Key-Id</b></dt><dd>test-only</dd><dt><b>X-Timestamp</b></dt><dd>1794013200</dd><dt><b>X-Signature</b></dt><dd>447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139</dd></dl></dd><dt><b>url</b></dt><dd>http://127.0.0.1:61441/events</dd><dt><b>status</b></dt><dd>pending</dd><dt><b>attempt</b></dt><dd>0</dd></dl></li></ul></dd><dt><b>inbox</b></dt><dd><ul></ul></dd><dt><b>journal</b></dt><dd><dl></dl></dd><dt><b>tickets</b></dt><dd><dl><dt><b>FIX-1</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul></ul></dd></dl></dd><dt><b>FIX-2</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul></ul></dd></dl></dd><dt><b>FIX-3</b></dt><dd><dl><dt><b>status</b></dt><dd>Todo</dd><dt><b>light</b></dt><dd>Gray</dd><dt><b>dependsOn</b></dt><dd><ul><li>FIX-1</li></ul></dd></dl></dd></dl></dd><dt><b>leases</b></dt><dd><dl></dl></dd><dt><b>runs</b></dt><dd><ul></ul></dd><dt><b>config</b></dt><dd><dl><dt><b>enabled</b></dt><dd>False</dd><dt><b>intervalSec</b></dt><dd>60</dd><dt><b>maxConcurrent</b></dt><dd>1</dd><dt><b>revision</b></dt><dd>1</dd></dl></dd><dt><b>cursor</b></dt><dd>0</dd><dt><b>verifications</b></dt><dd><ul></ul></dd><dt><b>reviews</b></dt><dd><ul></ul></dd><dt><b>approvals</b></dt><dd><ul></ul></dd><dt><b>runLedger</b></dt><dd><dl><dt><b>run-1</b></dt><dd><dl><dt><b>runId</b></dt><dd>run-1</dd><dt><b>ticketId</b></dt><dd>FIX-1</dd><dt><b>projectId</b></dt><dd>fixture-guguboard</dd><dt><b>owner</b></dt><dd>dev-1</dd><dt><b>developerSession</b></dt><dd>session-dev</dd><dt><b>leaseGeneration</b></dt><dd>1</dd><dt><b>checkoutSha</b></dt><dd>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</dd><dt><b>tree</b></dt><dd>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</dd><dt><b>workspace</b></dt><dd>fixture-workspace-1</dd></dl></dd></dl></dd><dt><b>principals</b></dt><dd><dl><dt><b>dev-1</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-dev</dd></dl></dd><dt><b>qa-1</b></dt><dd><dl><dt><b>role</b></dt><dd>verifier</dd><dt><b>session</b></dt><dd>session-qa</dd></dl></dd><dt><b>review-1</b></dt><dd><dl><dt><b>role</b></dt><dd>reviewer</dd><dt><b>session</b></dt><dd>session-review</dd></dl></dd><dt><b>human-1</b></dt><dd><dl><dt><b>role</b></dt><dd>admin</dd><dt><b>session</b></dt><dd>session-human</dd></dl></dd><dt><b>viewer-1</b></dt><dd><dl><dt><b>role</b></dt><dd>viewer</dd><dt><b>session</b></dt><dd>session-viewer</dd></dl></dd><dt><b>worker-a</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-worker-a</dd></dl></dd><dt><b>worker-b</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-worker-b</dd></dl></dd></dl></dd><dt><b>pr</b></dt><dd><dl><dt><b>id</b></dt><dd>fixture-pr</dd><dt><b>merged</b></dt><dd>True</dd><dt><b>candidateTree</b></dt><dd>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</dd><dt><b>mergedTree</b></dt><dd>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</dd></dl></dd><dt><b>evidence</b></dt><dd><dl><dt><b>fixture://evidence</b></dt><dd><dl><dt><b>digest</b></dt><dd>ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e</dd><dt><b>exists</b></dt><dd>True</dd></dl></dd><dt><b>fixture://qa</b></dt><dd><dl><dt><b>exists</b></dt><dd>True</dd></dl></dd><dt><b>fixture://review</b></dt><dd><dl><dt><b>exists</b></dt><dd>True</dd></dl></dd></dl></dd><dt><b>roleGrants</b></dt><dd><dl><dt><b>dev-1</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-dev</dd></dl></dd><dt><b>qa-1</b></dt><dd><dl><dt><b>role</b></dt><dd>verifier</dd><dt><b>session</b></dt><dd>session-qa</dd></dl></dd><dt><b>review-1</b></dt><dd><dl><dt><b>role</b></dt><dd>reviewer</dd><dt><b>session</b></dt><dd>session-review</dd></dl></dd><dt><b>human-1</b></dt><dd><dl><dt><b>role</b></dt><dd>admin</dd><dt><b>session</b></dt><dd>session-human</dd></dl></dd><dt><b>viewer-1</b></dt><dd><dl><dt><b>role</b></dt><dd>viewer</dd><dt><b>session</b></dt><dd>session-viewer</dd></dl></dd><dt><b>worker-a</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-worker-a</dd></dl></dd><dt><b>worker-b</b></dt><dd><dl><dt><b>role</b></dt><dd>dev-agent</dd><dt><b>session</b></dt><dd>session-worker-b</dd></dl></dd></dl></dd><dt><b>httpPolicy</b></dt><dd><dl><dt><b>allowedOrigins</b></dt><dd><ul><li>http://127.0.0.1:61441</li></ul></dd><dt><b>timeoutSec</b></dt><dd>10</dd><dt><b>followRedirects</b></dt><dd>False</dd></dl></dd></dl></dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>second rejected origin also causes no HTTP</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>0</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>permitted origin has positive configuration path</dd><dt><b>actual</b></dt><dd>None</dd><dt><b>expected</b></dt><dd>http://127.0.0.1:61441/events</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>subject error boundary is structured</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li></ul></dd><dt><b>missingFaultPaths</b></dt><dd><ul></ul></dd><dt><b>notes</b></dt><dd><ul></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-WH-02-1</dd><dt><b>status</b></dt><dd>BEHAVIOR_RED</dd><dt><b>checks</b></dt><dd><ul><li><dl><dt><b>assertion</b></dt><dd>no early retry</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>0</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>actual retry at boundary</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>1</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>stable event ID</dd><dt><b>actual</b></dt><dd>evt-1</dd><dt><b>expected</b></dt><dd>evt-1</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>stable body</dd><dt><b>actual</b></dt><dd>{&quot;schemaVersion&quot;:1,&quot;eventId&quot;:&quot;evt-1&quot;,&quot;projectId&quot;:&quot;fixture-guguboard&quot;,&quot;scheduleRevision&quot;:1,&quot;occurredAt&quot;:&quot;2026-11-07T09:00:00+08:00&quot;,&quot;eventType&quot;:&quot;wakeup&quot;,&quot;targetRunnerId&quot;:&quot;runner-1&quot;}</dd><dt><b>expected</b></dt><dd>{&quot;schemaVersion&quot;:1,&quot;eventId&quot;:&quot;evt-1&quot;,&quot;projectId&quot;:&quot;fixture-guguboard&quot;,&quot;scheduleRevision&quot;:1,&quot;occurredAt&quot;:&quot;2026-11-07T09:00:00+08:00&quot;,&quot;eventType&quot;:&quot;wakeup&quot;,&quot;targetRunnerId&quot;:&quot;runner-1&quot;}</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>no running job without matching authoritative lease</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>development cannot mark any task Done or Blue</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>peer captures one delivered body</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>1</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>declared delivery timeout is ten seconds</dd><dt><b>actual</b></dt><dd>None</dd><dt><b>expected</b></dt><dd>10</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>subject error boundary is structured</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li></ul></dd><dt><b>missingFaultPaths</b></dt><dd><ul></ul></dd><dt><b>notes</b></dt><dd><ul></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-WH-02-2</dd><dt><b>status</b></dt><dd>BEHAVIOR_RED</dd><dt><b>checks</b></dt><dd><ul><li><dl><dt><b>assertion</b></dt><dd>bounded retries</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>0</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>durable dead letter</dd><dt><b>actual</b></dt><dd>retry</dd><dt><b>expected</b></dt><dd>manual</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>no running job without matching authoritative lease</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>development cannot mark any task Done or Blue</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>subject error boundary is structured</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li></ul></dd><dt><b>missingFaultPaths</b></dt><dd><ul></ul></dd><dt><b>notes</b></dt><dd><ul></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-WH-02-3</dd><dt><b>status</b></dt><dd>BEHAVIOR_RED</dd><dt><b>checks</b></dt><dd><ul><li><dl><dt><b>assertion</b></dt><dd>subject persisted retry before restart</dd><dt><b>actual</b></dt><dd>pending</dd><dt><b>expected</b></dt><dd>retry</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>retry count survives reopen</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>0</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>retry time survives reopen</dd><dt><b>actual</b></dt><dd>None</dd><dt><b>expected</b></dt><dd>None</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>recovered retry delivered</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>2</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>no running job without matching authoritative lease</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>development cannot mark any task Done or Blue</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>peer captures one delivered body</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>1</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>declared delivery timeout is ten seconds</dd><dt><b>actual</b></dt><dd>None</dd><dt><b>expected</b></dt><dd>10</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>subject error boundary is structured</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li></ul></dd><dt><b>missingFaultPaths</b></dt><dd><ul></ul></dd><dt><b>notes</b></dt><dd><ul></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-UI-02-1</dd><dt><b>status</b></dt><dd>BEHAVIOR_RED</dd><dt><b>checks</b></dt><dd><ul><li><dl><dt><b>assertion</b></dt><dd>key reference displayed</dd><dt><b>actual</b></dt><dd></dd><dt><b>expected</b></dt><dd>test-key-1</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>secret absent from all DOM and wire responses</dd><dt><b>actual</b></dt><dd>False</dd><dt><b>expected</b></dt><dd>False</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>no running job without matching authoritative lease</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>development cannot mark any task Done or Blue</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>subject error boundary is structured</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li></ul></dd><dt><b>missingFaultPaths</b></dt><dd><ul></ul></dd><dt><b>notes</b></dt><dd><ul><li><dl><dt><b>browser</b></dt><dd>156.0.8078.81</dd><dt><b>screenshot</b></dt><dd>D:\GuGuBoard\docs\dispatch-plan\red\review-fixes-r3-evidence\TDD-UI-02-1.png</dd></dl></li></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-UI-02-2</dd><dt><b>status</b></dt><dd>BEHAVIOR_RED</dd><dt><b>checks</b></dt><dd><ul><li><dl><dt><b>assertion</b></dt><dd>actual test delivery transport invoked</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>1</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>exact health-only response</dd><dt><b>actual</b></dt><dd></dd><dt><b>expected</b></dt><dd>OK</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>health request reached runner ingress</dd><dt><b>actual</b></dt><dd>False</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>test-event mode sent on wire</dd><dt><b>actual</b></dt><dd>False</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>test never starts real job</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>0</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>test creates no inbox or lease</dd><dt><b>actual</b></dt><dd><ul><li><ul></ul></li><li><dl></dl></li></ul></dd><dt><b>expected</b></dt><dd><ul><li><ul></ul></li><li><dl></dl></li></ul></dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>no running job without matching authoritative lease</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>development cannot mark any task Done or Blue</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>subject error boundary is structured</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li></ul></dd><dt><b>missingFaultPaths</b></dt><dd><ul></ul></dd><dt><b>notes</b></dt><dd><ul><li><dl><dt><b>browser</b></dt><dd>156.0.8078.81</dd><dt><b>screenshot</b></dt><dd>D:\GuGuBoard\docs\dispatch-plan\red\review-fixes-r3-evidence\TDD-UI-02-2.png</dd></dl></li></ul></dd></dl></li><li><dl><dt><b>id</b></dt><dd>TDD-UI-02-3</dd><dt><b>status</b></dt><dd>BEHAVIOR_RED</dd><dt><b>checks</b></dt><dd><ul><li><dl><dt><b>assertion</b></dt><dd>offline visible</dd><dt><b>actual</b></dt><dd></dd><dt><b>expected</b></dt><dd>Offline</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>pause usable</dd><dt><b>actual</b></dt><dd>False</dd><dt><b>expected</b></dt><dd>False</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>click durably pauses delivery</dd><dt><b>actual</b></dt><dd>False</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>paused delivery sends nothing</dd><dt><b>actual</b></dt><dd>0</dd><dt><b>expected</b></dt><dd>0</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>same due event can send when unpaused</dd><dt><b>actual</b></dt><dd>False</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>False</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>no running job without matching authoritative lease</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>development cannot mark any task Done or Blue</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li><li><dl><dt><b>assertion</b></dt><dd>subject error boundary is structured</dd><dt><b>actual</b></dt><dd>True</dd><dt><b>expected</b></dt><dd>True</dd><dt><b>pass</b></dt><dd>True</dd></dl></li></ul></dd><dt><b>missingFaultPaths</b></dt><dd><ul></ul></dd><dt><b>notes</b></dt><dd><ul><li><dl><dt><b>browser</b></dt><dd>156.0.8078.81</dd><dt><b>screenshot</b></dt><dd>D:\GuGuBoard\docs\dispatch-plan\red\review-fixes-r3-evidence\TDD-UI-02-3.png</dd></dl></li></ul></dd></dl></li></ul></section><script type="application/json" id="module-spec">{
+  "title": "Webhook 投遞",
+  "module": "webhook-delivery",
+  "purpose": "擁有投遞紀錄與重試；不擁有工單執行",
+  "status": {
+    "architecture": "DETAILED_SPEC_APPROVED; executable envelope still pending",
+    "scope": "APPROVED",
+    "skeleton": "TEST ONLY; production NOT CREATED",
+    "red": "Current source: 2 safety PASS / 46 subject RED; independent R3 quality review pending; no automatic qualification",
+    "implementation": "NOT STARTED",
+    "moduleHealth": "NOT_READY"
+  },
+  "architecture": {
+    "context": "GuGuBoard 管理者、排程服務、Webhook、Windows Runner、AI CLI、獨立驗證與 Git PR provider",
+    "domain": "純政策與不變量，不依賴平台",
+    "application": "協調以下 input/output ports",
+    "inputPorts": [
+      "DeliverPending",
+      "RetryDue",
+      "TestDelivery"
+    ],
+    "outputPorts": [
+      "HttpDelivery",
+      "DeliveryStore",
+      "SecretProvider",
+      "Clock"
+    ],
+    "drivingAdapters": [
+      "管理 UI／API",
+      "受控計時器或 Webhook ingress",
+      "Contract tests"
+    ],
+    "drivenAdapters": [
+      "持久化",
+      "HTTP／Agent API",
+      "Windows 程序或測試 doubles：依實際 Port 選用"
+    ],
+    "hexagonalDiagram": "外部 UI／Timer／HTTP → Input Ports → Application → Domain；Application → Output Ports ← Infrastructure implements",
+    "dependencyDiagram": "Presentation → Command → Application → Domain；Adapters → Ports；內層不引用外層",
+    "stateOwnership": "擁有投遞紀錄與重試；不擁有工單執行",
+    "mutationBoundary": "僅對應 use case 可經儲存 Port 變更其權威狀態",
+    "transactionBoundary": "事件識別固定；成功接收後才標示 delivered",
+    "externalBoundary": "AI 輸出與網路輸入不可信；驗證身分與證據來源",
+    "forbidden": [
+      "Domain → HTTP／Filesystem／Process",
+      "UI → shell／直接寫狀態",
+      "跨模組直接讀寫內部狀態"
+    ]
+  },
+  "contractsAndInvariants": [
+    "C01：有效租約為執行授權；同工單最多一個有效執行者。舊程序停止無法確認時隔離並阻擋再啟動。",
+    "C02：Webhook 至少一次投遞；接收端依 eventId 與 payload digest 去重；同 ID 不同內容拒絕。",
+    "C03：HTTP 202 只代表 durable inbox 已保存；不表示工作、交付或驗收完成。",
+    "C04：exit 0 不代表成功交付；成功需要測試、證據、工單、runId、lease generation、checkout SHA。",
+    "C05：同 completionId 同內容可重送；不同內容衝突；Confirm 前不得接下一張。",
+    "C06：開發只能 In Review／READY_FOR_TDD；Done 需獨立驗證、獨立審查、授權核准及 PR 合併。",
+    "C07：依賴仍需 Done／Released；回報交付不解除依賴。",
+    "C08：排程與候選選擇在領單端再驗證；Webhook 不帶執行權；既有派工器與新 Runner 不得同時驅動同專案。",
+    "C09：角色、工作階段與版本來自可信記錄，不能採信 AI 自填身分。驗證證據綁定候選 tree；合併 tree 不同須重驗。",
+    "C10：錯誤分類 Validation／Unauthorized／Conflict／Unavailable／Timeout／LeaseLost／ReplanRequired；失敗不回傳 succeeded=true。"
+  ],
+  "bddCoverage": [
+    {
+      "id": "S-WH-01-1",
+      "given": "有一筆待投遞事件",
+      "when": "接收端可靠接收",
+      "then": "事件標示已接收而非工作完成",
+      "test": "TDD-WH-01-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-WH-01-2",
+      "given": "接收端逾時",
+      "when": "投遞事件",
+      "then": "保留待重試紀錄",
+      "test": "TDD-WH-01-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-WH-01-3",
+      "given": "目標不在允許清單",
+      "when": "儲存目標",
+      "then": "拒絕目標且不連線",
+      "test": "TDD-WH-01-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-WH-02-1",
+      "given": "事件已失敗一次",
+      "when": "到達下一重試時間",
+      "then": "使用相同事件識別重新投遞",
+      "test": "TDD-WH-02-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-WH-02-2",
+      "given": "事件已連續失敗五次",
+      "when": "評估重試",
+      "then": "停止自動重試並顯示人工處理",
+      "test": "TDD-WH-02-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-WH-02-3",
+      "given": "服務在重試前重啟",
+      "when": "恢復投遞",
+      "then": "保留次數與下次時間",
+      "test": "TDD-WH-02-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-UI-02-1",
+      "given": "管理者設定金鑰",
+      "when": "重新開啟設定",
+      "then": "只顯示金鑰參照且不回傳秘密",
+      "test": "TDD-UI-02-1",
+      "level": "L3",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-UI-02-2",
+      "given": "管理者發出測試事件",
+      "when": "檢視結果",
+      "then": "顯示連線結果且不啟動正式工單",
+      "test": "TDD-UI-02-2",
+      "level": "L3",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-UI-02-3",
+      "given": "Runner 離線",
+      "when": "檢視設定",
+      "then": "顯示離線狀態且可暫停投遞",
+      "test": "TDD-UI-02-3",
+      "level": "L3",
+      "result": "BEHAVIOR_RED"
+    }
+  ],
+  "coverageCategories": {
+    "B1": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B2": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B3": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B4": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B5": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B6": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B7": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B8": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B9": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B10": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B11": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    },
+    "B12": {
+      "status": "Applicable",
+      "evidence": "規劃情境及失敗注入；實際 coverage 待 executable tests",
+      "deferred": "跨 OS 真機驗證 deferred：第一階段 Windows，核心仍須平台無關"
+    }
+  },
+  "tddStrategy": {
+    "levels": [
+      "L0 Unit",
+      "L1 Component",
+      "L2 Module Contract",
+      "L3 Adapter Integration",
+      "L4 Cross-module",
+      "L5 System"
+    ],
+    "red": "Current source: 2 safety PASS / 46 subject RED; independent R3 quality review pending; no automatic qualification",
+    "pendingAutomation": [
+      "凍結產品 input/output ports 與 scope",
+      "產品實作後確認每個故障點實際命中及補償斷言",
+      "獨立測試品質審查與產品 UI/CLI 驗收"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "WH-01",
+      "module": "webhook-delivery",
+      "parentStory": "S-WH-01",
+      "title": "可靠投遞",
+      "intent": "可靠投遞",
+      "layer": "Application",
+      "estimateHours": 6,
+      "status": "Backlog",
+      "light": "Gray",
+      "tdd": "Red",
+      "ci": "NOT RUN",
+      "prUrl": "",
+      "dependsOn": [
+        "SCH-01"
+      ],
+      "contracts": [
+        "C01：有效租約為執行授權；同工單最多一個有效執行者。舊程序停止無法確認時隔離並阻擋再啟動。",
+        "C02：Webhook 至少一次投遞；接收端依 eventId 與 payload digest 去重；同 ID 不同內容拒絕。",
+        "C03：HTTP 202 只代表 durable inbox 已保存；不表示工作、交付或驗收完成。",
+        "C04：exit 0 不代表成功交付；成功需要測試、證據、工單、runId、lease generation、checkout SHA。",
+        "C05：同 completionId 同內容可重送；不同內容衝突；Confirm 前不得接下一張。",
+        "C06：開發只能 In Review／READY_FOR_TDD；Done 需獨立驗證、獨立審查、授權核准及 PR 合併。",
+        "C07：依賴仍需 Done／Released；回報交付不解除依賴。",
+        "C08：排程與候選選擇在領單端再驗證；Webhook 不帶執行權；既有派工器與新 Runner 不得同時驅動同專案。",
+        "C09：角色、工作階段與版本來自可信記錄，不能採信 AI 自填身分。驗證證據綁定候選 tree；合併 tree 不同須重驗。",
+        "C10：錯誤分類 Validation／Unauthorized／Conflict／Unavailable／Timeout／LeaseLost／ReplanRequired；失敗不回傳 succeeded=true。"
+      ],
+      "bdd": [
+        {
+          "id": "S-WH-01-1",
+          "given": "有一筆待投遞事件",
+          "when": "接收端可靠接收",
+          "then": "事件標示已接收而非工作完成",
+          "test": "TDD-WH-01-1",
+          "level": "L2",
+          "result": "BEHAVIOR_RED"
+        },
+        {
+          "id": "S-WH-01-2",
+          "given": "接收端逾時",
+          "when": "投遞事件",
+          "then": "保留待重試紀錄",
+          "test": "TDD-WH-01-2",
+          "level": "L2",
+          "result": "BEHAVIOR_RED"
+        },
+        {
+          "id": "S-WH-01-3",
+          "given": "目標不在允許清單",
+          "when": "儲存目標",
+          "then": "拒絕目標且不連線",
+          "test": "TDD-WH-01-3",
+          "level": "L2",
+          "result": "BEHAVIOR_RED"
+        }
+      ],
+      "fixtures": "fixtures/WH-01.json",
+      "testPlan": {
+        "command": "pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task WH-01",
+        "redCriterion": "測試可載入且 fixture 正確；僅因缺少上述 observable behavior 失敗。缺套件、編譯錯誤與 pending stub 不算 RED。",
+        "failureInjection": "在所有 Output Port 回傳可控失敗；比較前後持久化快照、事件數、啟動次數與工單狀態",
+        "acceptance": [
+          "所有列出 Then 均有可執行斷言",
+          "測試意圖不變且 focused 與 module contract GREEN",
+          "相鄰回歸全部 GREEN 或逐項分類",
+          "獨立實測與審查；無越界修改"
+        ]
+      },
+      "scope": {
+        "allowedNow": [
+          "docs/dispatch-plan/tasks/webhook-delivery/WH-01.json",
+          "docs/dispatch-plan/bdd/S-WH-01.feature",
+          "docs/dispatch-plan/fixtures/WH-01.json"
+        ],
+        "productionAllowed": [],
+        "protected": [
+          "serve-board.ps1",
+          "serve-ext.ps1",
+          "board.html",
+          ".ai-pm/**",
+          ".ai-board/**",
+          ".ai-hooks/**",
+          ".githooks/**",
+          ".github/**"
+        ],
+        "gate": "具體產品路徑、介面與 RED 尚未凍結；禁止由本工單開始實作"
+      },
+      "regression": [
+        "L0 pure policies",
+        "L1 public component",
+        "L2 module ports",
+        "L3 real adapters",
+        "L4 adjacent modules",
+        "L5 system acceptance"
+      ],
+      "roles": {
+        "developer": "UNASSIGNED",
+        "verifier": "UNASSIGNED distinct identity/session",
+        "reviewer": "UNASSIGNED distinct identity/session"
+      },
+      "history": [
+        {
+          "at": "2026-11-06T00:00:00+08:00",
+          "from": null,
+          "to": "Backlog",
+          "by": "planning-assistant",
+          "reason": "建立文件工單，未匯入正式看板"
+        }
+      ]
+    },
+    {
+      "id": "WH-02",
+      "module": "webhook-delivery",
+      "parentStory": "S-WH-02",
+      "title": "有界重試與恢復",
+      "intent": "有界重試與恢復",
+      "layer": "Application",
+      "estimateHours": 6,
+      "status": "Backlog",
+      "light": "Gray",
+      "tdd": "Red",
+      "ci": "NOT RUN",
+      "prUrl": "",
+      "dependsOn": [
+        "WH-01"
+      ],
+      "contracts": [
+        "C01：有效租約為執行授權；同工單最多一個有效執行者。舊程序停止無法確認時隔離並阻擋再啟動。",
+        "C02：Webhook 至少一次投遞；接收端依 eventId 與 payload digest 去重；同 ID 不同內容拒絕。",
+        "C03：HTTP 202 只代表 durable inbox 已保存；不表示工作、交付或驗收完成。",
+        "C04：exit 0 不代表成功交付；成功需要測試、證據、工單、runId、lease generation、checkout SHA。",
+        "C05：同 completionId 同內容可重送；不同內容衝突；Confirm 前不得接下一張。",
+        "C06：開發只能 In Review／READY_FOR_TDD；Done 需獨立驗證、獨立審查、授權核准及 PR 合併。",
+        "C07：依賴仍需 Done／Released；回報交付不解除依賴。",
+        "C08：排程與候選選擇在領單端再驗證；Webhook 不帶執行權；既有派工器與新 Runner 不得同時驅動同專案。",
+        "C09：角色、工作階段與版本來自可信記錄，不能採信 AI 自填身分。驗證證據綁定候選 tree；合併 tree 不同須重驗。",
+        "C10：錯誤分類 Validation／Unauthorized／Conflict／Unavailable／Timeout／LeaseLost／ReplanRequired；失敗不回傳 succeeded=true。"
+      ],
+      "bdd": [
+        {
+          "id": "S-WH-02-1",
+          "given": "事件已失敗一次",
+          "when": "到達下一重試時間",
+          "then": "使用相同事件識別重新投遞",
+          "test": "TDD-WH-02-1",
+          "level": "L2",
+          "result": "BEHAVIOR_RED"
+        },
+        {
+          "id": "S-WH-02-2",
+          "given": "事件已連續失敗五次",
+          "when": "評估重試",
+          "then": "停止自動重試並顯示人工處理",
+          "test": "TDD-WH-02-2",
+          "level": "L2",
+          "result": "BEHAVIOR_RED"
+        },
+        {
+          "id": "S-WH-02-3",
+          "given": "服務在重試前重啟",
+          "when": "恢復投遞",
+          "then": "保留次數與下次時間",
+          "test": "TDD-WH-02-3",
+          "level": "L2",
+          "result": "BEHAVIOR_RED"
+        }
+      ],
+      "fixtures": "fixtures/WH-02.json",
+      "testPlan": {
+        "command": "pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task WH-02",
+        "redCriterion": "測試可載入且 fixture 正確；僅因缺少上述 observable behavior 失敗。缺套件、編譯錯誤與 pending stub 不算 RED。",
+        "failureInjection": "在所有 Output Port 回傳可控失敗；比較前後持久化快照、事件數、啟動次數與工單狀態",
+        "acceptance": [
+          "所有列出 Then 均有可執行斷言",
+          "測試意圖不變且 focused 與 module contract GREEN",
+          "相鄰回歸全部 GREEN 或逐項分類",
+          "獨立實測與審查；無越界修改"
+        ]
+      },
+      "scope": {
+        "allowedNow": [
+          "docs/dispatch-plan/tasks/webhook-delivery/WH-02.json",
+          "docs/dispatch-plan/bdd/S-WH-02.feature",
+          "docs/dispatch-plan/fixtures/WH-02.json"
+        ],
+        "productionAllowed": [],
+        "protected": [
+          "serve-board.ps1",
+          "serve-ext.ps1",
+          "board.html",
+          ".ai-pm/**",
+          ".ai-board/**",
+          ".ai-hooks/**",
+          ".githooks/**",
+          ".github/**"
+        ],
+        "gate": "具體產品路徑、介面與 RED 尚未凍結；禁止由本工單開始實作"
+      },
+      "regression": [
+        "L0 pure policies",
+        "L1 public component",
+        "L2 module ports",
+        "L3 real adapters",
+        "L4 adjacent modules",
+        "L5 system acceptance"
+      ],
+      "roles": {
+        "developer": "UNASSIGNED",
+        "verifier": "UNASSIGNED distinct identity/session",
+        "reviewer": "UNASSIGNED distinct identity/session"
+      },
+      "history": [
+        {
+          "at": "2026-11-06T00:00:00+08:00",
+          "from": null,
+          "to": "Backlog",
+          "by": "planning-assistant",
+          "reason": "建立文件工單，未匯入正式看板"
+        }
+      ]
+    },
+    {
+      "id": "UI-02",
+      "module": "webhook-delivery",
+      "parentStory": "S-UI-02",
+      "title": "Webhook 與 Runner 設定介面",
+      "intent": "Webhook 與 Runner 設定介面",
+      "layer": "Presentation",
+      "estimateHours": 6,
+      "status": "Backlog",
+      "light": "Gray",
+      "tdd": "Red",
+      "ci": "NOT RUN",
+      "prUrl": "",
+      "dependsOn": [
+        "WH-02",
+        "RUN-01"
+      ],
+      "contracts": [
+        "C01：有效租約為執行授權；同工單最多一個有效執行者。舊程序停止無法確認時隔離並阻擋再啟動。",
+        "C02：Webhook 至少一次投遞；接收端依 eventId 與 payload digest 去重；同 ID 不同內容拒絕。",
+        "C03：HTTP 202 只代表 durable inbox 已保存；不表示工作、交付或驗收完成。",
+        "C04：exit 0 不代表成功交付；成功需要測試、證據、工單、runId、lease generation、checkout SHA。",
+        "C05：同 completionId 同內容可重送；不同內容衝突；Confirm 前不得接下一張。",
+        "C06：開發只能 In Review／READY_FOR_TDD；Done 需獨立驗證、獨立審查、授權核准及 PR 合併。",
+        "C07：依賴仍需 Done／Released；回報交付不解除依賴。",
+        "C08：排程與候選選擇在領單端再驗證；Webhook 不帶執行權；既有派工器與新 Runner 不得同時驅動同專案。",
+        "C09：角色、工作階段與版本來自可信記錄，不能採信 AI 自填身分。驗證證據綁定候選 tree；合併 tree 不同須重驗。",
+        "C10：錯誤分類 Validation／Unauthorized／Conflict／Unavailable／Timeout／LeaseLost／ReplanRequired；失敗不回傳 succeeded=true。"
+      ],
+      "bdd": [
+        {
+          "id": "S-UI-02-1",
+          "given": "管理者設定金鑰",
+          "when": "重新開啟設定",
+          "then": "只顯示金鑰參照且不回傳秘密",
+          "test": "TDD-UI-02-1",
+          "level": "L3",
+          "result": "BEHAVIOR_RED"
+        },
+        {
+          "id": "S-UI-02-2",
+          "given": "管理者發出測試事件",
+          "when": "檢視結果",
+          "then": "顯示連線結果且不啟動正式工單",
+          "test": "TDD-UI-02-2",
+          "level": "L3",
+          "result": "BEHAVIOR_RED"
+        },
+        {
+          "id": "S-UI-02-3",
+          "given": "Runner 離線",
+          "when": "檢視設定",
+          "then": "顯示離線狀態且可暫停投遞",
+          "test": "TDD-UI-02-3",
+          "level": "L3",
+          "result": "BEHAVIOR_RED"
+        }
+      ],
+      "fixtures": "fixtures/UI-02.json",
+      "testPlan": {
+        "command": "pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task UI-02",
+        "redCriterion": "測試可載入且 fixture 正確；僅因缺少上述 observable behavior 失敗。缺套件、編譯錯誤與 pending stub 不算 RED。",
+        "failureInjection": "在所有 Output Port 回傳可控失敗；比較前後持久化快照、事件數、啟動次數與工單狀態",
+        "acceptance": [
+          "所有列出 Then 均有可執行斷言",
+          "測試意圖不變且 focused 與 module contract GREEN",
+          "相鄰回歸全部 GREEN 或逐項分類",
+          "獨立實測與審查；無越界修改"
+        ]
+      },
+      "scope": {
+        "allowedNow": [
+          "docs/dispatch-plan/tasks/webhook-delivery/UI-02.json",
+          "docs/dispatch-plan/bdd/S-UI-02.feature",
+          "docs/dispatch-plan/fixtures/UI-02.json"
+        ],
+        "productionAllowed": [],
+        "protected": [
+          "serve-board.ps1",
+          "serve-ext.ps1",
+          "board.html",
+          ".ai-pm/**",
+          ".ai-board/**",
+          ".ai-hooks/**",
+          ".githooks/**",
+          ".github/**"
+        ],
+        "gate": "具體產品路徑、介面與 RED 尚未凍結；禁止由本工單開始實作"
+      },
+      "regression": [
+        "L0 pure policies",
+        "L1 public component",
+        "L2 module ports",
+        "L3 real adapters",
+        "L4 adjacent modules",
+        "L5 system acceptance"
+      ],
+      "roles": {
+        "developer": "UNASSIGNED",
+        "verifier": "UNASSIGNED distinct identity/session",
+        "reviewer": "UNASSIGNED distinct identity/session"
+      },
+      "history": [
+        {
+          "at": "2026-11-06T00:00:00+08:00",
+          "from": null,
+          "to": "Backlog",
+          "by": "planning-assistant",
+          "reason": "建立文件工單，未匯入正式看板"
+        }
+      ]
+    }
+  ],
+  "risks": [
+    "既有 claim/report 尚不足以提供 generation fencing 與 completion idempotency，需先核准相容擴充",
+    "目前無產品層實測、無可執行產品綁定、不可派工",
+    "不得以文件檢查取代行為證據",
+    "Empty-skeleton RED is not fault-handling verification or product UI acceptance; inspect per-case reachability"
+  ],
+  "decisions": [
+    "六角形＋洋蔥；不引入 CQRS 或通用工作流引擎",
+    "保留既有 API；新增能力需詳細契約核准",
+    "本套件不修改正式看板"
+  ],
+  "metadata": {
+    "date": "2026-11-07",
+    "revision": 1,
+    "source": "embedded ModuleSpec; regenerate using build_plan.py"
+  },
+  "redEvidence": {
+    "date": "2026-11-07",
+    "scopeApproval": "APPROVED",
+    "detailedSpecificationApproval": "APPROVED by user this turn",
+    "branch": "master",
+    "head": "ab2392318eb6e919fb5e4527100c9741b8ca3a16",
+    "testFramework": "PowerShell input skeleton + Python standard-library executable ports/drivers + isolated Playwright 1.56.1 / installed Chrome",
+    "productionChanges": false,
+    "independentVerification": "NOT RUN",
+    "approvalGate": "PRESERVED",
+    "contractSkeletonCases": 48,
+    "qualifiedBehaviorRED": [],
+    "remainingCases": [
+      "TDD-SCH-01-1",
+      "TDD-SCH-01-2",
+      "TDD-SCH-01-3",
+      "TDD-SCH-02-1",
+      "TDD-SCH-02-2",
+      "TDD-SCH-02-3",
+      "TDD-WH-01-1",
+      "TDD-WH-01-2",
+      "TDD-WH-01-3",
+      "TDD-WH-02-1",
+      "TDD-WH-02-2",
+      "TDD-WH-02-3",
+      "TDD-RUN-01-1",
+      "TDD-RUN-01-2",
+      "TDD-RUN-01-3",
+      "TDD-RUN-02-1",
+      "TDD-RUN-02-2",
+      "TDD-RUN-02-3",
+      "TDD-RUN-03-1",
+      "TDD-RUN-03-2",
+      "TDD-RUN-03-3",
+      "TDD-CMP-01-1",
+      "TDD-CMP-01-2",
+      "TDD-CMP-01-3",
+      "TDD-CMP-02-1",
+      "TDD-CMP-02-2",
+      "TDD-CMP-02-3",
+      "TDD-RUN-04-1",
+      "TDD-RUN-04-2",
+      "TDD-RUN-04-3",
+      "TDD-GOV-01-1",
+      "TDD-GOV-01-2",
+      "TDD-GOV-01-3",
+      "TDD-GOV-02-1",
+      "TDD-GOV-02-2",
+      "TDD-GOV-02-3",
+      "TDD-UI-01-1",
+      "TDD-UI-01-2",
+      "TDD-UI-01-3",
+      "TDD-UI-02-1",
+      "TDD-UI-02-2",
+      "TDD-UI-02-3",
+      "TDD-UI-03-1",
+      "TDD-UI-03-2",
+      "TDD-UI-03-3",
+      "TDD-INT-01-1",
+      "TDD-INT-01-2",
+      "TDD-INT-01-3"
+    ],
+    "notReadyReasons": [
+      "Independent R3 test-quality review pending",
+      "Production Skeleton, Port/error/storage contracts and productionAllowed not frozen",
+      "Unimplemented subject has unreachable fault paths; no product failure-handling acceptance",
+      "Product UI, real CLI/Adapters/install/regression NOT RUN"
+    ],
+    "readyForImplementation": false,
+    "commands": {
+      "all": "pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1",
+      "scheduler": "pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task SCH-01"
+    },
+    "executionExitCodes": {
+      "0": "all selected contract assertions pass",
+      "1": "behavior assertions differ",
+      "2": "invalid RED: infrastructure or fixture failure"
+    },
+    "qualifiedLayer": "Current source: 2 safety PASS / 46 subject RED; independent R3 quality review pending; no automatic qualification",
+    "canonicalEvidence": "review-fixes-r3-evidence/all.json",
+    "newlyQualifiedCases": 45,
+    "pendingFaultHandlingVerification": [
+      {
+        "id": "TDD-SCH-02-3",
+        "unreached": [
+          "Store.Commit"
+        ]
+      },
+      {
+        "id": "TDD-RUN-01-3",
+        "unreached": [
+          "Store.Commit"
+        ]
+      },
+      {
+        "id": "TDD-RUN-02-2",
+        "unreached": [
+          "Process.Start"
+        ]
+      },
+      {
+        "id": "TDD-RUN-03-2",
+        "unreached": [
+          "Board.Renew",
+          "Process.Stop"
+        ]
+      },
+      {
+        "id": "TDD-CMP-02-1",
+        "unreached": [
+          "Completion.ResponseAfterCommit"
+        ]
+      },
+      {
+        "id": "TDD-CMP-02-2",
+        "unreached": [
+          "Board.Release"
+        ]
+      }
+    ],
+    "qualityReviewStatus": "PENDING_R3",
+    "executionCounts": {
+      "passed": 2,
+      "red": 46,
+      "invalid": 0
+    },
+    "positiveControls": 21,
+    "mutantsKilled": 21,
+    "priorIndependentReview": {
+      "report": "independent-review-r2-2026-11-07.md",
+      "status": "Historical source review; repairs now require R3 review"
+    }
+  },
+  "behaviorEvidence": [
+    {
+      "id": "TDD-WH-01-1",
+      "status": "BEHAVIOR_RED",
+      "checks": [
+        {
+          "assertion": "real HTTP received request",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "durable delivery receipt",
+          "actual": "pending",
+          "expected": "delivered",
+          "pass": false
+        },
+        {
+          "assertion": "not work completion",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "delivery preserves all tickets",
+          "actual": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "expected": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "missingFaultPaths": [],
+      "notes": []
+    },
+    {
+      "id": "TDD-WH-01-2",
+      "status": "BEHAVIOR_RED",
+      "checks": [
+        {
+          "assertion": "timeout peer contacted",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "retry state persisted",
+          "actual": "pending",
+          "expected": "retry",
+          "pass": false
+        },
+        {
+          "assertion": "event preserved",
+          "actual": "evt-1",
+          "expected": "evt-1",
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "timeout classified",
+          "actual": null,
+          "expected": "Timeout",
+          "pass": false
+        },
+        {
+          "assertion": "timeout increments attempt",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "timeout persists next retry",
+          "actual": null,
+          "expected": 1794013210,
+          "pass": false
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "missingFaultPaths": [],
+      "notes": []
+    },
+    {
+      "id": "TDD-WH-01-3",
+      "status": "BEHAVIOR_RED",
+      "checks": [
+        {
+          "assertion": "no rejected network contact",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "config unchanged",
+          "actual": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "expected": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "rejected target cannot invoke HTTP transport",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "pass": false
+        },
+        {
+          "assertion": "complete authoritative snapshot unchanged",
+          "actual": {
+            "outbox": [
+              {
+                "eventId": "evt-1",
+                "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "X-Key-Id": "test-only",
+                  "X-Timestamp": "1794013200",
+                  "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+                },
+                "url": "http://127.0.0.1:61441/events",
+                "status": "pending",
+                "attempt": 0
+              }
+            ],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": [],
+            "runLedger": {
+              "run-1": {
+                "runId": "run-1",
+                "ticketId": "FIX-1",
+                "projectId": "fixture-guguboard",
+                "owner": "dev-1",
+                "developerSession": "session-dev",
+                "leaseGeneration": 1,
+                "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "workspace": "fixture-workspace-1"
+              }
+            },
+            "principals": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "pr": {
+              "id": "fixture-pr",
+              "merged": true,
+              "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "evidence": {
+              "fixture://evidence": {
+                "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                "exists": true
+              },
+              "fixture://qa": {
+                "exists": true
+              },
+              "fixture://review": {
+                "exists": true
+              }
+            },
+            "roleGrants": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "httpPolicy": {
+              "allowedOrigins": [
+                "http://127.0.0.1:61441"
+              ],
+              "timeoutSec": 10,
+              "followRedirects": false
+            }
+          },
+          "expected": {
+            "outbox": [
+              {
+                "eventId": "evt-1",
+                "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "X-Key-Id": "test-only",
+                  "X-Timestamp": "1794013200",
+                  "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+                },
+                "url": "http://127.0.0.1:61441/events",
+                "status": "pending",
+                "attempt": 0
+              }
+            ],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": [],
+            "runLedger": {
+              "run-1": {
+                "runId": "run-1",
+                "ticketId": "FIX-1",
+                "projectId": "fixture-guguboard",
+                "owner": "dev-1",
+                "developerSession": "session-dev",
+                "leaseGeneration": 1,
+                "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "workspace": "fixture-workspace-1"
+              }
+            },
+            "principals": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "pr": {
+              "id": "fixture-pr",
+              "merged": true,
+              "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "evidence": {
+              "fixture://evidence": {
+                "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                "exists": true
+              },
+              "fixture://qa": {
+                "exists": true
+              },
+              "fixture://review": {
+                "exists": true
+              }
+            },
+            "roleGrants": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "httpPolicy": {
+              "allowedOrigins": [
+                "http://127.0.0.1:61441"
+              ],
+              "timeoutSec": 10,
+              "followRedirects": false
+            }
+          },
+          "pass": true
+        },
+        {
+          "assertion": "second rejected origin also causes no HTTP",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "permitted origin has positive configuration path",
+          "actual": null,
+          "expected": "http://127.0.0.1:61441/events",
+          "pass": false
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "missingFaultPaths": [],
+      "notes": []
+    },
+    {
+      "id": "TDD-WH-02-1",
+      "status": "BEHAVIOR_RED",
+      "checks": [
+        {
+          "assertion": "no early retry",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "actual retry at boundary",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "stable event ID",
+          "actual": "evt-1",
+          "expected": "evt-1",
+          "pass": true
+        },
+        {
+          "assertion": "stable body",
+          "actual": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+          "expected": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "peer captures one delivered body",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "declared delivery timeout is ten seconds",
+          "actual": null,
+          "expected": 10,
+          "pass": false
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "missingFaultPaths": [],
+      "notes": []
+    },
+    {
+      "id": "TDD-WH-02-2",
+      "status": "BEHAVIOR_RED",
+      "checks": [
+        {
+          "assertion": "bounded retries",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "durable dead letter",
+          "actual": "retry",
+          "expected": "manual",
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "missingFaultPaths": [],
+      "notes": []
+    },
+    {
+      "id": "TDD-WH-02-3",
+      "status": "BEHAVIOR_RED",
+      "checks": [
+        {
+          "assertion": "subject persisted retry before restart",
+          "actual": "pending",
+          "expected": "retry",
+          "pass": false
+        },
+        {
+          "assertion": "retry count survives reopen",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "retry time survives reopen",
+          "actual": null,
+          "expected": null,
+          "pass": true
+        },
+        {
+          "assertion": "recovered retry delivered",
+          "actual": 0,
+          "expected": 2,
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "peer captures one delivered body",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "declared delivery timeout is ten seconds",
+          "actual": null,
+          "expected": 10,
+          "pass": false
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "missingFaultPaths": [],
+      "notes": []
+    },
+    {
+      "id": "TDD-UI-02-1",
+      "status": "BEHAVIOR_RED",
+      "checks": [
+        {
+          "assertion": "key reference displayed",
+          "actual": "",
+          "expected": "test-key-1",
+          "pass": false
+        },
+        {
+          "assertion": "secret absent from all DOM and wire responses",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\TDD-UI-02-1.png"
+        }
+      ]
+    },
+    {
+      "id": "TDD-UI-02-2",
+      "status": "BEHAVIOR_RED",
+      "checks": [
+        {
+          "assertion": "actual test delivery transport invoked",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "exact health-only response",
+          "actual": "",
+          "expected": "OK",
+          "pass": false
+        },
+        {
+          "assertion": "health request reached runner ingress",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "test-event mode sent on wire",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "test never starts real job",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "test creates no inbox or lease",
+          "actual": [
+            [],
+            {}
+          ],
+          "expected": [
+            [],
+            {}
+          ],
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\TDD-UI-02-2.png"
+        }
+      ]
+    },
+    {
+      "id": "TDD-UI-02-3",
+      "status": "BEHAVIOR_RED",
+      "checks": [
+        {
+          "assertion": "offline visible",
+          "actual": "",
+          "expected": "Offline",
+          "pass": false
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "click durably pauses delivery",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "paused delivery sends nothing",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "same due event can send when unpaused",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\TDD-UI-02-3.png"
+        }
+      ]
+    }
+  ]
+}</script></html>

@@ -1,0 +1,46 @@
+{
+  "task": "SCH-02",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-SCH-02-1",
+      "given": "專案已暫停",
+      "when": "到達派工時間",
+      "then": "不派工",
+      "test": "TDD-SCH-02-1",
+      "level": "L2",
+      "result": "PASS"
+    },
+    {
+      "id": "S-SCH-02-2",
+      "given": "服務錯過三個檢查週期",
+      "when": "恢復服務",
+      "then": "只重新評估目前工作且不補發三批",
+      "test": "TDD-SCH-02-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-SCH-02-3",
+      "given": "事件保存失敗",
+      "when": "評估到期排程",
+      "then": "不推進排程游標",
+      "test": "TDD-SCH-02-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

@@ -1,0 +1,818 @@
+{
+  "mutationControls": [
+    {
+      "case": "TDD-UI-02-1",
+      "positiveControl": "ui-safe",
+      "positiveStatus": "PASS",
+      "mutation": "ui-leak-hidden",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "secret absent from all DOM and wire responses"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "key reference displayed",
+          "actual": "test-key-1",
+          "expected": "test-key-1",
+          "pass": true
+        },
+        {
+          "assertion": "secret absent from all DOM and wire responses",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "key reference displayed",
+          "actual": "test-key-1",
+          "expected": "test-key-1",
+          "pass": true
+        },
+        {
+          "assertion": "secret absent from all DOM and wire responses",
+          "actual": true,
+          "expected": false,
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "case": "TDD-UI-02-3",
+      "positiveControl": "ui-safe",
+      "positiveStatus": "PASS",
+      "mutation": "ui-pause-noop",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "click durably pauses delivery"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "offline visible",
+          "actual": "Offline",
+          "expected": "Offline",
+          "pass": true
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "click durably pauses delivery",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "paused delivery sends nothing",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "offline visible",
+          "actual": "Offline",
+          "expected": "Offline",
+          "pass": true
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "click durably pauses delivery",
+          "actual": null,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "paused delivery sends nothing",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ]
+    }
+  ],
+  "date": "2026-11-07T00:49:32.231176+08:00",
+  "fixtureControls": {
+    "rpcPortInvocation": "PASS",
+    "rpcInjectedFault": "PASS",
+    "storeFault": "PASS",
+    "claimBarrier": "PASS",
+    "httpTimeout": "PASS",
+    "httpDisconnect": "PASS",
+    "realChildLifecycle": "PASS",
+    "durableReopen": "PASS",
+    "signedBytes": "PASS"
+  },
+  "results": [
+    {
+      "id": "TDD-UI-02-1",
+      "bdd": "S-UI-02-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "key reference displayed",
+          "actual": "",
+          "expected": "test-key-1",
+          "pass": false
+        },
+        {
+          "assertion": "secret absent from all DOM and wire responses",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetWebhookView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 32480,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "GetWebhookView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 30804,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-evidence\\TDD-UI-02-1.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          }
+        },
+        "keyRef": "test-key-1",
+        "secret": "DO_NOT_RENDER_TEST_SECRET",
+        "runnerOnline": true
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    },
+    {
+      "id": "TDD-UI-02-2",
+      "bdd": "S-UI-02-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "actual test delivery transport invoked",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "health outcome visible",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "test never starts real job",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "test creates no inbox or lease",
+          "actual": [
+            [],
+            {}
+          ],
+          "expected": [
+            [],
+            {}
+          ],
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetWebhookView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 11384,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "TestDelivery",
+          "request": {
+            "testEvent": true
+          },
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 20948,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-evidence\\TDD-UI-02-2.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          }
+        },
+        "keyRef": "test-key-1",
+        "secret": "DO_NOT_RENDER_TEST_SECRET",
+        "runnerOnline": true
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    },
+    {
+      "id": "TDD-UI-02-3",
+      "bdd": "S-UI-02-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "offline visible",
+          "actual": "",
+          "expected": "Offline",
+          "pass": false
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "click durably pauses delivery",
+          "actual": null,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "paused delivery sends nothing",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetRunnerView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 15064,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "PauseDelivery",
+          "request": {
+            "paused": true
+          },
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 21948,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "DeliverPending",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 32420,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-evidence\\TDD-UI-02-3.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          }
+        },
+        "keyRef": "test-key-1",
+        "secret": "DO_NOT_RENDER_TEST_SECRET",
+        "runnerOnline": false
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    }
+  ],
+  "red": 3,
+  "passed": 0,
+  "invalid": 0,
+  "productionChanged": false,
+  "independentAcceptance": "NOT RUN",
+  "provenance": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "files": {
+      "run_drivers.py": "ad8d8f8564ffc13224b6856424e83f07ce4ef4a8ed29a73ac118b30440edc436",
+      "driver_support.py": "117283bea38eb3a43c1380034adc8b327d9a9bca5a130ab529742cdc095a9349",
+      "Bridge.ps1": "56e8b7ff25d8896787f57a5dc7f84a9d7c409ee504d25ccabf6fe9a3f373c9c0",
+      "Skeleton.ps1": "f6e1a4e1aa4a6a425601ae3d3c4a97393d477727e020226fb52269b39829ea2e",
+      "ui-skeleton.html": "ab42c60cc6e7fb5594bbc4b42b786dcea681f383934354f84fac2b668f4eabcf",
+      "browser-driver.cjs": "643270765fe2c1060b487982b33c26f926baa061e5ddd251fb489f933b118937",
+      "PortProbe.ps1": "ae510e95f7ce884924a162a2e2cd1afbb96dd8c348d851b374c9e39ce8c67edb",
+      "cases.json": "fff710be1578de3982037b9aff563d48383d450710a7ed207f77c3329b6b5db3",
+      "review_strengthening.py": "a778650a9c8ca956b998cef30f19ec727c94bf9dcf609d0d4c85642a1a325be1",
+      "mutation_controls.py": "ec4d0cff6b9e968245963b3f0b637ed85f62ae977be07a807eb060109ab360ff",
+      "review-fixtures.json": "67a655030f5bd8464a84897075ea15786f86252860025229d6bafa46b01ec728"
+    }
+  },
+  "qualification": "RED against test-only empty application skeleton. Unreached fault ports demonstrate missing orchestration, not exercised fault handling. Real browser drives test-only UI, not product UI."
+}

@@ -1,0 +1,1500 @@
+{
+  "mutationControls": [
+    {
+      "case": "TDD-RUN-03-1",
+      "positiveControl": "renew-script",
+      "positiveStatus": "PASS",
+      "mutation": "renew-no-persist",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "renew persists new authoritative expiry",
+        "renew reached board port"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "renew reached board port",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "valid lease child remains alive",
+          "actual": null,
+          "expected": null,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "renew persists new authoritative expiry",
+          "actual": 1794014400,
+          "expected": 1794014400,
+          "pass": true
+        },
+        {
+          "assertion": "renew preserves generation",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "renew reached board port",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "valid lease child remains alive",
+          "actual": null,
+          "expected": null,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "renew persists new authoritative expiry",
+          "actual": 1794014100,
+          "expected": 1794014400,
+          "pass": false
+        },
+        {
+          "assertion": "renew preserves generation",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "positiveEvidence": {
+        "id": "TDD-RUN-03-1",
+        "bdd": "S-RUN-03-1",
+        "status": "PASS",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "renew reached board port",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "valid lease child remains alive",
+            "actual": null,
+            "expected": null,
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "renew persists new authoritative expiry",
+            "actual": 1794014400,
+            "expected": 1794014400,
+            "pass": true
+          },
+          {
+            "assertion": "renew preserves generation",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "subject error boundary is structured",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Board",
+            "method": "Renew",
+            "args": {
+              "ticket": "FIX-1",
+              "owner": "dev-1",
+              "generation": 1
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "RenewRun",
+            "pid": "control-thread-31732",
+            "trustedPrincipal": {
+              "actor": "dev-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-dev",
+              "role": "dev-agent"
+            },
+            "mode": "renew-script",
+            "request": {
+              "ticketId": "FIX-1"
+            }
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {
+            "FIX-1": {
+              "generation": 1,
+              "owner": "dev-1",
+              "until": 1794014400
+            }
+          },
+          "runs": [
+            {
+              "pid": 33768,
+              "created": 134384588818279157,
+              "descendant": 33000,
+              "descendantCreated": 134384588819721769,
+              "ticket": "FIX-1",
+              "runId": "run-1",
+              "owner": "dev-1",
+              "generation": 1,
+              "session": "session-dev",
+              "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-1-jp_bv4db\\workspaces\\4e65d3fbe8ad6535",
+              "completionSignal": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-1-jp_bv4db\\tree-0.json.done"
+            }
+          ],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-1-jp_bv4db\\workspaces\\4e65d3fbe8ad6535"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:60196"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-RUN-03.feature",
+          "scenarioDigest": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      },
+      "mutantEvidence": {
+        "id": "TDD-RUN-03-1",
+        "bdd": "S-RUN-03-1",
+        "status": "BEHAVIOR_RED",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "renew reached board port",
+            "actual": 0,
+            "expected": 1,
+            "pass": false
+          },
+          {
+            "assertion": "valid lease child remains alive",
+            "actual": null,
+            "expected": null,
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "renew persists new authoritative expiry",
+            "actual": 1794014100,
+            "expected": 1794014400,
+            "pass": false
+          },
+          {
+            "assertion": "renew preserves generation",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "subject error boundary is structured",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [],
+        "invocations": [
+          {
+            "operation": "RenewRun",
+            "pid": "control-thread-31732",
+            "trustedPrincipal": {
+              "actor": "dev-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-dev",
+              "role": "dev-agent"
+            },
+            "mode": "renew-no-persist",
+            "request": {
+              "ticketId": "FIX-1"
+            }
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {
+            "FIX-1": {
+              "generation": 1,
+              "owner": "dev-1",
+              "until": 1794014100
+            }
+          },
+          "runs": [
+            {
+              "pid": 33272,
+              "created": 134384588828469457,
+              "descendant": 7556,
+              "descendantCreated": 134384588829879312,
+              "ticket": "FIX-1",
+              "runId": "run-1",
+              "owner": "dev-1",
+              "generation": 1,
+              "session": "session-dev",
+              "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-1-2jltdjg4\\workspaces\\4e65d3fbe8ad6535",
+              "completionSignal": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-1-2jltdjg4\\tree-0.json.done"
+            }
+          ],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-1-2jltdjg4\\workspaces\\4e65d3fbe8ad6535"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:60204"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-RUN-03.feature",
+          "scenarioDigest": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      }
+    }
+  ],
+  "date": "2026-11-07T01:14:43.846086+08:00",
+  "fixtureControls": {
+    "rpcPortInvocation": "PASS",
+    "rpcInjectedFault": "PASS",
+    "storeFault": "PASS",
+    "claimBarrier": "PASS",
+    "httpTimeout": "PASS",
+    "httpDisconnect": "PASS",
+    "realChildLifecycle": "PASS",
+    "durableReopen": "PASS",
+    "signedBytes": "PASS"
+  },
+  "results": [
+    {
+      "id": "TDD-RUN-03-1",
+      "bdd": "S-RUN-03-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "renew reached board port",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "valid lease child remains alive",
+          "actual": null,
+          "expected": null,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "renew persists new authoritative expiry",
+          "actual": 1794014100,
+          "expected": 1794014400,
+          "pass": false
+        },
+        {
+          "assertion": "renew preserves generation",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RenewRun",
+          "request": {
+            "ticketId": "FIX-1"
+          },
+          "trustedPrincipal": {
+            "actor": "dev-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-dev",
+            "role": "dev-agent"
+          },
+          "pid": 28084,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1,
+            "owner": "dev-1",
+            "until": 1794014100
+          }
+        },
+        "runs": [
+          {
+            "pid": 32856,
+            "created": 134384588732164005,
+            "descendant": 9224,
+            "descendantCreated": 134384588733650892,
+            "ticket": "FIX-1",
+            "runId": "run-1",
+            "owner": "dev-1",
+            "generation": 1,
+            "session": "session-dev",
+            "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-1-w1e9oq62\\workspaces\\4e65d3fbe8ad6535",
+            "completionSignal": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-1-w1e9oq62\\tree-0.json.done"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-1-w1e9oq62\\workspaces\\4e65d3fbe8ad6535"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:60115"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        }
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-RUN-03.feature",
+        "scenarioDigest": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    },
+    {
+      "id": "TDD-RUN-03-2",
+      "bdd": "S-RUN-03-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "renew fault reached",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "actual child stopped before expiry",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "stop confirmation called",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "descendant confirmed exited",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "workspace quarantined after lost lease",
+          "actual": null,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "failed Stop actually reached on another live tree",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "failed Stop leaves its parent alive",
+          "actual": 134384588765455423,
+          "expected": 134384588765455423,
+          "pass": true
+        },
+        {
+          "assertion": "failed Stop leaves descendant alive",
+          "actual": 134384588766997976,
+          "expected": 134384588766997976,
+          "pass": true
+        },
+        {
+          "assertion": "failed Stop quarantines live workspace",
+          "actual": null,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "failed stop blocks all new jobs",
+          "actual": 2,
+          "expected": 2,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [
+        {
+          "kind": "port",
+          "port": "Process",
+          "method": "Start",
+          "args": {
+            "ticket": "FIX-2",
+            "runId": "run-stop-fails",
+            "owner": "dev-1",
+            "generation": 1
+          }
+        }
+      ],
+      "invocations": [
+        {
+          "operation": "RenewRun",
+          "request": {
+            "ticketId": "FIX-1"
+          },
+          "trustedPrincipal": {
+            "actor": "dev-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-dev",
+            "role": "dev-agent"
+          },
+          "pid": 33340,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RenewRun",
+          "request": {
+            "runId": "run-stop-fails",
+            "ticketId": "FIX-2"
+          },
+          "trustedPrincipal": {
+            "actor": "dev-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-dev",
+            "role": "dev-agent"
+          },
+          "pid": 9224,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RunNext",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "dev-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-dev",
+            "role": "dev-agent"
+          },
+          "pid": 31384,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {
+        "Board.Renew": 0,
+        "Process.Stop": 0
+      },
+      "missingFaultPaths": [
+        "Board.Renew",
+        "Process.Stop"
+      ],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1,
+            "owner": "dev-1",
+            "until": 1794014100
+          },
+          "FIX-2": {
+            "owner": "dev-1",
+            "generation": 1,
+            "until": 1794014100
+          }
+        },
+        "runs": [
+          {
+            "pid": 33220,
+            "created": 134384588752529082,
+            "descendant": 32772,
+            "descendantCreated": 134384588754078604,
+            "ticket": "FIX-1",
+            "runId": "run-1",
+            "owner": "dev-1",
+            "generation": 1,
+            "session": "session-dev",
+            "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-2-6ut7c_fa\\workspaces\\4e65d3fbe8ad6535",
+            "completionSignal": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-2-6ut7c_fa\\tree-0.json.done"
+          },
+          {
+            "pid": 33040,
+            "created": 134384588765455423,
+            "descendant": 31188,
+            "descendantCreated": 134384588766997976,
+            "ticket": "FIX-2",
+            "runId": "run-stop-fails",
+            "owner": "dev-1",
+            "generation": 1,
+            "session": "session-33040",
+            "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-2-6ut7c_fa\\workspaces\\158b4881c66b285b",
+            "completionSignal": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-2-6ut7c_fa\\tree-1.json.done"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-2-6ut7c_fa\\workspaces\\4e65d3fbe8ad6535"
+          },
+          "run-stop-fails": {
+            "runId": "run-stop-fails",
+            "ticketId": "FIX-2",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-2-6ut7c_fa\\workspaces\\158b4881c66b285b"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:60149"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        }
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-RUN-03.feature",
+        "scenarioDigest": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [
+        {
+          "point": "Board.Renew",
+          "count": 1
+        },
+        {
+          "point": "Board.Renew",
+          "count": 1
+        },
+        {
+          "point": "Process.Stop",
+          "count": 1
+        }
+      ],
+      "failureHandlingQualified": false
+    },
+    {
+      "id": "TDD-RUN-03-3",
+      "bdd": "S-RUN-03-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "old process must stop before recovery completes",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "durable run quarantine",
+          "actual": null,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "no new process",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Quarantined",
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "recovery checks trusted process creation marker",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "old descendant must be gone before continuing",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "recovery writes physical workspace quarantine",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ReconcileRun",
+          "request": {
+            "ticketId": "FIX-1",
+            "processMarker": {
+              "pid": 32920,
+              "state": "unknown"
+            }
+          },
+          "trustedPrincipal": {
+            "actor": "dev-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-dev",
+            "role": "dev-agent"
+          },
+          "pid": 33216,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1,
+            "owner": "dev-1",
+            "until": 1794014100
+          }
+        },
+        "runs": [
+          {
+            "pid": 32920,
+            "created": 134384588797872838,
+            "descendant": 32376,
+            "descendantCreated": 134384588799316154,
+            "ticket": "FIX-1",
+            "runId": "run-1",
+            "owner": "dev-1",
+            "generation": 1,
+            "session": "session-dev",
+            "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-3-71brxo6t\\workspaces\\4e65d3fbe8ad6535",
+            "completionSignal": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-3-71brxo6t\\tree-0.json.done"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-driver-RUN-03-3-71brxo6t\\workspaces\\4e65d3fbe8ad6535"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:60176"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        }
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-RUN-03.feature",
+        "scenarioDigest": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    }
+  ],
+  "red": 3,
+  "passed": 0,
+  "invalid": 0,
+  "productionChanged": false,
+  "independentAcceptance": "NOT RUN",
+  "provenance": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "files": {
+      "run_drivers.py": "fab4c3ea535ee9a898dbe22687914e4c1f115ccbf74ec47c0df53847f87e5a70",
+      "driver_support.py": "4a289c4f23c62b7cdf3d6f428d5583a74a7aee00f3cba707bc4f937ab74d7b60",
+      "Bridge.ps1": "56e8b7ff25d8896787f57a5dc7f84a9d7c409ee504d25ccabf6fe9a3f373c9c0",
+      "Skeleton.ps1": "f6e1a4e1aa4a6a425601ae3d3c4a97393d477727e020226fb52269b39829ea2e",
+      "ui-skeleton.html": "ab42c60cc6e7fb5594bbc4b42b786dcea681f383934354f84fac2b668f4eabcf",
+      "browser-driver.cjs": "643270765fe2c1060b487982b33c26f926baa061e5ddd251fb489f933b118937",
+      "PortProbe.ps1": "ae510e95f7ce884924a162a2e2cd1afbb96dd8c348d851b374c9e39ce8c67edb",
+      "cases.json": "fff710be1578de3982037b9aff563d48383d450710a7ed207f77c3329b6b5db3",
+      "review_strengthening.py": "7d0bf2ed80a5e0503a7b87709544bacfbd80e6d86ba1bcbe1789f566b408e215",
+      "mutation_controls.py": "41cc7e62b54af302d70834d8ac7e6831d4ac0774380e4f2a0c41ab24d8ca4875",
+      "review-fixtures.json": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140",
+      "review-case-inventory.json": "35e115237367bd88a859d978f1bf2221e8d6b1e42b53ececefd7c2d6521c68bb",
+      "fixture_contract_tests.py": "aed8ee8cb5c8335d41b496c1695562563c960995ff3e05a7e18f3cbdb055226d",
+      "qualify_review_fixes.py": "bfb16226f2e4fa9f5d256857d983b3cb5481023bbd56de87d8d1db1792f6f3a4",
+      "Run-Red.ps1": "328a0b6bcce557e03f1daf3562c6ce645118cfc2f5bd4a3f8df904ae73bebfde"
+    }
+  },
+  "qualification": "RED against test-only empty application skeleton. Unreached fault ports demonstrate missing orchestration, not exercised fault handling. Real browser drives test-only UI, not product UI."
+}

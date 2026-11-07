@@ -1,0 +1,46 @@
+{
+  "task": "RUN-02",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-RUN-02-1",
+      "given": "有兩個 Runner 同時要求一張工作",
+      "when": "領取工作",
+      "then": "只有有效租約持有人啟動",
+      "test": "TDD-RUN-02-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-RUN-02-2",
+      "given": "領取成功但程序無法啟動",
+      "when": "開始工作",
+      "then": "回報失敗並釋放租約",
+      "test": "TDD-RUN-02-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-RUN-02-3",
+      "given": "沒有可領工單",
+      "when": "請求工作",
+      "then": "進入等待且不啟動程序",
+      "test": "TDD-RUN-02-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

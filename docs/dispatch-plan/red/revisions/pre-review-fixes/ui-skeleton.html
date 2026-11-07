@@ -1,0 +1,24 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><title>GuGuBoard test-only UI skeleton</title>
+<body><h1>Test-only input adapter skeleton</h1>
+<form id="schedule"><label>Enabled<input id="enabled" type="checkbox"></label><label>Concurrent<input id="concurrent" type="number"></label><label>Start<input id="start" type="text"></label><button id="save" type="submit">Save</button></form>
+<button id="test" type="button">Test webhook</button><button id="pause" type="button">Pause</button><button id="complete" type="button">Complete</button>
+<div id="error" role="alert"></div><div id="key"></div><div id="health"></div><div id="runner"></div><div id="process"></div><div id="completion"></div><div id="reason"></div><div id="empty"></div><div id="success"></div><div id="settled" data-sequence="0"></div>
+<script>
+let seq=0;
+async function command(operation,request={}) {
+ const response=await fetch('/command',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({operation,request})});
+ if(!response.ok)throw new Error('Test adapter HTTP '+response.status);
+ const model=await response.json();
+ // Generic projection only. No validation, permissions, defaults, or domain rules.
+ for(const [field,id] of Object.entries({fieldError:'error',keyRef:'key',health:'health',runnerStatus:'runner',processStatus:'process',completionStatus:'completion',disabledReason:'reason',emptyText:'empty',successText:'success'}))if(field in model)document.getElementById(id).textContent=String(model[field]);
+ if('enabled' in model)document.getElementById('enabled').checked=model.enabled;
+ if('maxConcurrent' in model)document.getElementById('concurrent').value=model.maxConcurrent;
+ if('saveEnabled' in model)document.getElementById('save').disabled=!model.saveEnabled;
+ if('completeEnabled' in model)document.getElementById('complete').disabled=!model.completeEnabled;
+ if('pauseEnabled' in model)document.getElementById('pause').disabled=!model.pauseEnabled;
+ document.getElementById('settled').dataset.sequence=String(++seq);return model;
+}
+document.getElementById('schedule').onsubmit=async e=>{e.preventDefault();await command('SaveScheduleView',{notBefore:document.getElementById('start').value});};
+document.getElementById('test').onclick=()=>command('TestDelivery',{testEvent:true});
+command(new URLSearchParams(location.search).get('operation')||'GetScheduleView');
+</script></body></html>

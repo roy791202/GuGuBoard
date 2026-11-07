@@ -1,0 +1,3337 @@
+{
+  "mutationControls": [
+    {
+      "case": "TDD-UI-03-1",
+      "positiveControl": "ui-safe",
+      "positiveStatus": "PASS",
+      "mutation": "ui-exited-as-running",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "process exit visible"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "process exit visible",
+          "actual": "Exited",
+          "expected": "Exited",
+          "pass": true
+        },
+        {
+          "assertion": "completion unknown visible separately",
+          "actual": "Unknown",
+          "expected": "Unknown",
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "process exit visible",
+          "actual": "Running",
+          "expected": "Exited",
+          "pass": false
+        },
+        {
+          "assertion": "completion unknown visible separately",
+          "actual": "Unknown",
+          "expected": "Unknown",
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "positiveEvidence": {
+        "id": "TDD-UI-03-1",
+        "bdd": "S-UI-03-1",
+        "status": "PASS",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "process exit visible",
+            "actual": "Exited",
+            "expected": "Exited",
+            "pass": true
+          },
+          {
+            "assertion": "completion unknown visible separately",
+            "actual": "Unknown",
+            "expected": "Unknown",
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "subject error boundary is structured",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [],
+        "invocations": [
+          {
+            "operation": "GetRunView",
+            "pid": "control-thread-32320",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\0\\TDD-UI-03-1\\ui-safe\\TDD-UI-03-1.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [
+            {
+              "processStatus": "Exited",
+              "completionStatus": "Unknown"
+            }
+          ],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:60147"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+          "scenarioDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      },
+      "mutantEvidence": {
+        "id": "TDD-UI-03-1",
+        "bdd": "S-UI-03-1",
+        "status": "BEHAVIOR_RED",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "process exit visible",
+            "actual": "Running",
+            "expected": "Exited",
+            "pass": false
+          },
+          {
+            "assertion": "completion unknown visible separately",
+            "actual": "Unknown",
+            "expected": "Unknown",
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "subject error boundary is structured",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [],
+        "invocations": [
+          {
+            "operation": "GetRunView",
+            "pid": "control-thread-18724",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-exited-as-running",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\0\\TDD-UI-03-1\\ui-exited-as-running\\TDD-UI-03-1.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [
+            {
+              "processStatus": "Exited",
+              "completionStatus": "Unknown"
+            }
+          ],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:60168"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+          "scenarioDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      }
+    },
+    {
+      "case": "TDD-UI-03-2",
+      "positiveControl": "ui-safe",
+      "positiveStatus": "PASS",
+      "mutation": "ui-wrong-reason",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "exact unmerged gate reason"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "unmerged completion disabled",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "exact unmerged gate reason",
+          "actual": "PR_NOT_MERGED",
+          "expected": "PR_NOT_MERGED",
+          "pass": true
+        },
+        {
+          "assertion": "forged completion rejected",
+          "actual": "GateRejected",
+          "expected": "GateRejected",
+          "pass": true
+        },
+        {
+          "assertion": "forged complete API preserves all state",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [
+              {
+                "actor": "qa-1",
+                "session": "session-qa",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://qa"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "review-1",
+                "session": "session-review",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://review"
+              }
+            ],
+            "approvals": [],
+            "runLedger": {
+              "run-1": {
+                "runId": "run-1",
+                "ticketId": "FIX-1",
+                "projectId": "fixture-guguboard",
+                "owner": "dev-1",
+                "developerSession": "session-dev",
+                "leaseGeneration": 1,
+                "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "workspace": "fixture-workspace-1"
+              }
+            },
+            "principals": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "pr": {
+              "id": "fixture-pr",
+              "merged": false,
+              "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "evidence": {
+              "fixture://evidence": {
+                "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                "exists": true
+              },
+              "fixture://qa": {
+                "exists": true
+              },
+              "fixture://review": {
+                "exists": true
+              }
+            },
+            "roleGrants": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "httpPolicy": {
+              "allowedOrigins": [
+                "http://127.0.0.1:60194"
+              ],
+              "timeoutSec": 10,
+              "followRedirects": false
+            }
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [
+              {
+                "actor": "qa-1",
+                "session": "session-qa",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://qa"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "review-1",
+                "session": "session-review",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://review"
+              }
+            ],
+            "approvals": [],
+            "runLedger": {
+              "run-1": {
+                "runId": "run-1",
+                "ticketId": "FIX-1",
+                "projectId": "fixture-guguboard",
+                "owner": "dev-1",
+                "developerSession": "session-dev",
+                "leaseGeneration": 1,
+                "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "workspace": "fixture-workspace-1"
+              }
+            },
+            "principals": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "pr": {
+              "id": "fixture-pr",
+              "merged": false,
+              "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "evidence": {
+              "fixture://evidence": {
+                "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                "exists": true
+              },
+              "fixture://qa": {
+                "exists": true
+              },
+              "fixture://review": {
+                "exists": true
+              }
+            },
+            "roleGrants": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "httpPolicy": {
+              "allowedOrigins": [
+                "http://127.0.0.1:60194"
+              ],
+              "timeoutSec": 10,
+              "followRedirects": false
+            }
+          },
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "unmerged completion disabled",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "exact unmerged gate reason",
+          "actual": "SOME_TEXT",
+          "expected": "PR_NOT_MERGED",
+          "pass": false
+        },
+        {
+          "assertion": "forged completion rejected",
+          "actual": "GateRejected",
+          "expected": "GateRejected",
+          "pass": true
+        },
+        {
+          "assertion": "forged complete API preserves all state",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [
+              {
+                "actor": "qa-1",
+                "session": "session-qa",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://qa"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "review-1",
+                "session": "session-review",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://review"
+              }
+            ],
+            "approvals": [],
+            "runLedger": {
+              "run-1": {
+                "runId": "run-1",
+                "ticketId": "FIX-1",
+                "projectId": "fixture-guguboard",
+                "owner": "dev-1",
+                "developerSession": "session-dev",
+                "leaseGeneration": 1,
+                "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "workspace": "fixture-workspace-1"
+              }
+            },
+            "principals": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "pr": {
+              "id": "fixture-pr",
+              "merged": false,
+              "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "evidence": {
+              "fixture://evidence": {
+                "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                "exists": true
+              },
+              "fixture://qa": {
+                "exists": true
+              },
+              "fixture://review": {
+                "exists": true
+              }
+            },
+            "roleGrants": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "httpPolicy": {
+              "allowedOrigins": [
+                "http://127.0.0.1:60220"
+              ],
+              "timeoutSec": 10,
+              "followRedirects": false
+            }
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [
+              {
+                "actor": "qa-1",
+                "session": "session-qa",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://qa"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "review-1",
+                "session": "session-review",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://review"
+              }
+            ],
+            "approvals": [],
+            "runLedger": {
+              "run-1": {
+                "runId": "run-1",
+                "ticketId": "FIX-1",
+                "projectId": "fixture-guguboard",
+                "owner": "dev-1",
+                "developerSession": "session-dev",
+                "leaseGeneration": 1,
+                "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "workspace": "fixture-workspace-1"
+              }
+            },
+            "principals": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "pr": {
+              "id": "fixture-pr",
+              "merged": false,
+              "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "evidence": {
+              "fixture://evidence": {
+                "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                "exists": true
+              },
+              "fixture://qa": {
+                "exists": true
+              },
+              "fixture://review": {
+                "exists": true
+              }
+            },
+            "roleGrants": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "httpPolicy": {
+              "allowedOrigins": [
+                "http://127.0.0.1:60220"
+              ],
+              "timeoutSec": 10,
+              "followRedirects": false
+            }
+          },
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "positiveEvidence": {
+        "id": "TDD-UI-03-2",
+        "bdd": "S-UI-03-2",
+        "status": "PASS",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "unmerged completion disabled",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "exact unmerged gate reason",
+            "actual": "PR_NOT_MERGED",
+            "expected": "PR_NOT_MERGED",
+            "pass": true
+          },
+          {
+            "assertion": "forged completion rejected",
+            "actual": "GateRejected",
+            "expected": "GateRejected",
+            "pass": true
+          },
+          {
+            "assertion": "forged complete API preserves all state",
+            "actual": {
+              "outbox": [],
+              "inbox": [],
+              "journal": {},
+              "tickets": {
+                "FIX-1": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": []
+                },
+                "FIX-2": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": []
+                },
+                "FIX-3": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": [
+                    "FIX-1"
+                  ]
+                }
+              },
+              "leases": {},
+              "runs": [],
+              "config": {
+                "enabled": false,
+                "intervalSec": 60,
+                "maxConcurrent": 1,
+                "revision": 1
+              },
+              "cursor": 0,
+              "verifications": [
+                {
+                  "actor": "qa-1",
+                  "session": "session-qa",
+                  "runId": "run-1",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "result": "PASS",
+                  "evidence": "fixture://qa"
+                }
+              ],
+              "reviews": [
+                {
+                  "actor": "review-1",
+                  "session": "session-review",
+                  "runId": "run-1",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "result": "PASS",
+                  "evidence": "fixture://review"
+                }
+              ],
+              "approvals": [],
+              "runLedger": {
+                "run-1": {
+                  "runId": "run-1",
+                  "ticketId": "FIX-1",
+                  "projectId": "fixture-guguboard",
+                  "owner": "dev-1",
+                  "developerSession": "session-dev",
+                  "leaseGeneration": 1,
+                  "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "workspace": "fixture-workspace-1"
+                }
+              },
+              "principals": {
+                "dev-1": {
+                  "role": "dev-agent",
+                  "session": "session-dev"
+                },
+                "qa-1": {
+                  "role": "verifier",
+                  "session": "session-qa"
+                },
+                "review-1": {
+                  "role": "reviewer",
+                  "session": "session-review"
+                },
+                "human-1": {
+                  "role": "admin",
+                  "session": "session-human"
+                },
+                "viewer-1": {
+                  "role": "viewer",
+                  "session": "session-viewer"
+                },
+                "worker-a": {
+                  "role": "dev-agent",
+                  "session": "session-worker-a"
+                },
+                "worker-b": {
+                  "role": "dev-agent",
+                  "session": "session-worker-b"
+                }
+              },
+              "pr": {
+                "id": "fixture-pr",
+                "merged": false,
+                "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "evidence": {
+                "fixture://evidence": {
+                  "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                  "exists": true
+                },
+                "fixture://qa": {
+                  "exists": true
+                },
+                "fixture://review": {
+                  "exists": true
+                }
+              },
+              "roleGrants": {
+                "dev-1": {
+                  "role": "dev-agent",
+                  "session": "session-dev"
+                },
+                "qa-1": {
+                  "role": "verifier",
+                  "session": "session-qa"
+                },
+                "review-1": {
+                  "role": "reviewer",
+                  "session": "session-review"
+                },
+                "human-1": {
+                  "role": "admin",
+                  "session": "session-human"
+                },
+                "viewer-1": {
+                  "role": "viewer",
+                  "session": "session-viewer"
+                },
+                "worker-a": {
+                  "role": "dev-agent",
+                  "session": "session-worker-a"
+                },
+                "worker-b": {
+                  "role": "dev-agent",
+                  "session": "session-worker-b"
+                }
+              },
+              "httpPolicy": {
+                "allowedOrigins": [
+                  "http://127.0.0.1:60194"
+                ],
+                "timeoutSec": 10,
+                "followRedirects": false
+              }
+            },
+            "expected": {
+              "outbox": [],
+              "inbox": [],
+              "journal": {},
+              "tickets": {
+                "FIX-1": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": []
+                },
+                "FIX-2": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": []
+                },
+                "FIX-3": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": [
+                    "FIX-1"
+                  ]
+                }
+              },
+              "leases": {},
+              "runs": [],
+              "config": {
+                "enabled": false,
+                "intervalSec": 60,
+                "maxConcurrent": 1,
+                "revision": 1
+              },
+              "cursor": 0,
+              "verifications": [
+                {
+                  "actor": "qa-1",
+                  "session": "session-qa",
+                  "runId": "run-1",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "result": "PASS",
+                  "evidence": "fixture://qa"
+                }
+              ],
+              "reviews": [
+                {
+                  "actor": "review-1",
+                  "session": "session-review",
+                  "runId": "run-1",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "result": "PASS",
+                  "evidence": "fixture://review"
+                }
+              ],
+              "approvals": [],
+              "runLedger": {
+                "run-1": {
+                  "runId": "run-1",
+                  "ticketId": "FIX-1",
+                  "projectId": "fixture-guguboard",
+                  "owner": "dev-1",
+                  "developerSession": "session-dev",
+                  "leaseGeneration": 1,
+                  "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "workspace": "fixture-workspace-1"
+                }
+              },
+              "principals": {
+                "dev-1": {
+                  "role": "dev-agent",
+                  "session": "session-dev"
+                },
+                "qa-1": {
+                  "role": "verifier",
+                  "session": "session-qa"
+                },
+                "review-1": {
+                  "role": "reviewer",
+                  "session": "session-review"
+                },
+                "human-1": {
+                  "role": "admin",
+                  "session": "session-human"
+                },
+                "viewer-1": {
+                  "role": "viewer",
+                  "session": "session-viewer"
+                },
+                "worker-a": {
+                  "role": "dev-agent",
+                  "session": "session-worker-a"
+                },
+                "worker-b": {
+                  "role": "dev-agent",
+                  "session": "session-worker-b"
+                }
+              },
+              "pr": {
+                "id": "fixture-pr",
+                "merged": false,
+                "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "evidence": {
+                "fixture://evidence": {
+                  "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                  "exists": true
+                },
+                "fixture://qa": {
+                  "exists": true
+                },
+                "fixture://review": {
+                  "exists": true
+                }
+              },
+              "roleGrants": {
+                "dev-1": {
+                  "role": "dev-agent",
+                  "session": "session-dev"
+                },
+                "qa-1": {
+                  "role": "verifier",
+                  "session": "session-qa"
+                },
+                "review-1": {
+                  "role": "reviewer",
+                  "session": "session-review"
+                },
+                "human-1": {
+                  "role": "admin",
+                  "session": "session-human"
+                },
+                "viewer-1": {
+                  "role": "viewer",
+                  "session": "session-viewer"
+                },
+                "worker-a": {
+                  "role": "dev-agent",
+                  "session": "session-worker-a"
+                },
+                "worker-b": {
+                  "role": "dev-agent",
+                  "session": "session-worker-b"
+                }
+              },
+              "httpPolicy": {
+                "allowedOrigins": [
+                  "http://127.0.0.1:60194"
+                ],
+                "timeoutSec": 10,
+                "followRedirects": false
+              }
+            },
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "subject error boundary is structured",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [],
+        "invocations": [
+          {
+            "operation": "GetGateView",
+            "pid": "control-thread-4048",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          },
+          {
+            "operation": "ApproveCompletion",
+            "pid": "control-thread-31716",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {
+              "notBefore": "2026-11-07T09:00:00+08:00",
+              "ticketId": "FIX-1"
+            }
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\1\\TDD-UI-03-2\\ui-safe\\TDD-UI-03-2.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [
+            {
+              "actor": "qa-1",
+              "session": "session-qa",
+              "runId": "run-1",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "result": "PASS",
+              "evidence": "fixture://qa"
+            }
+          ],
+          "reviews": [
+            {
+              "actor": "review-1",
+              "session": "session-review",
+              "runId": "run-1",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "result": "PASS",
+              "evidence": "fixture://review"
+            }
+          ],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": false,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:60194"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+          "scenarioDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      },
+      "mutantEvidence": {
+        "id": "TDD-UI-03-2",
+        "bdd": "S-UI-03-2",
+        "status": "BEHAVIOR_RED",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "unmerged completion disabled",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "exact unmerged gate reason",
+            "actual": "SOME_TEXT",
+            "expected": "PR_NOT_MERGED",
+            "pass": false
+          },
+          {
+            "assertion": "forged completion rejected",
+            "actual": "GateRejected",
+            "expected": "GateRejected",
+            "pass": true
+          },
+          {
+            "assertion": "forged complete API preserves all state",
+            "actual": {
+              "outbox": [],
+              "inbox": [],
+              "journal": {},
+              "tickets": {
+                "FIX-1": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": []
+                },
+                "FIX-2": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": []
+                },
+                "FIX-3": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": [
+                    "FIX-1"
+                  ]
+                }
+              },
+              "leases": {},
+              "runs": [],
+              "config": {
+                "enabled": false,
+                "intervalSec": 60,
+                "maxConcurrent": 1,
+                "revision": 1
+              },
+              "cursor": 0,
+              "verifications": [
+                {
+                  "actor": "qa-1",
+                  "session": "session-qa",
+                  "runId": "run-1",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "result": "PASS",
+                  "evidence": "fixture://qa"
+                }
+              ],
+              "reviews": [
+                {
+                  "actor": "review-1",
+                  "session": "session-review",
+                  "runId": "run-1",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "result": "PASS",
+                  "evidence": "fixture://review"
+                }
+              ],
+              "approvals": [],
+              "runLedger": {
+                "run-1": {
+                  "runId": "run-1",
+                  "ticketId": "FIX-1",
+                  "projectId": "fixture-guguboard",
+                  "owner": "dev-1",
+                  "developerSession": "session-dev",
+                  "leaseGeneration": 1,
+                  "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "workspace": "fixture-workspace-1"
+                }
+              },
+              "principals": {
+                "dev-1": {
+                  "role": "dev-agent",
+                  "session": "session-dev"
+                },
+                "qa-1": {
+                  "role": "verifier",
+                  "session": "session-qa"
+                },
+                "review-1": {
+                  "role": "reviewer",
+                  "session": "session-review"
+                },
+                "human-1": {
+                  "role": "admin",
+                  "session": "session-human"
+                },
+                "viewer-1": {
+                  "role": "viewer",
+                  "session": "session-viewer"
+                },
+                "worker-a": {
+                  "role": "dev-agent",
+                  "session": "session-worker-a"
+                },
+                "worker-b": {
+                  "role": "dev-agent",
+                  "session": "session-worker-b"
+                }
+              },
+              "pr": {
+                "id": "fixture-pr",
+                "merged": false,
+                "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "evidence": {
+                "fixture://evidence": {
+                  "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                  "exists": true
+                },
+                "fixture://qa": {
+                  "exists": true
+                },
+                "fixture://review": {
+                  "exists": true
+                }
+              },
+              "roleGrants": {
+                "dev-1": {
+                  "role": "dev-agent",
+                  "session": "session-dev"
+                },
+                "qa-1": {
+                  "role": "verifier",
+                  "session": "session-qa"
+                },
+                "review-1": {
+                  "role": "reviewer",
+                  "session": "session-review"
+                },
+                "human-1": {
+                  "role": "admin",
+                  "session": "session-human"
+                },
+                "viewer-1": {
+                  "role": "viewer",
+                  "session": "session-viewer"
+                },
+                "worker-a": {
+                  "role": "dev-agent",
+                  "session": "session-worker-a"
+                },
+                "worker-b": {
+                  "role": "dev-agent",
+                  "session": "session-worker-b"
+                }
+              },
+              "httpPolicy": {
+                "allowedOrigins": [
+                  "http://127.0.0.1:60220"
+                ],
+                "timeoutSec": 10,
+                "followRedirects": false
+              }
+            },
+            "expected": {
+              "outbox": [],
+              "inbox": [],
+              "journal": {},
+              "tickets": {
+                "FIX-1": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": []
+                },
+                "FIX-2": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": []
+                },
+                "FIX-3": {
+                  "status": "Todo",
+                  "light": "Gray",
+                  "dependsOn": [
+                    "FIX-1"
+                  ]
+                }
+              },
+              "leases": {},
+              "runs": [],
+              "config": {
+                "enabled": false,
+                "intervalSec": 60,
+                "maxConcurrent": 1,
+                "revision": 1
+              },
+              "cursor": 0,
+              "verifications": [
+                {
+                  "actor": "qa-1",
+                  "session": "session-qa",
+                  "runId": "run-1",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "result": "PASS",
+                  "evidence": "fixture://qa"
+                }
+              ],
+              "reviews": [
+                {
+                  "actor": "review-1",
+                  "session": "session-review",
+                  "runId": "run-1",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "result": "PASS",
+                  "evidence": "fixture://review"
+                }
+              ],
+              "approvals": [],
+              "runLedger": {
+                "run-1": {
+                  "runId": "run-1",
+                  "ticketId": "FIX-1",
+                  "projectId": "fixture-guguboard",
+                  "owner": "dev-1",
+                  "developerSession": "session-dev",
+                  "leaseGeneration": 1,
+                  "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "workspace": "fixture-workspace-1"
+                }
+              },
+              "principals": {
+                "dev-1": {
+                  "role": "dev-agent",
+                  "session": "session-dev"
+                },
+                "qa-1": {
+                  "role": "verifier",
+                  "session": "session-qa"
+                },
+                "review-1": {
+                  "role": "reviewer",
+                  "session": "session-review"
+                },
+                "human-1": {
+                  "role": "admin",
+                  "session": "session-human"
+                },
+                "viewer-1": {
+                  "role": "viewer",
+                  "session": "session-viewer"
+                },
+                "worker-a": {
+                  "role": "dev-agent",
+                  "session": "session-worker-a"
+                },
+                "worker-b": {
+                  "role": "dev-agent",
+                  "session": "session-worker-b"
+                }
+              },
+              "pr": {
+                "id": "fixture-pr",
+                "merged": false,
+                "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+              },
+              "evidence": {
+                "fixture://evidence": {
+                  "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                  "exists": true
+                },
+                "fixture://qa": {
+                  "exists": true
+                },
+                "fixture://review": {
+                  "exists": true
+                }
+              },
+              "roleGrants": {
+                "dev-1": {
+                  "role": "dev-agent",
+                  "session": "session-dev"
+                },
+                "qa-1": {
+                  "role": "verifier",
+                  "session": "session-qa"
+                },
+                "review-1": {
+                  "role": "reviewer",
+                  "session": "session-review"
+                },
+                "human-1": {
+                  "role": "admin",
+                  "session": "session-human"
+                },
+                "viewer-1": {
+                  "role": "viewer",
+                  "session": "session-viewer"
+                },
+                "worker-a": {
+                  "role": "dev-agent",
+                  "session": "session-worker-a"
+                },
+                "worker-b": {
+                  "role": "dev-agent",
+                  "session": "session-worker-b"
+                }
+              },
+              "httpPolicy": {
+                "allowedOrigins": [
+                  "http://127.0.0.1:60220"
+                ],
+                "timeoutSec": 10,
+                "followRedirects": false
+              }
+            },
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "subject error boundary is structured",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [],
+        "invocations": [
+          {
+            "operation": "GetGateView",
+            "pid": "control-thread-32916",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-wrong-reason",
+            "request": {}
+          },
+          {
+            "operation": "ApproveCompletion",
+            "pid": "control-thread-33404",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-wrong-reason",
+            "request": {
+              "notBefore": "2026-11-07T09:00:00+08:00",
+              "ticketId": "FIX-1"
+            }
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\1\\TDD-UI-03-2\\ui-wrong-reason\\TDD-UI-03-2.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [
+            {
+              "actor": "qa-1",
+              "session": "session-qa",
+              "runId": "run-1",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "result": "PASS",
+              "evidence": "fixture://qa"
+            }
+          ],
+          "reviews": [
+            {
+              "actor": "review-1",
+              "session": "session-review",
+              "runId": "run-1",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "result": "PASS",
+              "evidence": "fixture://review"
+            }
+          ],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": false,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:60220"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          }
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+          "scenarioDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      }
+    }
+  ],
+  "date": "2026-11-07T01:14:47.730784+08:00",
+  "fixtureControls": {
+    "rpcPortInvocation": "PASS",
+    "rpcInjectedFault": "PASS",
+    "storeFault": "PASS",
+    "claimBarrier": "PASS",
+    "httpTimeout": "PASS",
+    "httpDisconnect": "PASS",
+    "realChildLifecycle": "PASS",
+    "durableReopen": "PASS",
+    "signedBytes": "PASS"
+  },
+  "results": [
+    {
+      "id": "TDD-UI-03-1",
+      "bdd": "S-UI-03-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "process exit visible",
+          "actual": "",
+          "expected": "Exited",
+          "pass": false
+        },
+        {
+          "assertion": "completion unknown visible separately",
+          "actual": "",
+          "expected": "Unknown",
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetRunView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 32848,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\TDD-UI-03-1.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [
+          {
+            "processStatus": "Exited",
+            "completionStatus": "Unknown"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:60051"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        }
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+        "scenarioDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    },
+    {
+      "id": "TDD-UI-03-2",
+      "bdd": "S-UI-03-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "unmerged completion disabled",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "exact unmerged gate reason",
+          "actual": "",
+          "expected": "PR_NOT_MERGED",
+          "pass": false
+        },
+        {
+          "assertion": "forged completion rejected",
+          "actual": "NotImplemented",
+          "expected": "GateRejected",
+          "pass": false
+        },
+        {
+          "assertion": "forged complete API preserves all state",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [
+              {
+                "actor": "qa-1",
+                "session": "session-qa",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://qa"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "review-1",
+                "session": "session-review",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://review"
+              }
+            ],
+            "approvals": [],
+            "runLedger": {
+              "run-1": {
+                "runId": "run-1",
+                "ticketId": "FIX-1",
+                "projectId": "fixture-guguboard",
+                "owner": "dev-1",
+                "developerSession": "session-dev",
+                "leaseGeneration": 1,
+                "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "workspace": "fixture-workspace-1"
+              }
+            },
+            "principals": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "pr": {
+              "id": "fixture-pr",
+              "merged": false,
+              "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "evidence": {
+              "fixture://evidence": {
+                "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                "exists": true
+              },
+              "fixture://qa": {
+                "exists": true
+              },
+              "fixture://review": {
+                "exists": true
+              }
+            },
+            "roleGrants": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "httpPolicy": {
+              "allowedOrigins": [
+                "http://127.0.0.1:60072"
+              ],
+              "timeoutSec": 10,
+              "followRedirects": false
+            }
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [
+              {
+                "actor": "qa-1",
+                "session": "session-qa",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://qa"
+              }
+            ],
+            "reviews": [
+              {
+                "actor": "review-1",
+                "session": "session-review",
+                "runId": "run-1",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "result": "PASS",
+                "evidence": "fixture://review"
+              }
+            ],
+            "approvals": [],
+            "runLedger": {
+              "run-1": {
+                "runId": "run-1",
+                "ticketId": "FIX-1",
+                "projectId": "fixture-guguboard",
+                "owner": "dev-1",
+                "developerSession": "session-dev",
+                "leaseGeneration": 1,
+                "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "workspace": "fixture-workspace-1"
+              }
+            },
+            "principals": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "pr": {
+              "id": "fixture-pr",
+              "merged": false,
+              "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            },
+            "evidence": {
+              "fixture://evidence": {
+                "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+                "exists": true
+              },
+              "fixture://qa": {
+                "exists": true
+              },
+              "fixture://review": {
+                "exists": true
+              }
+            },
+            "roleGrants": {
+              "dev-1": {
+                "role": "dev-agent",
+                "session": "session-dev"
+              },
+              "qa-1": {
+                "role": "verifier",
+                "session": "session-qa"
+              },
+              "review-1": {
+                "role": "reviewer",
+                "session": "session-review"
+              },
+              "human-1": {
+                "role": "admin",
+                "session": "session-human"
+              },
+              "viewer-1": {
+                "role": "viewer",
+                "session": "session-viewer"
+              },
+              "worker-a": {
+                "role": "dev-agent",
+                "session": "session-worker-a"
+              },
+              "worker-b": {
+                "role": "dev-agent",
+                "session": "session-worker-b"
+              }
+            },
+            "httpPolicy": {
+              "allowedOrigins": [
+                "http://127.0.0.1:60072"
+              ],
+              "timeoutSec": 10,
+              "followRedirects": false
+            }
+          },
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetGateView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 33192,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "ApproveCompletion",
+          "request": {
+            "notBefore": "2026-11-07T09:00:00+08:00",
+            "ticketId": "FIX-1"
+          },
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 31188,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\TDD-UI-03-2.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [
+          {
+            "actor": "qa-1",
+            "session": "session-qa",
+            "runId": "run-1",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "result": "PASS",
+            "evidence": "fixture://qa"
+          }
+        ],
+        "reviews": [
+          {
+            "actor": "review-1",
+            "session": "session-review",
+            "runId": "run-1",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "result": "PASS",
+            "evidence": "fixture://review"
+          }
+        ],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": false,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:60072"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        }
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+        "scenarioDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    },
+    {
+      "id": "TDD-UI-03-3",
+      "bdd": "S-UI-03-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "empty explanation visible",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "no invented success",
+          "actual": "",
+          "expected": "",
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "subject error boundary is structured",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetRunView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 29200,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\TDD-UI-03-3.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:60106"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        }
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+        "scenarioDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    }
+  ],
+  "red": 3,
+  "passed": 0,
+  "invalid": 0,
+  "productionChanged": false,
+  "independentAcceptance": "NOT RUN",
+  "provenance": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "files": {
+      "run_drivers.py": "fab4c3ea535ee9a898dbe22687914e4c1f115ccbf74ec47c0df53847f87e5a70",
+      "driver_support.py": "4a289c4f23c62b7cdf3d6f428d5583a74a7aee00f3cba707bc4f937ab74d7b60",
+      "Bridge.ps1": "56e8b7ff25d8896787f57a5dc7f84a9d7c409ee504d25ccabf6fe9a3f373c9c0",
+      "Skeleton.ps1": "f6e1a4e1aa4a6a425601ae3d3c4a97393d477727e020226fb52269b39829ea2e",
+      "ui-skeleton.html": "ab42c60cc6e7fb5594bbc4b42b786dcea681f383934354f84fac2b668f4eabcf",
+      "browser-driver.cjs": "643270765fe2c1060b487982b33c26f926baa061e5ddd251fb489f933b118937",
+      "PortProbe.ps1": "ae510e95f7ce884924a162a2e2cd1afbb96dd8c348d851b374c9e39ce8c67edb",
+      "cases.json": "fff710be1578de3982037b9aff563d48383d450710a7ed207f77c3329b6b5db3",
+      "review_strengthening.py": "7d0bf2ed80a5e0503a7b87709544bacfbd80e6d86ba1bcbe1789f566b408e215",
+      "mutation_controls.py": "41cc7e62b54af302d70834d8ac7e6831d4ac0774380e4f2a0c41ab24d8ca4875",
+      "review-fixtures.json": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140",
+      "review-case-inventory.json": "35e115237367bd88a859d978f1bf2221e8d6b1e42b53ececefd7c2d6521c68bb",
+      "fixture_contract_tests.py": "aed8ee8cb5c8335d41b496c1695562563c960995ff3e05a7e18f3cbdb055226d",
+      "qualify_review_fixes.py": "bfb16226f2e4fa9f5d256857d983b3cb5481023bbd56de87d8d1db1792f6f3a4",
+      "Run-Red.ps1": "328a0b6bcce557e03f1daf3562c6ce645118cfc2f5bd4a3f8df904ae73bebfde"
+    }
+  },
+  "qualification": "RED against test-only empty application skeleton. Unreached fault ports demonstrate missing orchestration, not exercised fault handling. Real browser drives test-only UI, not product UI."
+}

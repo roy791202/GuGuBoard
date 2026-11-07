@@ -1,0 +1,46 @@
+{
+  "task": "GOV-01",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-GOV-01-1",
+      "given": "驗證者是原開發者或同一工作階段",
+      "when": "提交驗證",
+      "then": "拒絕驗收",
+      "test": "TDD-GOV-01-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-GOV-01-2",
+      "given": "獨立驗證者完成實測",
+      "when": "提交證據",
+      "then": "保存驗證結果但不自動完成",
+      "test": "TDD-GOV-01-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-GOV-01-3",
+      "given": "獨立審查者與開發者身分不同",
+      "when": "提交審查",
+      "then": "保存審查結果且不提升角色",
+      "test": "TDD-GOV-01-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

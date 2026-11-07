@@ -1,0 +1,46 @@
+{
+  "task": "RUN-04",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-RUN-04-1",
+      "given": "上一張交付已確認且存在獨立就緒工單",
+      "when": "繼續領單",
+      "then": "在新工作階段執行下一張",
+      "test": "TDD-RUN-04-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-RUN-04-2",
+      "given": "下一張相依工單尚未核准合併",
+      "when": "繼續領單",
+      "then": "不領取相依工單",
+      "test": "TDD-RUN-04-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-RUN-04-3",
+      "given": "上一張交付結果未知",
+      "when": "繼續執行",
+      "then": "先對帳且不接新工單",
+      "test": "TDD-RUN-04-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

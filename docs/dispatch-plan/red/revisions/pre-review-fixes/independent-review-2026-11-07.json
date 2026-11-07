@@ -1,0 +1,452 @@
+{
+  "date": "2026-11-07",
+  "developer": "/root",
+  "reviewer": "/root/independent_red_review",
+  "independentSession": true,
+  "method": "Source and existing execution evidence review; no full dynamic rerun",
+  "branch": "master",
+  "head": "ab2392318eb6e919fb5e4527100c9741b8ca3a16",
+  "counts": {
+    "INVALID_RED": 2,
+    "VALID_RED": 11,
+    "PARTIAL_RED": 35
+  },
+  "readyForAIImplementation": false,
+  "productAcceptance": "NOT RUN",
+  "boardChanges": false,
+  "testOrGateChanges": false,
+  "sourceHashesUnchanged": true,
+  "sourceHashes": {
+    "docs/dispatch-plan/bdd/S-CMP-01.feature": "cfb6fe72a896c03f3684512491bbd67b943798bdbd106483e8892d79990a6dc4",
+    "docs/dispatch-plan/bdd/S-CMP-02.feature": "b9ac3f514d77e5e512ecde975540aa45acc44af59e8d3750508cb51bf32f4d24",
+    "docs/dispatch-plan/bdd/S-GOV-01.feature": "0bc9d1a182dcdc099c7bb0358df8902c8652ac042b196d7d38b78ad6ce092bad",
+    "docs/dispatch-plan/bdd/S-GOV-02.feature": "1ef91f219f69f99a16763aff0d3297b73f6fe8dff317f0bf5b7cff7fb8f3bb86",
+    "docs/dispatch-plan/bdd/S-INT-01.feature": "8d1fd0b4ca38ef3f2196e6b102933b530c274f646a0f6889f73a32e6c598c815",
+    "docs/dispatch-plan/bdd/S-RUN-01.feature": "f008a38a2a7f3f469d7948c9514a411f5f6ce588d41db664d5a173f769c159e3",
+    "docs/dispatch-plan/bdd/S-RUN-02.feature": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c",
+    "docs/dispatch-plan/bdd/S-RUN-03.feature": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94",
+    "docs/dispatch-plan/bdd/S-RUN-04.feature": "31b1ffdc0d92b75eb58256aca82347c687ac4b5d2f6db97eb807b9b98b4e58b9",
+    "docs/dispatch-plan/bdd/S-SCH-01.feature": "69fafe51de1978476fff28798ed682fd11c3cea041a5ea047a0dc61846913802",
+    "docs/dispatch-plan/bdd/S-SCH-02.feature": "2fa44f1725cc65ec9d175642340d221a95cc0a170537055e7eb6eeddc711ed9c",
+    "docs/dispatch-plan/bdd/S-UI-01.feature": "d5986ff5465ec9381321e1c52eaf6d3c589653e745a7a6a8ee7fd0cd58d6af35",
+    "docs/dispatch-plan/bdd/S-UI-02.feature": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+    "docs/dispatch-plan/bdd/S-UI-03.feature": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123",
+    "docs/dispatch-plan/bdd/S-WH-01.feature": "0bf36427221a058deb349498d91767dbe16442512607578adc0e0e4a1a1b6cab",
+    "docs/dispatch-plan/bdd/S-WH-02.feature": "2e106bbe273a7b17d3e9eec8c98821d09a911622e2b365a79a38a1c3584395c7",
+    "docs/dispatch-plan/red/Bridge.ps1": "affa9de9c6d0a6fa08dfef7f01e979e15a8bd127983e0ffbed0c3f13d8bb93b4",
+    "docs/dispatch-plan/red/PortProbe.ps1": "ae510e95f7ce884924a162a2e2cd1afbb96dd8c348d851b374c9e39ce8c67edb",
+    "docs/dispatch-plan/red/Run-InitialContract.ps1": "dc54e54ae265d1153a2a2803566857c71b45479728185f4c7157e259079cfadb",
+    "docs/dispatch-plan/red/Run-Red.ps1": "c12ecdf076bdda6b5b7abb91b7f1dd3d6aa32ee7a72e791bf00be60edea53306",
+    "docs/dispatch-plan/red/Skeleton.ps1": "f6e1a4e1aa4a6a425601ae3d3c4a97393d477727e020226fb52269b39829ea2e",
+    "docs/dispatch-plan/red/browser-driver.cjs": "1452732833809f0ca928a4f4145e5ee2e7a4068dec3d5d80d6fef96a23b7fec5",
+    "docs/dispatch-plan/red/cases.json": "fff710be1578de3982037b9aff563d48383d450710a7ed207f77c3329b6b5db3",
+    "docs/dispatch-plan/red/driver-evidence/all.json": "d5af2d50c136a99b0642204cc95949371ad6f55a8b5280557787262d1d51589d",
+    "docs/dispatch-plan/red/driver_support.py": "ae6d8aae2255256417fb7335df552a8d85344c8b37791cc9d2b2a5c4f0f91acd",
+    "docs/dispatch-plan/red/gate-status.json": "da9df4a6158063c706ee68857978be707f4391da0926f1fb511d4444b4473ba4",
+    "docs/dispatch-plan/red/qualify_evidence.py": "be7fcfa6ac687777f4202dab96d773f3dc449c5f6a3330b8c092a687a538aa0a",
+    "docs/dispatch-plan/red/run_drivers.py": "1a4af6488c2e9fca46225e45d6411eb0f3dc108758b3084926fb0ee45b4b77d1",
+    "docs/dispatch-plan/red/ui-skeleton.html": "681e8c554b506a176ae53d3951e374901518aecc812da21c4d11fa0857099c74",
+    "docs/dispatch-plan/tasks/ai-runner/RUN-01.json": "7d776d002007f3ae25fd394f7c75fa4f80613c811f9472a8b9fd9342d865ab30",
+    "docs/dispatch-plan/tasks/ai-runner/RUN-02.json": "ec3b57ec4ecbb65c2ea3ae01c53a10a0c5ba208f74362a219aa1188469d5db37",
+    "docs/dispatch-plan/tasks/ai-runner/RUN-03.json": "5a5f89553775dc0a0a034ebf3c6cdf4169b877eb70601ea1023762a406dc1795",
+    "docs/dispatch-plan/tasks/ai-runner/RUN-04.json": "ed5e5eda8d98ff30fc89f504dae152c46f3cffc6c10f15d30800cf2f2fb828aa",
+    "docs/dispatch-plan/tasks/dispatch-integration/INT-01.json": "3de017a3c341dec9bcf195b574eda12c6c5b5ae2eb1256120f1e8c72452374fe",
+    "docs/dispatch-plan/tasks/dispatch-scheduling/SCH-01.json": "60273b145b84bb01d091303a2e09e444d7022962fed68451af75617d68b9d1ee",
+    "docs/dispatch-plan/tasks/dispatch-scheduling/SCH-02.json": "c59c96897916072581267eeb3810cef151d2a1c0bb4b68b5e4e7c1b0a2d2c57a",
+    "docs/dispatch-plan/tasks/dispatch-scheduling/UI-01.json": "29a24b5f39087752056ba7ecf9a9aa1cae9b767ac94e66c72933ed4a1251c227",
+    "docs/dispatch-plan/tasks/verification-approval/GOV-01.json": "6fb99e4932401e579588e66ec8a8de0fff102851cdb98d0a7767b84137bd78dc",
+    "docs/dispatch-plan/tasks/verification-approval/GOV-02.json": "6b5120b8b8b1d64f525faa6a066647bcd1e339b9786bfbcf46a7702b7ff047a1",
+    "docs/dispatch-plan/tasks/verification-approval/UI-03.json": "aaacb10701363dda154b79dc1e3217a7aa1f4f10197806ca96cbbe580c209762",
+    "docs/dispatch-plan/tasks/webhook-delivery/UI-02.json": "ab4f5f34d44264f9fb90102dd5abbc1a42af81be3423212fd5153d418b7a46c9",
+    "docs/dispatch-plan/tasks/webhook-delivery/WH-01.json": "dbdd8ac955ad05c0905cdd143203949c52c7bc2b7e92d3e1908b64835c8ce7de",
+    "docs/dispatch-plan/tasks/webhook-delivery/WH-02.json": "1e0e47b9e0c5bff58906a4bb22ed1636463cf85684f94f3c5d72d00a2db87df3",
+    "docs/dispatch-plan/tasks/work-completion/CMP-01.json": "0528dc99582767852a59b5558e1062e10233f2e788d7b112fe41f86cb9cec586",
+    "docs/dispatch-plan/tasks/work-completion/CMP-02.json": "f1ba6c88ecc2ccb70271e4c0eb53d8eb1a70c02d00a2e42a1273b12ef90203e3"
+  },
+  "cases": [
+    {
+      "id": "TDD-SCH-01-1",
+      "failureCause": "未呼叫 Clock；回 NotImplemented",
+      "faultReached": "無",
+      "verdict": "INVALID_RED",
+      "assertionValidity": "INVALID_RED：BDD「不產生事件」已通過；額外 Clock／NotDue 才造成 RED",
+      "strengthening": "用可觀察時間邊界組合區分早派與不派，不指定內部呼叫作 BDD 失敗"
+    },
+    {
+      "id": "TDD-SCH-01-2",
+      "failureCause": "兩次評估後 outbox 仍為 0",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：直接觀察一個持久派工意圖",
+      "strengthening": "補 event identity、revision、cursor 原子提交及重啟重送"
+    },
+    {
+      "id": "TDD-SCH-01-3",
+      "failureCause": "未回 Validation",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：同一輸入同時違反時區與間隔，遮蔽單項缺陷",
+      "strengthening": "分開無時區／4 秒，補 5、3600、3601、空值及具體錯誤欄位"
+    },
+    {
+      "id": "TDD-SCH-02-1",
+      "failureCause": "未呼叫 Store.Read",
+      "faultReached": "無",
+      "verdict": "INVALID_RED",
+      "assertionValidity": "INVALID_RED：BDD「不派工」已通過；RED 只來自強制讀 Port",
+      "strengthening": "比較 paused／unpaused 相同到期排程；檢查事件與程序副作用"
+    },
+    {
+      "id": "TDD-SCH-02-2",
+      "failureCause": "outbox 0；cursor 未追至現在",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：重開後沒有當下評估",
+      "strengthening": "補重複 reconciliation 不補發、跨 revision、停用狀態"
+    },
+    {
+      "id": "TDD-SCH-02-3",
+      "failureCause": "未達 Commit；未回 Unavailable",
+      "faultReached": "Store.Commit=0",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：no-op 不等於原子失敗保護",
+      "strengthening": "證明已算出新 cursor/outbox；命中失敗後驗皆未提交，再重試"
+    },
+    {
+      "id": "TDD-WH-01-1",
+      "failureCause": "HTTP 0；pending 未變 delivered",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：實際接收及持久 receipt 缺失",
+      "strengthening": "驗 payload/eventId/簽章；工單與驗收狀態不得改動"
+    },
+    {
+      "id": "TDD-WH-01-2",
+      "failureCause": "沒接觸 timeout peer；未存 retry",
+      "faultReached": "timeout 未達",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：未證明 timeout 分支",
+      "strengthening": "真 timeout 與分類、attempt/nextAt、deadline、完整事件保存"
+    },
+    {
+      "id": "TDD-WH-01-3",
+      "failureCause": "未回 Validation",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：固定 peer 計數看不到任意外連",
+      "strengthening": "用受控不允許 origin 與全出口監測；allowlist 由可信設定給定"
+    },
+    {
+      "id": "TDD-WH-02-1",
+      "failureCause": "到重試時間仍無 HTTP",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：儲存欄位相同不代表送出 bytes 相同",
+      "strengthening": "peer 捕捉 body/ID/簽章/timestamp；驗時間邊界與退避序列"
+    },
+    {
+      "id": "TDD-WH-02-2",
+      "failureCause": "未存 manual",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：轉人工核心行為可觀察",
+      "strengthening": "驗第 4→5 次實際失敗、理由與多次評估不再送"
+    },
+    {
+      "id": "TDD-WH-02-3",
+      "failureCause": "reopen 後未投遞",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：保存由 fixture 保證，未證明 subject 恢復",
+      "strengthening": "subject 寫 retry 後重開，驗 endpoint、時鐘、到期順序"
+    },
+    {
+      "id": "TDD-RUN-01-1",
+      "failureCause": "inbox 0；首次 200 非 202",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：真 ingress 與持久 dedup 缺失",
+      "strengthening": "同 ID 異 digest=409、並行重送、重開去重、ack 前 commit"
+    },
+    {
+      "id": "TDD-RUN-01-2",
+      "failureCause": "tampered/stale 均 200",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：拒絕所有請求也會滿足負向案",
+      "strengthening": "有效簽章正向控制、±300/301、未來時間、未知/過期 key、缺 header、可信 key"
+    },
+    {
+      "id": "TDD-RUN-01-3",
+      "failureCause": "Commit 0；保存失敗及滿載均 200",
+      "faultReached": "Commit=0，輸出遺失該 fault",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：兩種錯誤混案；只比較部分 inbox",
+      "strengthening": "拆兩案、保留 fault hit、完整資料、無副作用、ack 與容量上界"
+    },
+    {
+      "id": "TDD-RUN-02-1",
+      "failureCause": "leases 0；runs 0",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：真雙程序，但 fake 已代做唯一 claim；未驗 Start 贏家",
+      "strengthening": "barrier 放競爭 seam；核對 owner/generation 與 Start args，多輪及 fencing"
+    },
+    {
+      "id": "TDD-RUN-02-2",
+      "failureCause": "Start fault 0；Release 0",
+      "faultReached": "Process.Start=0",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：空 lease 不證明補償",
+      "strengthening": "先成功 claim，再命中 start error，驗回報與精確 owner/generation release"
+    },
+    {
+      "id": "TDD-RUN-02-3",
+      "failureCause": "沒 Claim；未回 Idle",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：fake 可對空 board 發租約",
+      "strengthening": "fake 依契約拒不存在票；驗 Idle、無 lease/inbox 消耗/程序，不強迫不必要 Claim"
+    },
+    {
+      "id": "TDD-RUN-03-1",
+      "failureCause": "Renew 呼叫 0",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：不驗真的延長；fake Renew 沒寫 lease",
+      "strengthening": "驗 old/new until、generation、時鐘與 299/300 秒、下次續租"
+    },
+    {
+      "id": "TDD-RUN-03-2",
+      "failureCause": "Renew fault 0；子程序仍活",
+      "faultReached": "Board.Renew=0",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：漏整棵程序樹與工作區隔離",
+      "strengthening": "建父孫程序；deadline/重試；全樹退出、quarantine、Stop 失敗禁重領"
+    },
+    {
+      "id": "TDD-RUN-03-3",
+      "failureCause": "未 quarantine；未回 Quarantined",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：reopen 遺失 handle；未驗停舊後才重跑",
+      "strengthening": "marker/建立時間/group 查舊程序；確認停止、隔離、新執行與 PID reuse"
+    },
+    {
+      "id": "TDD-CMP-01-1",
+      "failureCause": "journal 0；In Progress；lease 未放",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：交付持久化與進審查缺失",
+      "strengthening": "payload/digest/版本、Green/READY_FOR_TDD/history、Confirm 前禁下一張"
+    },
+    {
+      "id": "TDD-CMP-01-2",
+      "failureCause": "未回 Validation",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：tests/evidence 同時空，遮蔽個別缺失",
+      "strengthening": "各自缺漏、failed>0、exit 非0、UNKNOWN、無 PR 理由、證據不存在/digest 不符"
+    },
+    {
+      "id": "TDD-CMP-01-3",
+      "failureCause": "未回 Conflict",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：僅 generation=0，漏其他版本",
+      "strengthening": "錯 ticket/run/project/owner/generation/SHA/tree，核對可信 ledger"
+    },
+    {
+      "id": "TDD-CMP-02-1",
+      "failureCause": "journal 0；未 Confirmed",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：沒有真的回應遺失，未驗原結果",
+      "strengthening": "commit 後 response loss；相同 response、一次 note/update/release、完整 journal"
+    },
+    {
+      "id": "TDD-CMP-02-2",
+      "failureCause": "Release fault 0；未 Confirmed",
+      "faultReached": "Board.Release=0",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：缺首輪失敗中間狀態與禁止接單",
+      "strengthening": "ReviewUpdated 保留、無重複 update、restart 一次 release、最後 Confirm"
+    },
+    {
+      "id": "TDD-CMP-02-3",
+      "failureCause": "未回 Conflict",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：新 evidence 同時帶 malformed digest",
+      "strengthening": "兩份各自有效 payload/digest；由同 ID 異內容造成 Conflict，原 receipt 不變"
+    },
+    {
+      "id": "TDD-RUN-04-1",
+      "failureCause": "FIX-2 未啟動；無新 session",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：下一獨立工作與新 session 可觀察",
+      "strengthening": "缺 session 不可算新 session；驗可信身分與隔離 checkout"
+    },
+    {
+      "id": "TDD-RUN-04-2",
+      "failureCause": "未回 Idle",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：no-start 已過，未驗無 Claim dependent",
+      "strengthening": "FIX-3 lease/Claim/Process 皆無，前置 Done 後可領正向控制"
+    },
+    {
+      "id": "TDD-RUN-04-3",
+      "failureCause": "未回 ReconcileRequired",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：未要求真正對帳、隔離或禁 Claim",
+      "strengthening": "驗 reconciliation/read、保持未知、無 lease/process，對帳成功後繼續"
+    },
+    {
+      "id": "TDD-GOV-01-1",
+      "failureCause": "未回 Unauthorized",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：developerSession 由 request 自填",
+      "strengthening": "可信交付身分；偽造 request/session 不可繞過，驗 Identity port"
+    },
+    {
+      "id": "TDD-GOV-01-2",
+      "failureCause": "verifications 0",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：獨立驗證保存但不完成",
+      "strengthening": "完整記錄、tree/session、證據來源、失敗實測與自驗負向"
+    },
+    {
+      "id": "TDD-GOV-01-3",
+      "failureCause": "reviews 0",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：w.ident 不變近乎天然成立",
+      "strengthening": "不可變 identity 回傳；持久角色/權限不變、三角色/session 各異、tree 綁定"
+    },
+    {
+      "id": "TDD-GOV-02-1",
+      "failureCause": "未回 GateRejected",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：只缺 verified/merged",
+      "strengthening": "reviewed/authorized/tree mismatch、過期證據、跨專案、偽造 gate，快照不變"
+    },
+    {
+      "id": "TDD-GOV-02-2",
+      "failureCause": "未 Done/Blue；approvals 0",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：seed 布林取代可信證據鏈，缺完整 history",
+      "strengthening": "獨立記錄/Git port；history/revision/time；不同 merged tree 必拒"
+    },
+    {
+      "id": "TDD-GOV-02-3",
+      "failureCause": "未回 Unauthorized",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：其他 gates 未合格，拒絕原因可混淆",
+      "strengthening": "其餘 gates 全合格，只改可信角色/noApprove，無 mutation"
+    },
+    {
+      "id": "TDD-UI-01-1",
+      "failureCause": "concurrency 空白",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：瀏覽器缺預設值",
+      "strengthening": "並行值固定 read-only/disabled、其餘 defaults；產品 UI 另驗"
+    },
+    {
+      "id": "TDD-UI-01-2",
+      "failureCause": "submit 後無 error text",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：任意非空字可過",
+      "strengthening": "notBefore 對應可讀錯誤、焦點/aria、舊值與合法提交對照"
+    },
+    {
+      "id": "TDD-UI-01-3",
+      "failureCause": "Save enabled",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：漏權限原因，disabled 時無強制 API 測試",
+      "strengthening": "理由、DOM disabled、forged command Unauthorized、完整快照不變"
+    },
+    {
+      "id": "TDD-UI-02-1",
+      "failureCause": "key reference 空白",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：innerText 漏 response/attribute/hidden/log secret",
+      "strengthening": "檢查 response/network、outerHTML/attributes/scripts，不只不顯示"
+    },
+    {
+      "id": "TDD-UI-02-2",
+      "failureCause": "HTTP 0；health 空白",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：peer 固定 202，未走 Runner test-event 防工作",
+      "strengthening": "實際 test event 至 ingress，驗 mode/schema、inbox/lease/run 無正式工作、明確 health"
+    },
+    {
+      "id": "TDD-UI-02-3",
+      "failureCause": "Offline 未顯示",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：Pause enabled 但無 handler",
+      "strengthening": "點 Pause、持久 paused、禁止後續投遞、狀態；對齊 operation 契約"
+    },
+    {
+      "id": "TDD-UI-03-1",
+      "failureCause": "process/completion 空白",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：兩種不同狀態分別顯示",
+      "strengthening": "exit 非0、交付失敗、quarantine；exit 不等於成功文案"
+    },
+    {
+      "id": "TDD-UI-03-2",
+      "failureCause": "Complete 未停用；reason 空白",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：任意 reason 可過，漏繞 UI 拒絕",
+      "strengthening": "exact PR_NOT_MERGED/可讀原因、直接 GateRejected、狀態不變"
+    },
+    {
+      "id": "TDD-UI-03-3",
+      "failureCause": "empty text 空白",
+      "faultReached": "無",
+      "verdict": "VALID_RED",
+      "assertionValidity": "VALID_RED：缺空狀態；無成功訊息有效",
+      "strengthening": "無假 run/card、無 aria success banner、正向資料對照"
+    },
+    {
+      "id": "TDD-INT-01-1",
+      "failureCause": "FIX-2 未跑；FIX-1 Todo",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：手造 event 接各段，非真資料流",
+      "strengthening": "前段輸出作後段輸入，關聯 event/run/completion IDs/SHA，禁手補事件"
+    },
+    {
+      "id": "TDD-INT-01-2",
+      "failureCause": "runs0；Release fault0；未 Confirm",
+      "faultReached": "Board.Release=0",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：未 transport disconnect，只武裝 Release exception",
+      "strengthening": "指定階段斷線/response loss，重啟同 journal，逐階段去重與恢復"
+    },
+    {
+      "id": "TDD-INT-01-3",
+      "failureCause": "未 Blue/Done",
+      "faultReached": "無",
+      "verdict": "PARTIAL_RED",
+      "assertionValidity": "PARTIAL_RED：命令數不證明授權，完全未 assert FIX-3 解鎖",
+      "strengthening": "可信 identities/gate records；FIX-3 前禁領、之後真 claim/start；不同 tree 必敗"
+    }
+  ]
+}

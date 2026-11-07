@@ -1,0 +1,46 @@
+{
+  "task": "WH-01",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-WH-01-1",
+      "given": "有一筆待投遞事件",
+      "when": "接收端可靠接收",
+      "then": "事件標示已接收而非工作完成",
+      "test": "TDD-WH-01-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-WH-01-2",
+      "given": "接收端逾時",
+      "when": "投遞事件",
+      "then": "保留待重試紀錄",
+      "test": "TDD-WH-01-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-WH-01-3",
+      "given": "目標不在允許清單",
+      "when": "儲存目標",
+      "then": "拒絕目標且不連線",
+      "test": "TDD-WH-01-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

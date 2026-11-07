@@ -1,0 +1,46 @@
+{
+  "task": "CMP-02",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-CMP-02-1",
+      "given": "交付已保存但回應遺失",
+      "when": "重送相同交付",
+      "then": "回傳原結果且不重複追加交付",
+      "test": "TDD-CMP-02-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-CMP-02-2",
+      "given": "工單已進審查中但釋放失敗",
+      "when": "重試交付",
+      "then": "完成釋放並確認交付",
+      "test": "TDD-CMP-02-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-CMP-02-3",
+      "given": "相同交付識別帶不同內容",
+      "when": "重新提交",
+      "then": "回報衝突且不覆寫原證據",
+      "test": "TDD-CMP-02-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-07T00:54:56.803685+08:00",
+  "executionCounts": {
+    "passed": 2,
+    "red": 46,
+    "invalid": 0
+  },
+  "mutationControls": 16,
+  "mutantsKilled": 16,
+  "positiveControls": 8,
+  "sourceAndObservationConsistency": "PASS",
+  "screenshots": {
+    "TDD-UI-01-1": "5f4a175d7c3c5f911a7de19af3a704b939d3a61f20f19659e8c2339e2a3d5d29",
+    "TDD-UI-01-2": "4768800bcfb70ffae439a2a985d3e0b7299b4189d1d07e3988ef0ca5070557f4",
+    "TDD-UI-01-3": "5f9c842542eb2ea76d08bc88f5fefb9d65bc96c4d26fa08a5db34d49914abc0f",
+    "TDD-UI-02-1": "5f4a175d7c3c5f911a7de19af3a704b939d3a61f20f19659e8c2339e2a3d5d29",
+    "TDD-UI-02-2": "0a377ed3bff7e5c544958f537606eaccd5e424a4c603f34824c71a710f801bef",
+    "TDD-UI-02-3": "ad0cba7a3987ca3e946544a1033ae71b3bb16988dc43a004f435050227793671",
+    "TDD-UI-03-1": "5f4a175d7c3c5f911a7de19af3a704b939d3a61f20f19659e8c2339e2a3d5d29",
+    "TDD-UI-03-2": "5f4a175d7c3c5f911a7de19af3a704b939d3a61f20f19659e8c2339e2a3d5d29",
+    "TDD-UI-03-3": "5f4a175d7c3c5f911a7de19af3a704b939d3a61f20f19659e8c2339e2a3d5d29"
+  },
+  "faultsNotReached": [
+    {
+      "id": "TDD-SCH-02-3",
+      "points": [
+        "Store.Commit"
+      ]
+    },
+    {
+      "id": "TDD-RUN-01-3",
+      "points": [
+        "Store.Commit"
+      ]
+    },
+    {
+      "id": "TDD-RUN-02-2",
+      "points": [
+        "Process.Start"
+      ]
+    },
+    {
+      "id": "TDD-RUN-03-2",
+      "points": [
+        "Board.Renew",
+        "Process.Stop"
+      ]
+    },
+    {
+      "id": "TDD-CMP-02-1",
+      "points": [
+        "Completion.ResponseAfterCommit"
+      ]
+    },
+    {
+      "id": "TDD-CMP-02-2",
+      "points": [
+        "Board.Release"
+      ]
+    }
+  ],
+  "qualification": "No blanket RED qualification. Negative safety PASS is legitimate; unhit faults remain blocked paths. Independent re-review required.",
+  "readyForImplementation": false,
+  "independentReReview": "PENDING",
+  "verifierSha256": "44a4d6b926215237436b8c3e0422e42e9fbdf7e6891c3e1257e72be3107cfe93"
+}

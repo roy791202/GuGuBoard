@@ -1,0 +1,880 @@
+{
+  "reviewer": "/root/independent_red_review",
+  "independent": true,
+  "participatedInDevelopment": false,
+  "reviewType": "R3 independent test definition/fixture/assertion quality, not product acceptance",
+  "date": "2026-11-07",
+  "readyForAIImplementation": false,
+  "definitionCounts": {
+    "READY_DEFINITION": 43,
+    "PARTIAL_ASSERTION": 2,
+    "INVALID_FIXTURE": 3
+  },
+  "sutEvidenceCounts": {
+    "NEGATIVE_PASS": 2,
+    "BEHAVIOR_RED": 37,
+    "FAULT_UNREACHED": 6,
+    "BLOCKED_UPSTREAM": 3
+  },
+  "cases": [
+    {
+      "id": "TDD-SCH-01-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "NEGATIVE_PASS",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "合法負向PASS；配對忽略時間mutant能被抓。",
+      "actualFailedAssertions": [],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-SCH-01-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "唯一持久outbox行為缺失，正向script與reject-all對照成立。",
+      "actualFailedAssertions": [
+        "one durable event after two invocations"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-SCH-01-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "無時區、空值、4/3601及合法5/3600各有明確斷言；配對正向成立。",
+      "actualFailedAssertions": [
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "valid boundary stored 5",
+        "valid boundary stored 3600"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-SCH-02-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "NEGATIVE_PASS",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "合法暫停負向PASS；不再以Store呼叫當RED。",
+      "actualFailedAssertions": [],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-SCH-02-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "重開只評當下、cursor追上、第二次reconcile不多發的定義合理。",
+      "actualFailedAssertions": [
+        "one current evaluation after reopen",
+        "cursor catches up"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-SCH-02-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "FAULT_UNREACHED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "提交payload同時含cursor/outbox，失敗保存與恢復重試定義合理；subject Commit未達。",
+      "actualFailedAssertions": [
+        "commit fault reached",
+        "observable operation result",
+        "fault occurs with new cursor and outbox in same transaction",
+        "retry after storage recovery creates one event"
+      ],
+      "faultHits": {
+        "Store.Commit": 0
+      },
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-WH-01-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "HTTP接收、receipt及tickets不變符合BDD；完整first-send安全矩陣仍屬後續module coverage。",
+      "actualFailedAssertions": [
+        "real HTTP received request",
+        "durable delivery receipt"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-WH-01-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "有實際timeout peer、錯誤分類、attempt與nextAt；空骨架尚未接觸peer。",
+      "actualFailedAssertions": [
+        "timeout peer contacted",
+        "retry state persisted",
+        "timeout classified",
+        "timeout increments attempt",
+        "timeout persists next retry"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-WH-01-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "兩個不允許origin各驗零Http呼叫，加允許目標正向配置；可信policy不由client自行指定。",
+      "actualFailedAssertions": [
+        "observable operation result",
+        "observable operation result",
+        "permitted origin has positive configuration path"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-WH-02-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "實際wire bytes、HMAC、timestamp及宣告10秒timeout斷言合理；physical timeout縮放僅fixture。",
+      "actualFailedAssertions": [
+        "actual retry at boundary",
+        "peer captures one delivered body",
+        "declared delivery timeout is ten seconds"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-WH-02-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "五次後manual、不再發送的核心負向轉移可觀察。",
+      "actualFailedAssertions": [
+        "durable dead letter"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-WH-02-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "先由subject寫retry再重開；old peer設回ok，固定外部URL合理；subject首次投遞未達。",
+      "actualFailedAssertions": [
+        "subject persisted retry before restart",
+        "recovered retry delivered",
+        "peer captures one delivered body",
+        "declared delivery timeout is ten seconds"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-01-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "首次202及同事件200、durable單筆inbox；配對ack控制符合案例範圍。",
+      "actualFailedAssertions": [
+        "durable HTTP dedup",
+        "first acceptance"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-01-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "已修正-300首次202、+300重送200；TEMP signed-ack-script全部PASS。",
+      "actualFailedAssertions": [
+        "tampered signed bytes rejected",
+        "stale signed bytes rejected",
+        "signature time boundary -301",
+        "signature time boundary -300",
+        "signature time boundary 301",
+        "invalid trusted key/header X-Key-Idunknown-key",
+        "invalid trusted key/header X-Key-Idexpired-key",
+        "invalid trusted key/header X-Signature"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-01-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "FAULT_UNREACHED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "已保留immutable armed history，滿載原資料完整比較；Store.Commit subject未達。",
+      "actualFailedAssertions": [
+        "durability fault reached",
+        "failed persistence no ack",
+        "full inbox backpressure"
+      ],
+      "faultHits": {
+        "Store.Commit": 0
+      },
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-02-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "真claim barrier、獨立trusted contenders、唯一真Process.Start及owner/generation比對；配對wrong-owner mutant成立。",
+      "actualFailedAssertions": [
+        "one valid lease",
+        "one real process start",
+        "one real process adapter start"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-02-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "FAULT_UNREACHED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "claim/start故障/精確release補償/失敗報告；故障尚未達，不能算failure handling已驗。",
+      "actualFailedAssertions": [
+        "actual start fault reached",
+        "compensating release called",
+        "claim reached before start failure",
+        "compensation matches start owner and generation",
+        "failed start is reported"
+      ],
+      "faultHits": {
+        "Process.Start": 0
+      },
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-02-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "空board零lease/process且Idle；正向control及無claim啟動mutant對照成立。",
+      "actualFailedAssertions": [
+        "observable operation result"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-03-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "Identity/ledger/lease owner均dev-1；TEMP renew-script PASS，expiry持久更新可觀察。",
+      "actualFailedAssertions": [
+        "renew reached board port",
+        "renew persists new authoritative expiry"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-03-2",
+      "definitionQuality": "PARTIAL_ASSERTION",
+      "sutEvidence": "FAULT_UNREACHED",
+      "r1Closure": "PARTIAL",
+      "r2Closure": "PARTIAL",
+      "review": "另起活父孫程序注入Stop失敗，要求hit/stillalive/禁新run；但workspace只驗可由Store偽造的dict，缺物理QUARANTINED或Workspace port斷言。",
+      "actualFailedAssertions": [
+        "renew fault reached",
+        "actual child stopped before expiry",
+        "stop confirmation called",
+        "descendant confirmed exited",
+        "workspace quarantined after lost lease",
+        "failed Stop actually reached on another live tree",
+        "failed Stop quarantines live workspace"
+      ],
+      "faultHits": {
+        "Board.Renew": 0,
+        "Process.Stop": 0
+      },
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-03-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "停止舊父孫、實體quarantine、後續新workspace/session及PID mismatch保護已有定義；這些深層步驟baseline尚未到達。",
+      "actualFailedAssertions": [
+        "old process must stop before recovery completes",
+        "durable run quarantine",
+        "observable operation result",
+        "recovery checks trusted process creation marker",
+        "old descendant must be gone before continuing",
+        "recovery writes physical workspace quarantine"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-CMP-01-1",
+      "definitionQuality": "INVALID_FIXTURE",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "OPEN_REGRESSION",
+      "r2Closure": "OPEN_NEW",
+      "review": "fixture current lease缺until，正確completion-commit-script在TEMP KeyError until；安全實作視為LeaseLost，不能滿足成功前提。",
+      "actualFailedAssertions": [
+        "durable completion journal",
+        "delivery awaits independent review",
+        "lease released",
+        "completion stores exact payload",
+        "journal confirmed",
+        "delivery TDD marked Green",
+        "delivery history appended"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-CMP-01-2",
+      "definitionQuality": "INVALID_FIXTURE",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "OPEN_REGRESSION",
+      "r2Closure": "OPEN_NEW",
+      "review": "共用缺until的無效lease，與欲單測證據缺漏同時失效，沒有規格宣告錯誤優先順序；需先確立有效lease再驗Validation。",
+      "actualFailedAssertions": [
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-CMP-01-3",
+      "definitionQuality": "INVALID_FIXTURE",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "OPEN_REGRESSION",
+      "r2Closure": "OPEN_NEW",
+      "review": "共用缺until的無效lease，遮蔽錯generation/版本/身分的特定拒絕原因；需合法基線。",
+      "actualFailedAssertions": [
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-CMP-02-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "FAULT_UNREACHED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "已補有效相符lease/status；TEMP completion-commit-script通過真postcommit斷線及replay receipt/history斷言；baseline fault仍0。",
+      "actualFailedAssertions": [
+        "one journal after replay through fresh process",
+        "durable confirmed stage",
+        "actual response loss after durable commit",
+        "confirmed receipt is present",
+        "one append-only completion history"
+      ],
+      "faultHits": {
+        "Completion.ResponseAfterCommit": 0
+      },
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-CMP-02-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "FAULT_UNREACHED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "保留ReviewUpdated journal和有效lease；Release中斷與重開恢復定義合理；subject fault仍0。",
+      "actualFailedAssertions": [
+        "release fault reached",
+        "lease released after fresh process",
+        "journal confirms",
+        "one successful resumed release"
+      ],
+      "faultHits": {
+        "Board.Release": 0
+      },
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-CMP-02-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "相同ID不同有效evidence/digest，完整快照保持與Conflict；未改expected以過關。",
+      "actualFailedAssertions": [
+        "observable operation result"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-04-1",
+      "definitionQuality": "PARTIAL_ASSERTION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "PARTIAL",
+      "r2Closure": "PARTIAL",
+      "review": "真父孫程序/新session檢查已補，但TEMP控制以lease dev-1/g1啟動intruder/g999仍整案PASS；matching lease不變量不足。",
+      "actualFailedAssertions": [
+        "independent next ticket actually runs",
+        "new execution session",
+        "next job really called process adapter",
+        "next job is physically alive"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-04-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "相依未完成不得Claim/lease/start，Idle與無dependent lease皆有斷言。",
+      "actualFailedAssertions": [
+        "observable operation result"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-RUN-04-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "未知completion的durable reconciliation及零lease/no new run符合核心行為。",
+      "actualFailedAssertions": [
+        "observable operation result",
+        "unknown completion triggers durable reconciliation"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-GOV-01-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "trusted ledger/session比較與forged client欄位拒絕；有PASS反向control，非client身分自證。",
+      "actualFailedAssertions": [
+        "observable operation result",
+        "observable operation result",
+        "observable operation result"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-GOV-01-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "保存verification且tree/session綁可信run、不自動完成；目前缺保存行為。",
+      "actualFailedAssertions": [
+        "independent evidence persisted",
+        "verification bound to trusted run tree"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-GOV-01-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "持久grants完整比較；改用格式合法c*40不同tree，排除僅格式拒絕。",
+      "actualFailedAssertions": [
+        "review durable",
+        "observable operation result"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-GOV-02-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "各verification/review/authority/merge缺失及tree不符分別拒絕；principal與grants同步。",
+      "actualFailedAssertions": [
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-GOV-02-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "完整trusted gate records正向，Done/Blue及matching tree history斷言；仍非真Git服務驗收。",
+      "actualFailedAssertions": [
+        "fully accepted task done",
+        "fully accepted task blue",
+        "approval history durable",
+        "approval records immutable history",
+        "approval history uses matching merged tree"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-GOV-02-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "其他gate合格後只變可信actor/role/noApprove，session同步可信principal，完整snapshot不變。",
+      "actualFailedAssertions": [
+        "observable operation result",
+        "observable operation result",
+        "observable operation result",
+        "observable operation result"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-UI-01-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "預設停用/並行1可讀；readonly是test adapter本身行為，不能移算產品UI。",
+      "actualFailedAssertions": [
+        "default concurrency visible"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-UI-01-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "欄位notBefore與具體提示、保留設定；當前缺view/validation實作。",
+      "actualFailedAssertions": [
+        "validation identifies notBefore field",
+        "validation message identifies field"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-UI-01-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "viewer-1有一致roleGrant/session，exact reason及繞UI直接API拒絕/全state不變；配對正向PASS。",
+      "actualFailedAssertions": [
+        "viewer save disabled",
+        "viewer permission reason",
+        "forged API save rejected"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-UI-02-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "wire response text與完整HTML均檢secret；hidden-secret mutant被抓；不等於產品logs/storage安全。",
+      "actualFailedAssertions": [
+        "key reference displayed"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-UI-02-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "真正受控HTTP到AcceptWakeup、testEvent bytes、exact OK及無inbox/lease/run；TEMP ui-health-script PASS。",
+      "actualFailedAssertions": [
+        "actual test delivery transport invoked",
+        "exact health-only response",
+        "health request reached runner ingress",
+        "test-event mode sent on wire"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-UI-02-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "種due pending事件，paused/unpaused同runnerOnline條件；真click持久化，兩個mutants分別抓no-op pause/忽略pause；TEMP正向PASS。",
+      "actualFailedAssertions": [
+        "offline visible",
+        "click durably pauses delivery",
+        "same due event can send when unpaused"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-UI-03-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "Exited歷史不再錯套租約；TEMP ui-safe正確顯示PASS，Running顯示mutant被抓。",
+      "actualFailedAssertions": [
+        "process exit visible",
+        "completion unknown visible separately"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-UI-03-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "exact PR_NOT_MERGED、disabled與直接Approve拒絕/全state不變；配對wrong-reason控制成立。",
+      "actualFailedAssertions": [
+        "unmerged completion disabled",
+        "exact unmerged gate reason",
+        "forged completion rejected"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-UI-03-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BEHAVIOR_RED",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "空說明且不顯成功的核心觀察合理；baseline缺空說明。",
+      "actualFailedAssertions": [
+        "empty explanation visible"
+      ],
+      "faultHits": {},
+      "blockedStages": []
+    },
+    {
+      "id": "TDD-INT-01-1",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BLOCKED_UPSTREAM",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "真outbox→wire bytes→ingress→inbox，各失敗stage停止；不再補造事件；baseline止於scheduler。",
+      "actualFailedAssertions": [
+        "scheduler produces actual next-stage event"
+      ],
+      "faultHits": {},
+      "blockedStages": [
+        {
+          "blockedStage": "scheduler→delivery",
+          "reason": "subject produced no event; no synthetic replacement"
+        }
+      ]
+    },
+    {
+      "id": "TDD-INT-01-2",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BLOCKED_UPSTREAM",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "真run marker正常exit、由ledger/lease取completion身分，postcommit loss/reopen設計合理；baseline止於scheduler，下游未驗。",
+      "actualFailedAssertions": [
+        "scheduler produces actual next-stage event"
+      ],
+      "faultHits": {},
+      "blockedStages": [
+        {
+          "blockedStage": "scheduler→delivery",
+          "reason": "subject produced no event; no synthetic replacement"
+        }
+      ]
+    },
+    {
+      "id": "TDD-INT-01-3",
+      "definitionQuality": "READY_DEFINITION",
+      "sutEvidence": "BLOCKED_UPSTREAM",
+      "r1Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "r2Closure": "CLOSED_AT_DEFINITION_LAYER",
+      "review": "獨立可信角色操作後Done與Blue及FIX-3開始均有斷言；baseline止於scheduler，不得移算全鏈路驗證。",
+      "actualFailedAssertions": [
+        "scheduler produces actual next-stage event"
+      ],
+      "faultHits": {},
+      "blockedStages": [
+        {
+          "blockedStage": "scheduler→delivery",
+          "reason": "subject produced no event; no synthetic replacement"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "R3-01",
+      "priority": "P1",
+      "file": "run_drivers.py",
+      "line": 87,
+      "title": "CMP-01全部案例共用無效current lease，成功案例無法被安全實作滿足",
+      "reproduction": "TEMP run_case(CMP-01-1,factory(completion-commit-script)) => INVALID_RED, error until。fixture lease只有owner/generation；Board Renew/Release current contract要求until>now。",
+      "required": "共用setup補until=now+900及相符可信run基線；CMP-01-1加入完整成功交付PASS控制，CMP-01-2/3只變欲驗證之失效欄位。"
+    },
+    {
+      "id": "R3-02",
+      "priority": "P2",
+      "file": "review_strengthening.py",
+      "line": 44,
+      "title": "matching lease不變量未比對active run owner/generation，且可由processStatus文字短路",
+      "reproduction": "TEMP RUN-04-1 control: Claim FIX-2 owner dev-1/g1，Process.Start ticket FIX-2 owner intruder/g999、新session真父孫程序 => 整案PASS。",
+      "required": "依真實marker判active，再核ticket/run owner/generation與未過期可信lease；歷史Exited只在實體確實退出時豁免。於RUN-04及integration後重新檢查，新增paired wrong-owner/generation mutant。"
+    },
+    {
+      "id": "R3-03",
+      "priority": "P2",
+      "file": "review_strengthening.py",
+      "line": 103,
+      "title": "租約失效workspace隔離只驗snapshot flag，仍可繞過Workspace port/物理marker",
+      "reproduction": "RUN-03-2兩組失效路徑僅quarantinedWorkspaces[workspace]==True；Store.Commit可直接寫此flag，既不要求Workspace.Quarantine trace，也未驗QUARANTINED檔。RUN-03-3已有物理檔斷言但不覆本案。",
+      "required": "在成功stop與失敗stop兩組workspace均驗實體marker與正確workspace port目標；增加只寫flag不隔離的mutant。"
+    }
+  ],
+  "r2FindingsClosure": [
+    {
+      "id": "R2-01",
+      "status": "CLOSED_AT_DEFINITION_LAYER",
+      "note": "原R2具體缺陷已修；subject未實作路徑仍另列，不混為測試錯誤。"
+    },
+    {
+      "id": "R2-02",
+      "status": "PARTIAL",
+      "note": "Exited錯殺已修；matching lease owner/gen仍有新可重現漏抓。"
+    },
+    {
+      "id": "R2-03",
+      "status": "CLOSED_AT_DEFINITION_LAYER",
+      "note": "原R2具體缺陷已修；subject未實作路徑仍另列，不混為測試錯誤。"
+    },
+    {
+      "id": "R2-04",
+      "status": "CLOSED_AT_DEFINITION_LAYER",
+      "note": "原R2具體缺陷已修；subject未實作路徑仍另列，不混為測試錯誤。"
+    },
+    {
+      "id": "R2-05",
+      "status": "PARTIAL",
+      "note": "活程序Stop故障前提/hit已修；workspace實體隔離斷言未補。"
+    },
+    {
+      "id": "R2-06",
+      "status": "CLOSED_AT_DEFINITION_LAYER",
+      "note": "原R2具體缺陷已修；subject未實作路徑仍另列，不混為測試錯誤。"
+    },
+    {
+      "id": "R2-07",
+      "status": "CLOSED_AT_DEFINITION_LAYER",
+      "note": "原R2具體缺陷已修；subject未實作路徑仍另列，不混為測試錯誤。"
+    },
+    {
+      "id": "R2-08",
+      "status": "CLOSED_AT_DEFINITION_LAYER",
+      "note": "原R2具體缺陷已修；subject未實作路徑仍另列，不混為測試錯誤。"
+    },
+    {
+      "id": "R2-09",
+      "status": "CLOSED_AT_DEFINITION_LAYER",
+      "note": "原R2具體缺陷已修；subject未實作路徑仍另列，不混為測試錯誤。"
+    },
+    {
+      "id": "R2-10",
+      "status": "CLOSED_AT_DEFINITION_LAYER",
+      "note": "原R2具體缺陷已修；subject未實作路徑仍另列，不混為測試錯誤。"
+    }
+  ],
+  "executed": [
+    "TEMP fixture_contract_tests.py:11 PASS",
+    "TEMP signed-ack-script RUN-01-2:PASS",
+    "TEMP renew-script RUN-03-1:PASS",
+    "TEMP completion-commit-script CMP-02-1:PASS, real response loss exercised",
+    "TEMP ui-safe UI-03-1:PASS",
+    "TEMP ui-safe UI-02-3:PASS",
+    "TEMP ui-health-script UI-02-2:PASS",
+    "TEMP completion-commit-script CMP-01-1:INVALID_RED KeyError until",
+    "TEMP independently written wrong next-process owner/gen control RUN-04-1:PASS (surviving defect)",
+    "Independent read-only JSON verifier:48 baseline status/checks consistent,21 paired positive PASS and21 new-assertion kills,15 source hashes/protected hashes match"
+  ],
+  "notExecuted": [
+    "Full48 independent rerun",
+    "All21 paired controls independent rerun",
+    "Real product/installed UI/AI CLI/runtime/installer acceptance"
+  ],
+  "tempDirectory": "C:\\Users\\g6812\\AppData\\Local\\Temp\\gugu-r3-independent-15769f92143e489ebe8aea1936ae8581",
+  "originalEvidenceDate": "2026-11-07T01:26:40.699677+08:00",
+  "evidenceBoundary": "No fault-hit counts transferred from controls to baseline. Test-only controls establish satisfiability of selected oracles, not production implementation. READY_DEFINITION is scoped test readiness, not architecture or product authorization."
+}

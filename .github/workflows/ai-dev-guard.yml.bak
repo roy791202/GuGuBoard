@@ -1,0 +1,53 @@
+# AI Dev Skills：PR 強制檢查（第 3 層）。在分支保護把「AI Dev Guard / guard」與「AI Dev Guard / tests」設為必要檢查。
+name: AI Dev Guard
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+permissions:
+  contents: read
+concurrency:
+  group: ai-dev-guard-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Board / Task / BDD / spec / version checks
+        shell: pwsh
+        env:
+          BOARD_PATH: docs/board.json
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: ./.github/ai-dev-guard/guard.ps1
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tauri Linux deps
+        if: ${{ hashFiles('src-tauri/Cargo.toml') != '' }}
+        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - uses: dtolnay/rust-toolchain@stable
+        if: ${{ hashFiles('**/Cargo.toml') != '' }}
+      - name: cargo test
+        if: ${{ hashFiles('**/Cargo.toml') != '' }}
+        shell: bash
+        run: |
+          if [ -f src-tauri/Cargo.toml ]; then cd src-tauri; fi
+          cargo test --locked --all-targets
+      - uses: actions/setup-node@v4
+        if: ${{ hashFiles('package.json') != '' }}
+        with:
+          node-version: 20
+      - name: npm test
+        if: ${{ hashFiles('package.json') != '' }}
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          npm test --if-present

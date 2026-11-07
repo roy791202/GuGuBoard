@@ -1,0 +1,72 @@
+{
+    "hooks":  {
+                  "PreToolUse":  [
+                                     {
+                                         "matcher":  "Bash|PowerShell|Read|Edit|Write|MultiEdit",
+                                         "hooks":  [
+                                                       {
+                                                           "type":  "command",
+                                                           "command":  "powershell",
+                                                           "args":  [
+                                                                        "-NoProfile",
+                                                                        "-ExecutionPolicy",
+                                                                        "Bypass",
+                                                                        "-File",
+                                                                        "${CLAUDE_PROJECT_DIR}/.ai-hooks/ai-hook.ps1",
+                                                                        "-Tool",
+                                                                        "claude",
+                                                                        "-Event",
+                                                                        "PreToolUse"
+                                                                    ],
+                                                           "timeout":  15
+                                                       }
+                                                   ]
+                                     }
+                                 ],
+                  "PostToolUse":  [
+                                      {
+                                          "matcher":  "Edit|Write|MultiEdit",
+                                          "hooks":  [
+                                                        {
+                                                            "type":  "command",
+                                                            "command":  "powershell",
+                                                            "args":  [
+                                                                         "-NoProfile",
+                                                                         "-ExecutionPolicy",
+                                                                         "Bypass",
+                                                                         "-File",
+                                                                         "${CLAUDE_PROJECT_DIR}/.ai-hooks/ai-hook.ps1",
+                                                                         "-Tool",
+                                                                         "claude",
+                                                                         "-Event",
+                                                                         "PostToolUse"
+                                                                     ],
+                                                            "timeout":  120
+                                                        }
+                                                    ]
+                                      }
+                                  ],
+                  "Stop":  [
+                               {
+                                   "hooks":  [
+                                                 {
+                                                     "type":  "command",
+                                                     "command":  "powershell",
+                                                     "args":  [
+                                                                  "-NoProfile",
+                                                                  "-ExecutionPolicy",
+                                                                  "Bypass",
+                                                                  "-File",
+                                                                  "${CLAUDE_PROJECT_DIR}/.ai-hooks/ai-hook.ps1",
+                                                                  "-Tool",
+                                                                  "claude",
+                                                                  "-Event",
+                                                                  "Stop"
+                                                              ],
+                                                     "timeout":  900
+                                                 }
+                                             ]
+                               }
+                           ]
+              }
+}

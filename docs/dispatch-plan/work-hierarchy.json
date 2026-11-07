@@ -1,0 +1,637 @@
+{
+  "purpose": "Planning hierarchy, not a live board import payload",
+  "items": [
+    {
+      "id": "E-DISPATCH",
+      "level": "Epic",
+      "title": "可靠自動派工與獨立驗收",
+      "parentId": null,
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "F-dispatch-scheduling",
+      "level": "Feature",
+      "title": "定時派工",
+      "parentId": "E-DISPATCH",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "F-webhook-delivery",
+      "level": "Feature",
+      "title": "Webhook 投遞",
+      "parentId": "E-DISPATCH",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "F-ai-runner",
+      "level": "Feature",
+      "title": "AI Runner",
+      "parentId": "E-DISPATCH",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "F-work-completion",
+      "level": "Feature",
+      "title": "交付回報",
+      "parentId": "E-DISPATCH",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "F-verification-approval",
+      "level": "Feature",
+      "title": "獨立驗證與核准",
+      "parentId": "E-DISPATCH",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "F-dispatch-integration",
+      "level": "Feature",
+      "title": "派工整合",
+      "parentId": "E-DISPATCH",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "S-SCH-01",
+      "level": "Story",
+      "title": "作為管理者，我想要到期與唯一派工意圖，以便安全自動交付工作",
+      "parentId": "F-dispatch-scheduling",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-SCH-01-1",
+        "S-SCH-01-2",
+        "S-SCH-01-3"
+      ]
+    },
+    {
+      "id": "SCH-01",
+      "level": "Task",
+      "title": "到期與唯一派工意圖",
+      "parentId": "S-SCH-01",
+      "estimate": {
+        "hours": 6
+      },
+      "dependsOn": [],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-SCH-01-1",
+        "S-SCH-01-2",
+        "S-SCH-01-3"
+      ]
+    },
+    {
+      "id": "S-SCH-02",
+      "level": "Story",
+      "title": "作為管理者，我想要暫停與重新啟動對帳，以便安全自動交付工作",
+      "parentId": "F-dispatch-scheduling",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-SCH-02-1",
+        "S-SCH-02-2",
+        "S-SCH-02-3"
+      ]
+    },
+    {
+      "id": "SCH-02",
+      "level": "Task",
+      "title": "暫停與重新啟動對帳",
+      "parentId": "S-SCH-02",
+      "estimate": {
+        "hours": 6
+      },
+      "dependsOn": [
+        "SCH-01"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-SCH-02-1",
+        "S-SCH-02-2",
+        "S-SCH-02-3"
+      ]
+    },
+    {
+      "id": "S-WH-01",
+      "level": "Story",
+      "title": "作為管理者，我想要可靠投遞，以便安全自動交付工作",
+      "parentId": "F-webhook-delivery",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-WH-01-1",
+        "S-WH-01-2",
+        "S-WH-01-3"
+      ]
+    },
+    {
+      "id": "WH-01",
+      "level": "Task",
+      "title": "可靠投遞",
+      "parentId": "S-WH-01",
+      "estimate": {
+        "hours": 6
+      },
+      "dependsOn": [
+        "SCH-01"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-WH-01-1",
+        "S-WH-01-2",
+        "S-WH-01-3"
+      ]
+    },
+    {
+      "id": "S-WH-02",
+      "level": "Story",
+      "title": "作為管理者，我想要有界重試與恢復，以便安全自動交付工作",
+      "parentId": "F-webhook-delivery",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-WH-02-1",
+        "S-WH-02-2",
+        "S-WH-02-3"
+      ]
+    },
+    {
+      "id": "WH-02",
+      "level": "Task",
+      "title": "有界重試與恢復",
+      "parentId": "S-WH-02",
+      "estimate": {
+        "hours": 6
+      },
+      "dependsOn": [
+        "WH-01"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-WH-02-1",
+        "S-WH-02-2",
+        "S-WH-02-3"
+      ]
+    },
+    {
+      "id": "S-RUN-01",
+      "level": "Story",
+      "title": "作為管理者，我想要驗證喚醒與可靠去重，以便安全自動交付工作",
+      "parentId": "F-ai-runner",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-RUN-01-1",
+        "S-RUN-01-2",
+        "S-RUN-01-3"
+      ]
+    },
+    {
+      "id": "RUN-01",
+      "level": "Task",
+      "title": "驗證喚醒與可靠去重",
+      "parentId": "S-RUN-01",
+      "estimate": {
+        "hours": 8
+      },
+      "dependsOn": [],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-RUN-01-1",
+        "S-RUN-01-2",
+        "S-RUN-01-3"
+      ]
+    },
+    {
+      "id": "S-RUN-02",
+      "level": "Story",
+      "title": "作為管理者，我想要領單後隔離啟動，以便安全自動交付工作",
+      "parentId": "F-ai-runner",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-RUN-02-1",
+        "S-RUN-02-2",
+        "S-RUN-02-3"
+      ]
+    },
+    {
+      "id": "RUN-02",
+      "level": "Task",
+      "title": "領單後隔離啟動",
+      "parentId": "S-RUN-02",
+      "estimate": {
+        "hours": 8
+      },
+      "dependsOn": [
+        "RUN-01"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-RUN-02-1",
+        "S-RUN-02-2",
+        "S-RUN-02-3"
+      ]
+    },
+    {
+      "id": "S-RUN-03",
+      "level": "Story",
+      "title": "作為管理者，我想要續租與中止恢復，以便安全自動交付工作",
+      "parentId": "F-ai-runner",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-RUN-03-1",
+        "S-RUN-03-2",
+        "S-RUN-03-3"
+      ]
+    },
+    {
+      "id": "RUN-03",
+      "level": "Task",
+      "title": "續租與中止恢復",
+      "parentId": "S-RUN-03",
+      "estimate": {
+        "hours": 8
+      },
+      "dependsOn": [
+        "RUN-02"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-RUN-03-1",
+        "S-RUN-03-2",
+        "S-RUN-03-3"
+      ]
+    },
+    {
+      "id": "S-CMP-01",
+      "level": "Story",
+      "title": "作為管理者，我想要驗證交付回報，以便安全自動交付工作",
+      "parentId": "F-work-completion",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-CMP-01-1",
+        "S-CMP-01-2",
+        "S-CMP-01-3"
+      ]
+    },
+    {
+      "id": "CMP-01",
+      "level": "Task",
+      "title": "驗證交付回報",
+      "parentId": "S-CMP-01",
+      "estimate": {
+        "hours": 8
+      },
+      "dependsOn": [
+        "RUN-02"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-CMP-01-1",
+        "S-CMP-01-2",
+        "S-CMP-01-3"
+      ]
+    },
+    {
+      "id": "S-CMP-02",
+      "level": "Story",
+      "title": "作為管理者，我想要交付重入與對帳，以便安全自動交付工作",
+      "parentId": "F-work-completion",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-CMP-02-1",
+        "S-CMP-02-2",
+        "S-CMP-02-3"
+      ]
+    },
+    {
+      "id": "CMP-02",
+      "level": "Task",
+      "title": "交付重入與對帳",
+      "parentId": "S-CMP-02",
+      "estimate": {
+        "hours": 8
+      },
+      "dependsOn": [
+        "CMP-01"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-CMP-02-1",
+        "S-CMP-02-2",
+        "S-CMP-02-3"
+      ]
+    },
+    {
+      "id": "S-RUN-04",
+      "level": "Story",
+      "title": "作為管理者，我想要交付後繼續領單，以便安全自動交付工作",
+      "parentId": "F-ai-runner",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-RUN-04-1",
+        "S-RUN-04-2",
+        "S-RUN-04-3"
+      ]
+    },
+    {
+      "id": "RUN-04",
+      "level": "Task",
+      "title": "交付後繼續領單",
+      "parentId": "S-RUN-04",
+      "estimate": {
+        "hours": 6
+      },
+      "dependsOn": [
+        "CMP-02",
+        "RUN-03"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-RUN-04-1",
+        "S-RUN-04-2",
+        "S-RUN-04-3"
+      ]
+    },
+    {
+      "id": "S-GOV-01",
+      "level": "Story",
+      "title": "作為管理者，我想要角色與工作階段分離，以便安全自動交付工作",
+      "parentId": "F-verification-approval",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-GOV-01-1",
+        "S-GOV-01-2",
+        "S-GOV-01-3"
+      ]
+    },
+    {
+      "id": "GOV-01",
+      "level": "Task",
+      "title": "角色與工作階段分離",
+      "parentId": "S-GOV-01",
+      "estimate": {
+        "hours": 8
+      },
+      "dependsOn": [],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-GOV-01-1",
+        "S-GOV-01-2",
+        "S-GOV-01-3"
+      ]
+    },
+    {
+      "id": "S-GOV-02",
+      "level": "Story",
+      "title": "作為管理者，我想要核准與合併關卡，以便安全自動交付工作",
+      "parentId": "F-verification-approval",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-GOV-02-1",
+        "S-GOV-02-2",
+        "S-GOV-02-3"
+      ]
+    },
+    {
+      "id": "GOV-02",
+      "level": "Task",
+      "title": "核准與合併關卡",
+      "parentId": "S-GOV-02",
+      "estimate": {
+        "hours": 8
+      },
+      "dependsOn": [
+        "GOV-01"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-GOV-02-1",
+        "S-GOV-02-2",
+        "S-GOV-02-3"
+      ]
+    },
+    {
+      "id": "S-UI-01",
+      "level": "Story",
+      "title": "作為管理者，我想要排程設定介面，以便安全自動交付工作",
+      "parentId": "F-dispatch-scheduling",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-UI-01-1",
+        "S-UI-01-2",
+        "S-UI-01-3"
+      ]
+    },
+    {
+      "id": "UI-01",
+      "level": "Task",
+      "title": "排程設定介面",
+      "parentId": "S-UI-01",
+      "estimate": {
+        "hours": 6
+      },
+      "dependsOn": [
+        "SCH-02"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-UI-01-1",
+        "S-UI-01-2",
+        "S-UI-01-3"
+      ]
+    },
+    {
+      "id": "S-UI-02",
+      "level": "Story",
+      "title": "作為管理者，我想要Webhook 與 Runner 設定介面，以便安全自動交付工作",
+      "parentId": "F-webhook-delivery",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-UI-02-1",
+        "S-UI-02-2",
+        "S-UI-02-3"
+      ]
+    },
+    {
+      "id": "UI-02",
+      "level": "Task",
+      "title": "Webhook 與 Runner 設定介面",
+      "parentId": "S-UI-02",
+      "estimate": {
+        "hours": 6
+      },
+      "dependsOn": [
+        "WH-02",
+        "RUN-01"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-UI-02-1",
+        "S-UI-02-2",
+        "S-UI-02-3"
+      ]
+    },
+    {
+      "id": "S-UI-03",
+      "level": "Story",
+      "title": "作為管理者，我想要執行與關卡紀錄介面，以便安全自動交付工作",
+      "parentId": "F-verification-approval",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-UI-03-1",
+        "S-UI-03-2",
+        "S-UI-03-3"
+      ]
+    },
+    {
+      "id": "UI-03",
+      "level": "Task",
+      "title": "執行與關卡紀錄介面",
+      "parentId": "S-UI-03",
+      "estimate": {
+        "hours": 6
+      },
+      "dependsOn": [
+        "GOV-02",
+        "CMP-02"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-UI-03-1",
+        "S-UI-03-2",
+        "S-UI-03-3"
+      ]
+    },
+    {
+      "id": "S-INT-01",
+      "level": "Story",
+      "title": "作為管理者，我想要完整派工與恢復，以便安全自動交付工作",
+      "parentId": "F-dispatch-integration",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "estimateNote": "初估，待團隊校準",
+      "status": "Backlog",
+      "light": "Gray",
+      "bdd": [
+        "S-INT-01-1",
+        "S-INT-01-2",
+        "S-INT-01-3"
+      ]
+    },
+    {
+      "id": "INT-01",
+      "level": "Task",
+      "title": "完整派工與恢復",
+      "parentId": "S-INT-01",
+      "estimate": {
+        "hours": 8
+      },
+      "dependsOn": [
+        "RUN-04",
+        "GOV-02",
+        "UI-03",
+        "UI-02"
+      ],
+      "status": "Backlog",
+      "light": "Gray",
+      "scenarioIds": [
+        "S-INT-01-1",
+        "S-INT-01-2",
+        "S-INT-01-3"
+      ]
+    }
+  ]
+}
