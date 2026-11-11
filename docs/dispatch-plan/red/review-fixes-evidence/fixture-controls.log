@@ -1,0 +1,12 @@
+test_armed_fault_survives_cancel_and_is_counted_only_if_reached (__main__.FixtureContracts) ... ok
+test_board_rejects_missing_blocked_and_future_tickets (__main__.FixtureContracts) ... ok
+test_generation_owner_fencing_and_persisted_renewal (__main__.FixtureContracts) ... ok
+test_http_preserves_url_headers_body_deadline_and_disables_redirect (__main__.FixtureContracts) ... ok
+test_response_loss_is_actual_http_disconnect_after_new_commit (__main__.FixtureContracts) ... ok
+test_stop_is_targeted_and_survives_world_reconstruction (__main__.FixtureContracts) ... ok
+test_workspace_quarantine_is_real_and_confined (__main__.FixtureContracts) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 6.228s
+
+OK

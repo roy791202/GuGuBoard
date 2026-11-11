@@ -1,0 +1,7 @@
+{
+  "exitCode": 0,
+  "sourceHash": "339921b1e96ca722ade75ef52242a71168216f4d24cc76bb050ea19c3a90e5ad",
+  "layer": "fixture contracts only; not application acceptance",
+  "tests": 7,
+  "result": "PASS"
+}

@@ -1,0 +1,133 @@
+{
+  "date": "2026-11-07",
+  "scopeApproval": "APPROVED",
+  "detailedSpecificationApproval": "APPROVED by user this turn",
+  "branch": "master",
+  "head": "ab2392318eb6e919fb5e4527100c9741b8ca3a16",
+  "testFramework": "PowerShell input skeleton + Python standard-library executable ports/drivers + isolated Playwright 1.56.1 / installed Chrome",
+  "productionChanges": false,
+  "independentVerification": "NOT RUN",
+  "approvalGate": "PRESERVED",
+  "contractSkeletonCases": 48,
+  "qualifiedBehaviorRED": [],
+  "remainingCases": [
+    "TDD-SCH-01-1",
+    "TDD-SCH-01-2",
+    "TDD-SCH-01-3",
+    "TDD-SCH-02-1",
+    "TDD-SCH-02-2",
+    "TDD-SCH-02-3",
+    "TDD-WH-01-1",
+    "TDD-WH-01-2",
+    "TDD-WH-01-3",
+    "TDD-WH-02-1",
+    "TDD-WH-02-2",
+    "TDD-WH-02-3",
+    "TDD-RUN-01-1",
+    "TDD-RUN-01-2",
+    "TDD-RUN-01-3",
+    "TDD-RUN-02-1",
+    "TDD-RUN-02-2",
+    "TDD-RUN-02-3",
+    "TDD-RUN-03-1",
+    "TDD-RUN-03-2",
+    "TDD-RUN-03-3",
+    "TDD-CMP-01-1",
+    "TDD-CMP-01-2",
+    "TDD-CMP-01-3",
+    "TDD-CMP-02-1",
+    "TDD-CMP-02-2",
+    "TDD-CMP-02-3",
+    "TDD-RUN-04-1",
+    "TDD-RUN-04-2",
+    "TDD-RUN-04-3",
+    "TDD-GOV-01-1",
+    "TDD-GOV-01-2",
+    "TDD-GOV-01-3",
+    "TDD-GOV-02-1",
+    "TDD-GOV-02-2",
+    "TDD-GOV-02-3",
+    "TDD-UI-01-1",
+    "TDD-UI-01-2",
+    "TDD-UI-01-3",
+    "TDD-UI-02-1",
+    "TDD-UI-02-2",
+    "TDD-UI-02-3",
+    "TDD-UI-03-1",
+    "TDD-UI-03-2",
+    "TDD-UI-03-3",
+    "TDD-INT-01-1",
+    "TDD-INT-01-2",
+    "TDD-INT-01-3"
+  ],
+  "notReadyReasons": [
+    "Independent R3 test-quality review pending",
+    "Production Skeleton, Port/error/storage contracts and productionAllowed not frozen",
+    "Unimplemented subject has unreachable fault paths; no product failure-handling acceptance",
+    "Product UI, real CLI/Adapters/install/regression NOT RUN"
+  ],
+  "readyForImplementation": false,
+  "commands": {
+    "all": "pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1",
+    "scheduler": "pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task SCH-01"
+  },
+  "executionExitCodes": {
+    "0": "all selected contract assertions pass",
+    "1": "behavior assertions differ",
+    "2": "invalid RED: infrastructure or fixture failure"
+  },
+  "qualifiedLayer": "Current source: 2 safety PASS / 46 subject RED; independent R3 quality review pending; no automatic qualification",
+  "canonicalEvidence": "review-fixes-r3-evidence/all.json",
+  "newlyQualifiedCases": 45,
+  "pendingFaultHandlingVerification": [
+    {
+      "id": "TDD-SCH-02-3",
+      "unreached": [
+        "Store.Commit"
+      ]
+    },
+    {
+      "id": "TDD-RUN-01-3",
+      "unreached": [
+        "Store.Commit"
+      ]
+    },
+    {
+      "id": "TDD-RUN-02-2",
+      "unreached": [
+        "Process.Start"
+      ]
+    },
+    {
+      "id": "TDD-RUN-03-2",
+      "unreached": [
+        "Board.Renew",
+        "Process.Stop"
+      ]
+    },
+    {
+      "id": "TDD-CMP-02-1",
+      "unreached": [
+        "Completion.ResponseAfterCommit"
+      ]
+    },
+    {
+      "id": "TDD-CMP-02-2",
+      "unreached": [
+        "Board.Release"
+      ]
+    }
+  ],
+  "qualityReviewStatus": "PENDING_R3",
+  "executionCounts": {
+    "passed": 2,
+    "red": 46,
+    "invalid": 0
+  },
+  "positiveControls": 21,
+  "mutantsKilled": 21,
+  "priorIndependentReview": {
+    "report": "independent-review-r2-2026-11-07.md",
+    "status": "Historical source review; repairs now require R3 review"
+  }
+}

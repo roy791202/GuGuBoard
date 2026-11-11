@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .ai-hooks/ai-hook.ps1 -Tool cursor -Event beforeShellExecution",
+        "timeout": 15
+      }
+    ],
+    "beforeReadFile": [
+      {
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .ai-hooks/ai-hook.ps1 -Tool cursor -Event beforeReadFile",
+        "timeout": 10
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .ai-hooks/ai-hook.ps1 -Tool cursor -Event afterFileEdit",
+        "timeout": 120
+      }
+    ],
+    "stop": [
+      {
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File .ai-hooks/ai-hook.ps1 -Tool cursor -Event stop",
+        "timeout": 900,
+        "loop_limit": 3
+      }
+    ]
+  }
+}

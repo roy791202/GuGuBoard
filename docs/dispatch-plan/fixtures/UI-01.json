@@ -1,0 +1,46 @@
+{
+  "task": "UI-01",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-UI-01-1",
+      "given": "管理者開啟新排程",
+      "when": "檢視設定",
+      "then": "顯示停用與並行一個的預設值",
+      "test": "TDD-UI-01-1",
+      "level": "L3",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-UI-01-2",
+      "given": "開始時間無效",
+      "when": "儲存設定",
+      "then": "顯示欄位錯誤且保留舊設定",
+      "test": "TDD-UI-01-2",
+      "level": "L3",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-UI-01-3",
+      "given": "唯讀使用者開啟設定",
+      "when": "嘗試變更",
+      "then": "無法儲存且顯示權限原因",
+      "test": "TDD-UI-01-3",
+      "level": "L3",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

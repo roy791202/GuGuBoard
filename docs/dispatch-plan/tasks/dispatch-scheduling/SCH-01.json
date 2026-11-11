@@ -1,0 +1,109 @@
+{
+  "id": "SCH-01",
+  "module": "dispatch-scheduling",
+  "parentStory": "S-SCH-01",
+  "title": "到期與唯一派工意圖",
+  "intent": "到期與唯一派工意圖",
+  "layer": "Application",
+  "estimateHours": 6,
+  "status": "Backlog",
+  "light": "Gray",
+  "tdd": "Red",
+  "ci": "NOT RUN",
+  "prUrl": "",
+  "dependsOn": [],
+  "contracts": [
+    "C01：有效租約為執行授權；同工單最多一個有效執行者。舊程序停止無法確認時隔離並阻擋再啟動。",
+    "C02：Webhook 至少一次投遞；接收端依 eventId 與 payload digest 去重；同 ID 不同內容拒絕。",
+    "C03：HTTP 202 只代表 durable inbox 已保存；不表示工作、交付或驗收完成。",
+    "C04：exit 0 不代表成功交付；成功需要測試、證據、工單、runId、lease generation、checkout SHA。",
+    "C05：同 completionId 同內容可重送；不同內容衝突；Confirm 前不得接下一張。",
+    "C06：開發只能 In Review／READY_FOR_TDD；Done 需獨立驗證、獨立審查、授權核准及 PR 合併。",
+    "C07：依賴仍需 Done／Released；回報交付不解除依賴。",
+    "C08：排程與候選選擇在領單端再驗證；Webhook 不帶執行權；既有派工器與新 Runner 不得同時驅動同專案。",
+    "C09：角色、工作階段與版本來自可信記錄，不能採信 AI 自填身分。驗證證據綁定候選 tree；合併 tree 不同須重驗。",
+    "C10：錯誤分類 Validation／Unauthorized／Conflict／Unavailable／Timeout／LeaseLost／ReplanRequired；失敗不回傳 succeeded=true。"
+  ],
+  "bdd": [
+    {
+      "id": "S-SCH-01-1",
+      "given": "有效排程在開始前一秒",
+      "when": "評估派工",
+      "then": "不產生事件",
+      "test": "TDD-SCH-01-1",
+      "level": "L2",
+      "result": "PASS"
+    },
+    {
+      "id": "S-SCH-01-2",
+      "given": "有效排程剛好到期",
+      "when": "連續評估兩次",
+      "then": "只保存一個派工意圖",
+      "test": "TDD-SCH-01-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-SCH-01-3",
+      "given": "時間未含時區或間隔小於五秒",
+      "when": "儲存設定",
+      "then": "拒絕設定且保留舊值",
+      "test": "TDD-SCH-01-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ],
+  "fixtures": "fixtures/SCH-01.json",
+  "testPlan": {
+    "command": "pwsh -NoProfile -File docs/dispatch-plan/red/Run-Red.ps1 -Task SCH-01",
+    "redCriterion": "測試可載入且 fixture 正確；僅因缺少上述 observable behavior 失敗。缺套件、編譯錯誤與 pending stub 不算 RED。",
+    "failureInjection": "在所有 Output Port 回傳可控失敗；比較前後持久化快照、事件數、啟動次數與工單狀態",
+    "acceptance": [
+      "所有列出 Then 均有可執行斷言",
+      "測試意圖不變且 focused 與 module contract GREEN",
+      "相鄰回歸全部 GREEN 或逐項分類",
+      "獨立實測與審查；無越界修改"
+    ]
+  },
+  "scope": {
+    "allowedNow": [
+      "docs/dispatch-plan/tasks/dispatch-scheduling/SCH-01.json",
+      "docs/dispatch-plan/bdd/S-SCH-01.feature",
+      "docs/dispatch-plan/fixtures/SCH-01.json"
+    ],
+    "productionAllowed": [],
+    "protected": [
+      "serve-board.ps1",
+      "serve-ext.ps1",
+      "board.html",
+      ".ai-pm/**",
+      ".ai-board/**",
+      ".ai-hooks/**",
+      ".githooks/**",
+      ".github/**"
+    ],
+    "gate": "具體產品路徑、介面與 RED 尚未凍結；禁止由本工單開始實作"
+  },
+  "regression": [
+    "L0 pure policies",
+    "L1 public component",
+    "L2 module ports",
+    "L3 real adapters",
+    "L4 adjacent modules",
+    "L5 system acceptance"
+  ],
+  "roles": {
+    "developer": "UNASSIGNED",
+    "verifier": "UNASSIGNED distinct identity/session",
+    "reviewer": "UNASSIGNED distinct identity/session"
+  },
+  "history": [
+    {
+      "at": "2026-11-06T00:00:00+08:00",
+      "from": null,
+      "to": "Backlog",
+      "by": "planning-assistant",
+      "reason": "建立文件工單，未匯入正式看板"
+    }
+  ]
+}

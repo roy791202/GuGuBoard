@@ -1,0 +1,60 @@
+{
+  "invalid": 0,
+  "layer": "test-only contract skeleton",
+  "red": 3,
+  "passed": 0,
+  "independentAcceptance": "NOT RUN",
+  "results": [
+    {
+      "bdd": "S-SCH-01-1",
+      "mismatches": [
+        {
+          "expected": "NotDue",
+          "field": "outcome",
+          "actual": "NotImplemented"
+        }
+      ],
+      "id": "TDD-SCH-01-1",
+      "status": "BEHAVIOR_RED",
+      "assertions": 2
+    },
+    {
+      "bdd": "S-SCH-01-2",
+      "mismatches": [
+        {
+          "expected": "Scheduled",
+          "field": "outcome",
+          "actual": "NotImplemented"
+        },
+        {
+          "expected": 1,
+          "field": "eventCount",
+          "actual": 0
+        }
+      ],
+      "id": "TDD-SCH-01-2",
+      "status": "BEHAVIOR_RED",
+      "assertions": 2
+    },
+    {
+      "bdd": "S-SCH-01-3",
+      "mismatches": [
+        {
+          "expected": "Validation",
+          "field": "outcome",
+          "actual": "NotImplemented"
+        },
+        {
+          "expected": true,
+          "field": "configurationPreserved",
+          "actual": "<absent>"
+        }
+      ],
+      "id": "TDD-SCH-01-3",
+      "status": "BEHAVIOR_RED",
+      "assertions": 2
+    }
+  ],
+  "date": "2026-11-07T00:01:10.9732959+08:00",
+  "productionCodeChanged": false
+}

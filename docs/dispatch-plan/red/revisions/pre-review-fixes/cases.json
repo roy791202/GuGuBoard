@@ -1,0 +1,1222 @@
+[
+  {
+    "id": "TDD-SCH-01-1",
+    "bdd": "S-SCH-01-1",
+    "module": "dispatch-scheduling",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "EvaluateDue",
+    "request": {
+      "nowOffsetSec": -1
+    },
+    "expected": {
+      "outcome": "NotDue",
+      "eventCount": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "有效排程在開始前一秒",
+    "when": "評估派工",
+    "then": "不產生事件"
+  },
+  {
+    "id": "TDD-SCH-01-2",
+    "bdd": "S-SCH-01-2",
+    "module": "dispatch-scheduling",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "EvaluateDue",
+    "request": {
+      "nowOffsetSec": 0,
+      "repeat": 2
+    },
+    "expected": {
+      "outcome": "Scheduled",
+      "eventCount": 1
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "有效排程剛好到期",
+    "when": "連續評估兩次",
+    "then": "只保存一個派工意圖"
+  },
+  {
+    "id": "TDD-SCH-01-3",
+    "bdd": "S-SCH-01-3",
+    "module": "dispatch-scheduling",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ConfigureSchedule",
+    "request": {
+      "notBefore": "2026-11-06T09:00:00",
+      "intervalSec": 4
+    },
+    "expected": {
+      "outcome": "Validation",
+      "configurationPreserved": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "時間未含時區或間隔小於五秒",
+    "when": "儲存設定",
+    "then": "拒絕設定且保留舊值"
+  },
+  {
+    "id": "TDD-SCH-02-1",
+    "bdd": "S-SCH-02-1",
+    "module": "dispatch-scheduling",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "EvaluateDue",
+    "request": {
+      "paused": true
+    },
+    "expected": {
+      "outcome": "Paused",
+      "eventCount": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "專案已暫停",
+    "when": "到達派工時間",
+    "then": "不派工"
+  },
+  {
+    "id": "TDD-SCH-02-2",
+    "bdd": "S-SCH-02-2",
+    "module": "dispatch-scheduling",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ReconcileSchedule",
+    "request": {
+      "missedTicks": 3
+    },
+    "expected": {
+      "outcome": "Reconciled",
+      "evaluationCount": 1
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "服務錯過三個檢查週期",
+    "when": "恢復服務",
+    "then": "只重新評估目前工作且不補發三批"
+  },
+  {
+    "id": "TDD-SCH-02-3",
+    "bdd": "S-SCH-02-3",
+    "module": "dispatch-scheduling",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "EvaluateDue",
+    "request": {
+      "failPort": "ScheduleOutboxStore.Commit"
+    },
+    "expected": {
+      "outcome": "Unavailable",
+      "cursorPreserved": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "事件保存失敗",
+    "when": "評估到期排程",
+    "then": "不推進排程游標"
+  },
+  {
+    "id": "TDD-WH-01-1",
+    "bdd": "S-WH-01-1",
+    "module": "webhook-delivery",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "DeliverPending",
+    "request": {
+      "httpStatus": 202
+    },
+    "expected": {
+      "outcome": "Delivered",
+      "workCompleted": false
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "有一筆待投遞事件",
+    "when": "接收端可靠接收",
+    "then": "事件標示已接收而非工作完成"
+  },
+  {
+    "id": "TDD-WH-01-2",
+    "bdd": "S-WH-01-2",
+    "module": "webhook-delivery",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "DeliverPending",
+    "request": {
+      "httpFailure": "Timeout"
+    },
+    "expected": {
+      "outcome": "RetryPending",
+      "eventPreserved": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "接收端逾時",
+    "when": "投遞事件",
+    "then": "保留待重試紀錄"
+  },
+  {
+    "id": "TDD-WH-01-3",
+    "bdd": "S-WH-01-3",
+    "module": "webhook-delivery",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ConfigureTarget",
+    "request": {
+      "url": "http://untrusted.invalid",
+      "allowedOrigins": [
+        "http://127.0.0.1:8766"
+      ]
+    },
+    "expected": {
+      "outcome": "Validation",
+      "httpCalls": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "目標不在允許清單",
+    "when": "儲存目標",
+    "then": "拒絕目標且不連線"
+  },
+  {
+    "id": "TDD-WH-02-1",
+    "bdd": "S-WH-02-1",
+    "module": "webhook-delivery",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RetryDue",
+    "request": {
+      "attempt": 1,
+      "elapsedSec": 10
+    },
+    "expected": {
+      "outcome": "Retried",
+      "eventId": "evt-1"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "事件已失敗一次",
+    "when": "到達下一重試時間",
+    "then": "使用相同事件識別重新投遞"
+  },
+  {
+    "id": "TDD-WH-02-2",
+    "bdd": "S-WH-02-2",
+    "module": "webhook-delivery",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RetryDue",
+    "request": {
+      "attempt": 5
+    },
+    "expected": {
+      "outcome": "ManualRequired",
+      "httpCalls": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "事件已連續失敗五次",
+    "when": "評估重試",
+    "then": "停止自動重試並顯示人工處理"
+  },
+  {
+    "id": "TDD-WH-02-3",
+    "bdd": "S-WH-02-3",
+    "module": "webhook-delivery",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ReconcileDelivery",
+    "request": {
+      "persistedAttempt": 2,
+      "nextAt": "2026-11-06T09:00:30+08:00"
+    },
+    "expected": {
+      "outcome": "Recovered",
+      "attempt": 2,
+      "nextAt": "2026-11-06T09:00:30+08:00"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "服務在重試前重啟",
+    "when": "恢復投遞",
+    "then": "保留次數與下次時間"
+  },
+  {
+    "id": "TDD-RUN-01-1",
+    "bdd": "S-RUN-01-1",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "AcceptWakeup",
+    "request": {
+      "validSignature": true,
+      "repeat": 2,
+      "eventId": "evt-1"
+    },
+    "expected": {
+      "outcome": "AcceptedDuplicate",
+      "inboxCount": 1
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "事件有效且佇列有空位",
+    "when": "接收兩次相同事件",
+    "then": "只保存一筆工作"
+  },
+  {
+    "id": "TDD-RUN-01-2",
+    "bdd": "S-RUN-01-2",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "AcceptWakeup",
+    "request": {
+      "validSignature": false,
+      "ageSec": 301
+    },
+    "expected": {
+      "outcome": "Unauthorized",
+      "processStarts": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "事件已被竄改或超過五分鐘",
+    "when": "接收事件",
+    "then": "拒絕且不啟動工作"
+  },
+  {
+    "id": "TDD-RUN-01-3",
+    "bdd": "S-RUN-01-3",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "AcceptWakeup",
+    "request": {
+      "failPort": "InboxStore.Commit"
+    },
+    "expected": {
+      "outcome": "Unavailable",
+      "acknowledged": false
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "接收儲存失敗或佇列已滿",
+    "when": "接收事件",
+    "then": "不回覆成功且不遺失已接受工作"
+  },
+  {
+    "id": "TDD-RUN-02-1",
+    "bdd": "S-RUN-02-1",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RunNext",
+    "request": {
+      "contenders": 2,
+      "claimable": [
+        "FIX-1"
+      ]
+    },
+    "expected": {
+      "outcome": "Started",
+      "processStarts": 1
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "有兩個 Runner 同時要求一張工作",
+    "when": "領取工作",
+    "then": "只有有效租約持有人啟動"
+  },
+  {
+    "id": "TDD-RUN-02-2",
+    "bdd": "S-RUN-02-2",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RunNext",
+    "request": {
+      "failPort": "AIProcess.Start"
+    },
+    "expected": {
+      "outcome": "StartFailed",
+      "leaseReleased": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "領取成功但程序無法啟動",
+    "when": "開始工作",
+    "then": "回報失敗並釋放租約"
+  },
+  {
+    "id": "TDD-RUN-02-3",
+    "bdd": "S-RUN-02-3",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RunNext",
+    "request": {
+      "claimable": []
+    },
+    "expected": {
+      "outcome": "Idle",
+      "processStarts": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "沒有可領工單",
+    "when": "請求工作",
+    "then": "進入等待且不啟動程序"
+  },
+  {
+    "id": "TDD-RUN-03-1",
+    "bdd": "S-RUN-03-1",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RenewRun",
+    "request": {
+      "elapsedSec": 300,
+      "leaseValid": true
+    },
+    "expected": {
+      "outcome": "Renewed",
+      "renewCalls": 1
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "工作仍在執行且持有租約",
+    "when": "到達五分鐘續租點",
+    "then": "延長租約"
+  },
+  {
+    "id": "TDD-RUN-03-2",
+    "bdd": "S-RUN-03-2",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RenewRun",
+    "request": {
+      "renewUnavailable": true,
+      "leaseRemainingSec": 60
+    },
+    "expected": {
+      "outcome": "Stopped",
+      "processTreeExited": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "續租無法在安全期限內確認",
+    "when": "處理租約失效",
+    "then": "停止整個受控程序樹且隔離工作區"
+  },
+  {
+    "id": "TDD-RUN-03-3",
+    "bdd": "S-RUN-03-3",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ReconcileRun",
+    "request": {
+      "oldProcessStatus": "Unknown"
+    },
+    "expected": {
+      "outcome": "Quarantined",
+      "processStarts": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "Runner 重啟且舊程序狀態未知",
+    "when": "執行恢復對帳",
+    "then": "先隔離並確認舊程序停止再允許新執行"
+  },
+  {
+    "id": "TDD-CMP-01-1",
+    "bdd": "S-CMP-01-1",
+    "module": "work-completion",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SubmitCompletion",
+    "request": {
+      "evidenceComplete": true,
+      "passed": 3,
+      "failed": 0
+    },
+    "expected": {
+      "outcome": "Confirmed",
+      "ticketStatus": "In Review"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Progress",
+      "outcome": "NotImplemented"
+    },
+    "given": "測試全綠且證據完整",
+    "when": "提交交付",
+    "then": "工單進入審查中並保存證據"
+  },
+  {
+    "id": "TDD-CMP-01-2",
+    "bdd": "S-CMP-01-2",
+    "module": "work-completion",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SubmitCompletion",
+    "request": {
+      "exitCode": 0,
+      "evidenceComplete": false
+    },
+    "expected": {
+      "outcome": "Validation",
+      "ticketStatus": "In Progress"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Progress",
+      "outcome": "NotImplemented"
+    },
+    "given": "程序正常結束但缺測試證據",
+    "when": "提交交付",
+    "then": "拒絕成功交付且不設完成"
+  },
+  {
+    "id": "TDD-CMP-01-3",
+    "bdd": "S-CMP-01-3",
+    "module": "work-completion",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SubmitCompletion",
+    "request": {
+      "leaseGeneration": 0,
+      "trustedLeaseGeneration": 1
+    },
+    "expected": {
+      "outcome": "Conflict",
+      "ticketStatus": "In Progress"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Progress",
+      "outcome": "NotImplemented"
+    },
+    "given": "交付內容來自其他租約或版本",
+    "when": "提交交付",
+    "then": "拒絕回報且保留原工單"
+  },
+  {
+    "id": "TDD-CMP-02-1",
+    "bdd": "S-CMP-02-1",
+    "module": "work-completion",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SubmitCompletion",
+    "request": {
+      "repeat": 2,
+      "sameDigest": true
+    },
+    "expected": {
+      "outcome": "Confirmed",
+      "completionCount": 1
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Progress",
+      "outcome": "NotImplemented"
+    },
+    "given": "交付已保存但回應遺失",
+    "when": "重送相同交付",
+    "then": "回傳原結果且不重複追加交付"
+  },
+  {
+    "id": "TDD-CMP-02-2",
+    "bdd": "S-CMP-02-2",
+    "module": "work-completion",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ReconcileCompletion",
+    "request": {
+      "savedStage": "ReviewUpdated",
+      "firstReleaseFailed": true
+    },
+    "expected": {
+      "outcome": "Confirmed",
+      "leaseReleased": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Progress",
+      "outcome": "NotImplemented"
+    },
+    "given": "工單已進審查中但釋放失敗",
+    "when": "重試交付",
+    "then": "完成釋放並確認交付"
+  },
+  {
+    "id": "TDD-CMP-02-3",
+    "bdd": "S-CMP-02-3",
+    "module": "work-completion",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SubmitCompletion",
+    "request": {
+      "sameId": true,
+      "sameDigest": false
+    },
+    "expected": {
+      "outcome": "Conflict",
+      "originalEvidencePreserved": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Progress",
+      "outcome": "NotImplemented"
+    },
+    "given": "相同交付識別帶不同內容",
+    "when": "重新提交",
+    "then": "回報衝突且不覆寫原證據"
+  },
+  {
+    "id": "TDD-RUN-04-1",
+    "bdd": "S-RUN-04-1",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RunNext",
+    "request": {
+      "completionStatus": "Confirmed",
+      "claimable": [
+        "FIX-2"
+      ]
+    },
+    "expected": {
+      "outcome": "Started",
+      "ticketId": "FIX-2",
+      "newSession": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "上一張交付已確認且存在獨立就緒工單",
+    "when": "繼續領單",
+    "then": "在新工作階段執行下一張"
+  },
+  {
+    "id": "TDD-RUN-04-2",
+    "bdd": "S-RUN-04-2",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RunNext",
+    "request": {
+      "completionStatus": "Confirmed",
+      "claimable": [
+        "FIX-3"
+      ],
+      "dependencyStatus": "In Review"
+    },
+    "expected": {
+      "outcome": "Idle",
+      "processStarts": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "下一張相依工單尚未核准合併",
+    "when": "繼續領單",
+    "then": "不領取相依工單"
+  },
+  {
+    "id": "TDD-RUN-04-3",
+    "bdd": "S-RUN-04-3",
+    "module": "ai-runner",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "RunNext",
+    "request": {
+      "completionStatus": "Unknown",
+      "claimable": [
+        "FIX-2"
+      ]
+    },
+    "expected": {
+      "outcome": "ReconcileRequired",
+      "processStarts": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "上一張交付結果未知",
+    "when": "繼續執行",
+    "then": "先對帳且不接新工單"
+  },
+  {
+    "id": "TDD-GOV-01-1",
+    "bdd": "S-GOV-01-1",
+    "module": "verification-approval",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SubmitVerification",
+    "request": {
+      "verifier": "dev-1",
+      "developer": "dev-1"
+    },
+    "expected": {
+      "outcome": "Unauthorized",
+      "verificationCount": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "驗證者是原開發者或同一工作階段",
+    "when": "提交驗證",
+    "then": "拒絕驗收"
+  },
+  {
+    "id": "TDD-GOV-01-2",
+    "bdd": "S-GOV-01-2",
+    "module": "verification-approval",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SubmitVerification",
+    "request": {
+      "verifier": "qa-1",
+      "developer": "dev-1"
+    },
+    "expected": {
+      "outcome": "VerificationSaved",
+      "ticketStatus": "In Review"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "獨立驗證者完成實測",
+    "when": "提交證據",
+    "then": "保存驗證結果但不自動完成"
+  },
+  {
+    "id": "TDD-GOV-01-3",
+    "bdd": "S-GOV-01-3",
+    "module": "verification-approval",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SubmitReview",
+    "request": {
+      "reviewer": "review-1",
+      "developer": "dev-1",
+      "verifier": "qa-1"
+    },
+    "expected": {
+      "outcome": "ReviewSaved",
+      "roleUnchanged": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "獨立審查者與開發者身分不同",
+    "when": "提交審查",
+    "then": "保存審查結果且不提升角色"
+  },
+  {
+    "id": "TDD-GOV-02-1",
+    "bdd": "S-GOV-02-1",
+    "module": "verification-approval",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ApproveCompletion",
+    "request": {
+      "verified": false,
+      "merged": false
+    },
+    "expected": {
+      "outcome": "GateRejected",
+      "ticketStatus": "In Review"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "尚未驗證或尚未合併",
+    "when": "要求完成工單",
+    "then": "拒絕完成"
+  },
+  {
+    "id": "TDD-GOV-02-2",
+    "bdd": "S-GOV-02-2",
+    "module": "verification-approval",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ApproveCompletion",
+    "request": {
+      "verified": true,
+      "reviewed": true,
+      "authorized": true,
+      "merged": true,
+      "treeMatches": true
+    },
+    "expected": {
+      "outcome": "Approved",
+      "ticketStatus": "Done",
+      "light": "Blue"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "驗證審查核准皆通過且證據對應已合併版本",
+    "when": "授權者確認完成",
+    "then": "工單設完成與藍燈並保存歷程"
+  },
+  {
+    "id": "TDD-GOV-02-3",
+    "bdd": "S-GOV-02-3",
+    "module": "verification-approval",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ApproveCompletion",
+    "request": {
+      "role": "dev-agent",
+      "noApprove": true
+    },
+    "expected": {
+      "outcome": "Unauthorized",
+      "ticketStatus": "In Review"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "開發者或派工憑證嘗試核准",
+    "when": "要求完成工單",
+    "then": "拒絕且保留狀態"
+  },
+  {
+    "id": "TDD-UI-01-1",
+    "bdd": "S-UI-01-1",
+    "module": "dispatch-scheduling",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "GetScheduleView",
+    "request": {
+      "role": "admin",
+      "newSchedule": true
+    },
+    "expected": {
+      "outcome": "View",
+      "enabled": false,
+      "maxConcurrent": 1
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "管理者開啟新排程",
+    "when": "檢視設定",
+    "then": "顯示停用與並行一個的預設值"
+  },
+  {
+    "id": "TDD-UI-01-2",
+    "bdd": "S-UI-01-2",
+    "module": "dispatch-scheduling",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SaveScheduleView",
+    "request": {
+      "notBefore": "invalid"
+    },
+    "expected": {
+      "outcome": "Validation",
+      "fieldError": "notBefore",
+      "configurationPreserved": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "開始時間無效",
+    "when": "儲存設定",
+    "then": "顯示欄位錯誤且保留舊設定"
+  },
+  {
+    "id": "TDD-UI-01-3",
+    "bdd": "S-UI-01-3",
+    "module": "dispatch-scheduling",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "SaveScheduleView",
+    "request": {
+      "role": "viewer"
+    },
+    "expected": {
+      "outcome": "Unauthorized",
+      "saveEnabled": false
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "唯讀使用者開啟設定",
+    "when": "嘗試變更",
+    "then": "無法儲存且顯示權限原因"
+  },
+  {
+    "id": "TDD-UI-02-1",
+    "bdd": "S-UI-02-1",
+    "module": "webhook-delivery",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "GetWebhookView",
+    "request": {
+      "storedKeyRef": "test-key-1"
+    },
+    "expected": {
+      "outcome": "View",
+      "keyRef": "test-key-1",
+      "secretReturned": false
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "管理者設定金鑰",
+    "when": "重新開啟設定",
+    "then": "只顯示金鑰參照且不回傳秘密"
+  },
+  {
+    "id": "TDD-UI-02-2",
+    "bdd": "S-UI-02-2",
+    "module": "webhook-delivery",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "TestDelivery",
+    "request": {
+      "testEvent": true
+    },
+    "expected": {
+      "outcome": "HealthChecked",
+      "processStarts": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "管理者發出測試事件",
+    "when": "檢視結果",
+    "then": "顯示連線結果且不啟動正式工單"
+  },
+  {
+    "id": "TDD-UI-02-3",
+    "bdd": "S-UI-02-3",
+    "module": "webhook-delivery",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "GetRunnerView",
+    "request": {
+      "runnerOnline": false
+    },
+    "expected": {
+      "outcome": "View",
+      "runnerStatus": "Offline",
+      "pauseEnabled": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "Runner 離線",
+    "when": "檢視設定",
+    "then": "顯示離線狀態且可暫停投遞"
+  },
+  {
+    "id": "TDD-UI-03-1",
+    "bdd": "S-UI-03-1",
+    "module": "verification-approval",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "GetRunView",
+    "request": {
+      "processExited": true,
+      "completionStatus": "Unknown"
+    },
+    "expected": {
+      "outcome": "View",
+      "processStatus": "Exited",
+      "completionStatus": "Unknown"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "程序已結束但交付未確認",
+    "when": "檢視工單",
+    "then": "分別呈現程序與交付狀態"
+  },
+  {
+    "id": "TDD-UI-03-2",
+    "bdd": "S-UI-03-2",
+    "module": "verification-approval",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "GetGateView",
+    "request": {
+      "merged": false
+    },
+    "expected": {
+      "outcome": "View",
+      "completeEnabled": false,
+      "disabledReason": "PR_NOT_MERGED"
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "尚未合併工單",
+    "when": "檢視關卡",
+    "then": "完成控制停用並說明原因"
+  },
+  {
+    "id": "TDD-UI-03-3",
+    "bdd": "S-UI-03-3",
+    "module": "verification-approval",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "GetRunView",
+    "request": {
+      "runs": []
+    },
+    "expected": {
+      "outcome": "View",
+      "empty": true,
+      "successShown": false
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "沒有執行紀錄",
+    "when": "檢視紀錄",
+    "then": "呈現空狀態且不顯示成功"
+  },
+  {
+    "id": "TDD-INT-01-1",
+    "bdd": "S-INT-01-1",
+    "module": "dispatch-integration",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ExerciseSystem",
+    "request": {
+      "ready": [
+        "FIX-1",
+        "FIX-2"
+      ],
+      "dependent": "FIX-3",
+      "completeFirst": true
+    },
+    "expected": {
+      "outcome": "NextStarted",
+      "ticketId": "FIX-2",
+      "firstStatus": "In Review",
+      "dependentStarts": 0
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "兩張獨立已就緒工作與一張未解除相依工作",
+    "when": "完成第一張交付",
+    "then": "第二張開始且第一張等待獨立驗證並不領第三張"
+  },
+  {
+    "id": "TDD-INT-01-2",
+    "bdd": "S-INT-01-2",
+    "module": "dispatch-integration",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ExerciseRecovery",
+    "request": {
+      "repeatEvent": 2,
+      "completionDisconnect": true
+    },
+    "expected": {
+      "outcome": "Confirmed",
+      "firstProcessStarts": 1
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "事件重送且交付中途斷線",
+    "when": "服務恢復對帳",
+    "then": "不重複執行且能確認交付"
+  },
+  {
+    "id": "TDD-INT-01-3",
+    "bdd": "S-INT-01-3",
+    "module": "dispatch-integration",
+    "level": "test-only contract skeleton; UI projection / integration ports are not real UI or system proof",
+    "operation": "ExerciseAcceptance",
+    "request": {
+      "distinctTrustedIdentities": true,
+      "verified": true,
+      "reviewed": true,
+      "authorized": true,
+      "merged": true,
+      "treeMatches": true
+    },
+    "expected": {
+      "outcome": "Approved",
+      "light": "Blue",
+      "dependentUnblocked": true
+    },
+    "initialState": {
+      "eventCount": 0,
+      "processStarts": 0,
+      "completionCount": 0,
+      "ticketStatus": "In Review",
+      "outcome": "NotImplemented"
+    },
+    "given": "開發完成後由不同身分驗證審查並核准已合併版本",
+    "when": "完成驗收",
+    "then": "僅此時變藍並解除相依"
+  }
+]

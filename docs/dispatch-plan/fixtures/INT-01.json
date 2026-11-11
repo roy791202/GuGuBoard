@@ -1,0 +1,46 @@
+{
+  "task": "INT-01",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-INT-01-1",
+      "given": "兩張獨立已就緒工作與一張未解除相依工作",
+      "when": "完成第一張交付",
+      "then": "第二張開始且第一張等待獨立驗證並不領第三張",
+      "test": "TDD-INT-01-1",
+      "level": "L4",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-INT-01-2",
+      "given": "事件重送且交付中途斷線",
+      "when": "服務恢復對帳",
+      "then": "不重複執行且能確認交付",
+      "test": "TDD-INT-01-2",
+      "level": "L4",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-INT-01-3",
+      "given": "開發完成後由不同身分驗證審查並核准已合併版本",
+      "when": "完成驗收",
+      "then": "僅此時變藍並解除相依",
+      "test": "TDD-INT-01-3",
+      "level": "L4",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

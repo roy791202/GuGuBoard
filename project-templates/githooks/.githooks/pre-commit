@@ -1,0 +1,5 @@
+#!/bin/sh
+# AI Dev Skills：commit 前檢查（board.json、略過測試、版本同步）
+PS=$(command -v pwsh || command -v powershell || command -v powershell.exe)
+[ -z "$PS" ] && { echo "找不到 PowerShell，無法執行 pre-commit 檢查" >&2; exit 1; }
+exec "$PS" -NoProfile -ExecutionPolicy Bypass -File "$(git rev-parse --show-toplevel)/.githooks/check.ps1" -Mode pre-commit

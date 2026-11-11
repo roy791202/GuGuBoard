@@ -1,0 +1,3736 @@
+{
+  "mutationControls": [
+    {
+      "case": "TDD-UI-02-2",
+      "positiveControl": "ui-health-script",
+      "positiveStatus": "PASS",
+      "mutation": "ui-test-creates-job",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "test creates no inbox or lease"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "actual test delivery transport invoked",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "exact health-only response",
+          "actual": "OK",
+          "expected": "OK",
+          "pass": true
+        },
+        {
+          "assertion": "health request reached runner ingress",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "test-event mode sent on wire",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "test never starts real job",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "test creates no inbox or lease",
+          "actual": [
+            [],
+            {}
+          ],
+          "expected": [
+            [],
+            {}
+          ],
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "actual test delivery transport invoked",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "exact health-only response",
+          "actual": "OK",
+          "expected": "OK",
+          "pass": true
+        },
+        {
+          "assertion": "health request reached runner ingress",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "test-event mode sent on wire",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "test never starts real job",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "test creates no inbox or lease",
+          "actual": [
+            [
+              {
+                "schemaVersion": 1,
+                "eventId": "evt-1",
+                "projectId": "fixture-guguboard",
+                "scheduleRevision": 1,
+                "occurredAt": "2026-11-07T09:00:00+08:00",
+                "eventType": "wakeup",
+                "targetRunnerId": "runner-1",
+                "testEvent": true
+              }
+            ],
+            {}
+          ],
+          "expected": [
+            [],
+            {}
+          ],
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "positiveEvidence": {
+        "id": "TDD-UI-02-2",
+        "bdd": "S-UI-02-2",
+        "status": "PASS",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "actual test delivery transport invoked",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "exact health-only response",
+            "actual": "OK",
+            "expected": "OK",
+            "pass": true
+          },
+          {
+            "assertion": "health request reached runner ingress",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "test-event mode sent on wire",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "test never starts real job",
+            "actual": 0,
+            "expected": 0,
+            "pass": true
+          },
+          {
+            "assertion": "test creates no inbox or lease",
+            "actual": [
+              [],
+              {}
+            ],
+            "expected": [
+              [],
+              {}
+            ],
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Http",
+            "method": "Send",
+            "args": {
+              "url": "http://127.0.0.1:58930/events",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\",\"testEvent\":true}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "d5f335505f1883024626821cfbf1f4f1527851770a923921c2ae08e602272a4e"
+              },
+              "timeoutSec": 10
+            }
+          },
+          {
+            "kind": "transport",
+            "url": "http://127.0.0.1:58930/events",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Key-Id": "test-only",
+              "X-Timestamp": "1794013200",
+              "X-Signature": "d5f335505f1883024626821cfbf1f4f1527851770a923921c2ae08e602272a4e"
+            },
+            "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\",\"testEvent\":true}",
+            "timeoutSec": 10
+          },
+          {
+            "kind": "peer",
+            "bytes": 197,
+            "mode": "ok",
+            "request": {
+              "bodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31222c22746573744576656e74223a747275657d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "197",
+                "Host": "127.0.0.1:58930",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "d5f335505f1883024626821cfbf1f4f1527851770a923921c2ae08e602272a4e",
+                "Connection": "close"
+              },
+              "path": "/events",
+              "mode": "ok"
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "GetWebhookView",
+            "pid": "control-thread-32452",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-health-script",
+            "request": {}
+          },
+          {
+            "operation": "TestDelivery",
+            "pid": "control-thread-32516",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-health-script",
+            "request": {
+              "testEvent": true
+            }
+          },
+          {
+            "operation": "AcceptWakeup",
+            "pid": "control-thread-29976",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-health-script",
+            "request": {
+              "rawBodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31222c22746573744576656e74223a747275657d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "197",
+                "Host": "127.0.0.1:58930",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "d5f335505f1883024626821cfbf1f4f1527851770a923921c2ae08e602272a4e",
+                "Connection": "close"
+              }
+            }
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\0\\TDD-UI-02-2\\ui-health-script\\TDD-UI-02-2.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:58930"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "keyRef": "test-key-1",
+          "secret": "DO_NOT_RENDER_TEST_SECRET",
+          "runnerOnline": true
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+          "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      },
+      "mutantEvidence": {
+        "id": "TDD-UI-02-2",
+        "bdd": "S-UI-02-2",
+        "status": "BEHAVIOR_RED",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "actual test delivery transport invoked",
+            "actual": 1,
+            "expected": 1,
+            "pass": true
+          },
+          {
+            "assertion": "exact health-only response",
+            "actual": "OK",
+            "expected": "OK",
+            "pass": true
+          },
+          {
+            "assertion": "health request reached runner ingress",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "test-event mode sent on wire",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "test never starts real job",
+            "actual": 0,
+            "expected": 0,
+            "pass": true
+          },
+          {
+            "assertion": "test creates no inbox or lease",
+            "actual": [
+              [
+                {
+                  "schemaVersion": 1,
+                  "eventId": "evt-1",
+                  "projectId": "fixture-guguboard",
+                  "scheduleRevision": 1,
+                  "occurredAt": "2026-11-07T09:00:00+08:00",
+                  "eventType": "wakeup",
+                  "targetRunnerId": "runner-1",
+                  "testEvent": true
+                }
+              ],
+              {}
+            ],
+            "expected": [
+              [],
+              {}
+            ],
+            "pass": false
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Http",
+            "method": "Send",
+            "args": {
+              "url": "http://127.0.0.1:58957/events",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\",\"testEvent\":true}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "d5f335505f1883024626821cfbf1f4f1527851770a923921c2ae08e602272a4e"
+              },
+              "timeoutSec": 10
+            }
+          },
+          {
+            "kind": "transport",
+            "url": "http://127.0.0.1:58957/events",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Key-Id": "test-only",
+              "X-Timestamp": "1794013200",
+              "X-Signature": "d5f335505f1883024626821cfbf1f4f1527851770a923921c2ae08e602272a4e"
+            },
+            "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\",\"testEvent\":true}",
+            "timeoutSec": 10
+          },
+          {
+            "kind": "peer",
+            "bytes": 197,
+            "mode": "ok",
+            "request": {
+              "bodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31222c22746573744576656e74223a747275657d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "197",
+                "Host": "127.0.0.1:58957",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "d5f335505f1883024626821cfbf1f4f1527851770a923921c2ae08e602272a4e",
+                "Connection": "close"
+              },
+              "path": "/events",
+              "mode": "ok"
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "GetWebhookView",
+            "pid": "control-thread-18200",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-test-creates-job",
+            "request": {}
+          },
+          {
+            "operation": "TestDelivery",
+            "pid": "control-thread-31180",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-test-creates-job",
+            "request": {
+              "testEvent": true
+            }
+          },
+          {
+            "operation": "AcceptWakeup",
+            "pid": "control-thread-13440",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-test-creates-job",
+            "request": {
+              "rawBodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31222c22746573744576656e74223a747275657d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "197",
+                "Host": "127.0.0.1:58957",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "d5f335505f1883024626821cfbf1f4f1527851770a923921c2ae08e602272a4e",
+                "Connection": "close"
+              }
+            }
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\0\\TDD-UI-02-2\\ui-test-creates-job\\TDD-UI-02-2.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [
+            {
+              "schemaVersion": 1,
+              "eventId": "evt-1",
+              "projectId": "fixture-guguboard",
+              "scheduleRevision": 1,
+              "occurredAt": "2026-11-07T09:00:00+08:00",
+              "eventType": "wakeup",
+              "targetRunnerId": "runner-1",
+              "testEvent": true
+            }
+          ],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:58957"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "keyRef": "test-key-1",
+          "secret": "DO_NOT_RENDER_TEST_SECRET",
+          "runnerOnline": true
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+          "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      }
+    },
+    {
+      "case": "TDD-UI-02-3",
+      "positiveControl": "ui-safe",
+      "positiveStatus": "PASS",
+      "mutation": "ui-ignore-delivery-pause",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "paused delivery sends nothing"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "offline visible",
+          "actual": "Offline",
+          "expected": "Offline",
+          "pass": true
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "click durably pauses delivery",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "paused delivery sends nothing",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "same due event can send when unpaused",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "offline visible",
+          "actual": "Offline",
+          "expected": "Offline",
+          "pass": true
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "click durably pauses delivery",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "paused delivery sends nothing",
+          "actual": 1,
+          "expected": 0,
+          "pass": false
+        },
+        {
+          "assertion": "same due event can send when unpaused",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "positiveEvidence": {
+        "id": "TDD-UI-02-3",
+        "bdd": "S-UI-02-3",
+        "status": "PASS",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "offline visible",
+            "actual": "Offline",
+            "expected": "Offline",
+            "pass": true
+          },
+          {
+            "assertion": "pause usable",
+            "actual": false,
+            "expected": false,
+            "pass": true
+          },
+          {
+            "assertion": "click durably pauses delivery",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "paused delivery sends nothing",
+            "actual": 0,
+            "expected": 0,
+            "pass": true
+          },
+          {
+            "assertion": "same due event can send when unpaused",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Http",
+            "method": "Send",
+            "args": {
+              "url": "http://127.0.0.1:58985/events",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "timeoutSec": 10
+            }
+          },
+          {
+            "kind": "transport",
+            "url": "http://127.0.0.1:58985/events",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Key-Id": "test-only",
+              "X-Timestamp": "1794013200",
+              "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+            },
+            "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+            "timeoutSec": 10
+          },
+          {
+            "kind": "peer",
+            "bytes": 180,
+            "mode": "ok",
+            "request": {
+              "bodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31227d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "180",
+                "Host": "127.0.0.1:58985",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139",
+                "Connection": "close"
+              },
+              "path": "/events",
+              "mode": "ok"
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "GetRunnerView",
+            "pid": "control-thread-16008",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          },
+          {
+            "operation": "PauseDelivery",
+            "pid": "control-thread-20840",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {
+              "paused": true
+            }
+          },
+          {
+            "operation": "DeliverPending",
+            "pid": "control-thread-31676",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          },
+          {
+            "operation": "DeliverPending",
+            "pid": "control-thread-31676",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\1\\TDD-UI-02-3\\ui-safe\\TDD-UI-02-3.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [
+            {
+              "eventId": "evt-1",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "url": "http://127.0.0.1:58985/events",
+              "status": "pending",
+              "attempt": 0
+            }
+          ],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": true,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1,
+            "paused": false
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:58985"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "keyRef": "test-key-1",
+          "secret": "DO_NOT_RENDER_TEST_SECRET",
+          "runnerOnline": true
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+          "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      },
+      "mutantEvidence": {
+        "id": "TDD-UI-02-3",
+        "bdd": "S-UI-02-3",
+        "status": "BEHAVIOR_RED",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "offline visible",
+            "actual": "Offline",
+            "expected": "Offline",
+            "pass": true
+          },
+          {
+            "assertion": "pause usable",
+            "actual": false,
+            "expected": false,
+            "pass": true
+          },
+          {
+            "assertion": "click durably pauses delivery",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "paused delivery sends nothing",
+            "actual": 1,
+            "expected": 0,
+            "pass": false
+          },
+          {
+            "assertion": "same due event can send when unpaused",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Http",
+            "method": "Send",
+            "args": {
+              "url": "http://127.0.0.1:59011/events",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "timeoutSec": 10
+            }
+          },
+          {
+            "kind": "transport",
+            "url": "http://127.0.0.1:59011/events",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Key-Id": "test-only",
+              "X-Timestamp": "1794013200",
+              "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+            },
+            "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+            "timeoutSec": 10
+          },
+          {
+            "kind": "peer",
+            "bytes": 180,
+            "mode": "ok",
+            "request": {
+              "bodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31227d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "180",
+                "Host": "127.0.0.1:59011",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139",
+                "Connection": "close"
+              },
+              "path": "/events",
+              "mode": "ok"
+            }
+          },
+          {
+            "kind": "port",
+            "port": "Http",
+            "method": "Send",
+            "args": {
+              "url": "http://127.0.0.1:59011/events",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "timeoutSec": 10
+            }
+          },
+          {
+            "kind": "transport",
+            "url": "http://127.0.0.1:59011/events",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Key-Id": "test-only",
+              "X-Timestamp": "1794013200",
+              "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+            },
+            "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+            "timeoutSec": 10
+          },
+          {
+            "kind": "peer",
+            "bytes": 180,
+            "mode": "ok",
+            "request": {
+              "bodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31227d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "180",
+                "Host": "127.0.0.1:59011",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139",
+                "Connection": "close"
+              },
+              "path": "/events",
+              "mode": "ok"
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "GetRunnerView",
+            "pid": "control-thread-7016",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-ignore-delivery-pause",
+            "request": {}
+          },
+          {
+            "operation": "PauseDelivery",
+            "pid": "control-thread-1716",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-ignore-delivery-pause",
+            "request": {
+              "paused": true
+            }
+          },
+          {
+            "operation": "DeliverPending",
+            "pid": "control-thread-31676",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-ignore-delivery-pause",
+            "request": {}
+          },
+          {
+            "operation": "DeliverPending",
+            "pid": "control-thread-31676",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-ignore-delivery-pause",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\1\\TDD-UI-02-3\\ui-ignore-delivery-pause\\TDD-UI-02-3.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [
+            {
+              "eventId": "evt-1",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "url": "http://127.0.0.1:59011/events",
+              "status": "pending",
+              "attempt": 0
+            }
+          ],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": true,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1,
+            "paused": false
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:59011"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "keyRef": "test-key-1",
+          "secret": "DO_NOT_RENDER_TEST_SECRET",
+          "runnerOnline": true
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+          "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      }
+    },
+    {
+      "case": "TDD-UI-02-1",
+      "positiveControl": "ui-safe",
+      "positiveStatus": "PASS",
+      "mutation": "ui-leak-hidden",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "secret absent from all DOM and wire responses"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "key reference displayed",
+          "actual": "test-key-1",
+          "expected": "test-key-1",
+          "pass": true
+        },
+        {
+          "assertion": "secret absent from all DOM and wire responses",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "key reference displayed",
+          "actual": "test-key-1",
+          "expected": "test-key-1",
+          "pass": true
+        },
+        {
+          "assertion": "secret absent from all DOM and wire responses",
+          "actual": true,
+          "expected": false,
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "positiveEvidence": {
+        "id": "TDD-UI-02-1",
+        "bdd": "S-UI-02-1",
+        "status": "PASS",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "key reference displayed",
+            "actual": "test-key-1",
+            "expected": "test-key-1",
+            "pass": true
+          },
+          {
+            "assertion": "secret absent from all DOM and wire responses",
+            "actual": false,
+            "expected": false,
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [],
+        "invocations": [
+          {
+            "operation": "GetWebhookView",
+            "pid": "control-thread-21868",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          },
+          {
+            "operation": "GetWebhookView",
+            "pid": "control-thread-30792",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\2\\TDD-UI-02-1\\ui-safe\\TDD-UI-02-1.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:59039"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "keyRef": "test-key-1",
+          "secret": "DO_NOT_RENDER_TEST_SECRET",
+          "runnerOnline": true
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+          "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      },
+      "mutantEvidence": {
+        "id": "TDD-UI-02-1",
+        "bdd": "S-UI-02-1",
+        "status": "BEHAVIOR_RED",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "key reference displayed",
+            "actual": "test-key-1",
+            "expected": "test-key-1",
+            "pass": true
+          },
+          {
+            "assertion": "secret absent from all DOM and wire responses",
+            "actual": true,
+            "expected": false,
+            "pass": false
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [],
+        "invocations": [
+          {
+            "operation": "GetWebhookView",
+            "pid": "control-thread-12200",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-leak-hidden",
+            "request": {}
+          },
+          {
+            "operation": "GetWebhookView",
+            "pid": "control-thread-31032",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-leak-hidden",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\2\\TDD-UI-02-1\\ui-leak-hidden\\TDD-UI-02-1.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:59062"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "keyRef": "test-key-1",
+          "secret": "DO_NOT_RENDER_TEST_SECRET",
+          "runnerOnline": true
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+          "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      }
+    },
+    {
+      "case": "TDD-UI-02-3",
+      "positiveControl": "ui-safe",
+      "positiveStatus": "PASS",
+      "mutation": "ui-pause-noop",
+      "mutationStatus": "BEHAVIOR_RED",
+      "newlyFailedAssertions": [
+        "click durably pauses delivery",
+        "paused delivery sends nothing"
+      ],
+      "killed": true,
+      "positiveChecks": [
+        {
+          "assertion": "offline visible",
+          "actual": "Offline",
+          "expected": "Offline",
+          "pass": true
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "click durably pauses delivery",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "paused delivery sends nothing",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "same due event can send when unpaused",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "mutantChecks": [
+        {
+          "assertion": "offline visible",
+          "actual": "Offline",
+          "expected": "Offline",
+          "pass": true
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "click durably pauses delivery",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "paused delivery sends nothing",
+          "actual": 1,
+          "expected": 0,
+          "pass": false
+        },
+        {
+          "assertion": "same due event can send when unpaused",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "positiveEvidence": {
+        "id": "TDD-UI-02-3",
+        "bdd": "S-UI-02-3",
+        "status": "PASS",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "offline visible",
+            "actual": "Offline",
+            "expected": "Offline",
+            "pass": true
+          },
+          {
+            "assertion": "pause usable",
+            "actual": false,
+            "expected": false,
+            "pass": true
+          },
+          {
+            "assertion": "click durably pauses delivery",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "paused delivery sends nothing",
+            "actual": 0,
+            "expected": 0,
+            "pass": true
+          },
+          {
+            "assertion": "same due event can send when unpaused",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Http",
+            "method": "Send",
+            "args": {
+              "url": "http://127.0.0.1:59087/events",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "timeoutSec": 10
+            }
+          },
+          {
+            "kind": "transport",
+            "url": "http://127.0.0.1:59087/events",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Key-Id": "test-only",
+              "X-Timestamp": "1794013200",
+              "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+            },
+            "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+            "timeoutSec": 10
+          },
+          {
+            "kind": "peer",
+            "bytes": 180,
+            "mode": "ok",
+            "request": {
+              "bodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31227d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "180",
+                "Host": "127.0.0.1:59087",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139",
+                "Connection": "close"
+              },
+              "path": "/events",
+              "mode": "ok"
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "GetRunnerView",
+            "pid": "control-thread-31176",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          },
+          {
+            "operation": "PauseDelivery",
+            "pid": "control-thread-31324",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {
+              "paused": true
+            }
+          },
+          {
+            "operation": "DeliverPending",
+            "pid": "control-thread-31676",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          },
+          {
+            "operation": "DeliverPending",
+            "pid": "control-thread-31676",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-safe",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\3\\TDD-UI-02-3\\ui-safe\\TDD-UI-02-3.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [
+            {
+              "eventId": "evt-1",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "url": "http://127.0.0.1:59087/events",
+              "status": "pending",
+              "attempt": 0
+            }
+          ],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": true,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1,
+            "paused": false
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:59087"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "keyRef": "test-key-1",
+          "secret": "DO_NOT_RENDER_TEST_SECRET",
+          "runnerOnline": true
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+          "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      },
+      "mutantEvidence": {
+        "id": "TDD-UI-02-3",
+        "bdd": "S-UI-02-3",
+        "status": "BEHAVIOR_RED",
+        "layer": "test-only input ports + executable boundary drivers",
+        "checks": [
+          {
+            "assertion": "offline visible",
+            "actual": "Offline",
+            "expected": "Offline",
+            "pass": true
+          },
+          {
+            "assertion": "pause usable",
+            "actual": false,
+            "expected": false,
+            "pass": true
+          },
+          {
+            "assertion": "click durably pauses delivery",
+            "actual": false,
+            "expected": true,
+            "pass": false
+          },
+          {
+            "assertion": "paused delivery sends nothing",
+            "actual": 1,
+            "expected": 0,
+            "pass": false
+          },
+          {
+            "assertion": "same due event can send when unpaused",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "no running job without matching authoritative lease",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          },
+          {
+            "assertion": "development cannot mark any task Done or Blue",
+            "actual": true,
+            "expected": true,
+            "pass": true
+          }
+        ],
+        "trace": [
+          {
+            "kind": "port",
+            "port": "Http",
+            "method": "Send",
+            "args": {
+              "url": "http://127.0.0.1:59112/events",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "timeoutSec": 10
+            }
+          },
+          {
+            "kind": "transport",
+            "url": "http://127.0.0.1:59112/events",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Key-Id": "test-only",
+              "X-Timestamp": "1794013200",
+              "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+            },
+            "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+            "timeoutSec": 10
+          },
+          {
+            "kind": "peer",
+            "bytes": 180,
+            "mode": "ok",
+            "request": {
+              "bodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31227d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "180",
+                "Host": "127.0.0.1:59112",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139",
+                "Connection": "close"
+              },
+              "path": "/events",
+              "mode": "ok"
+            }
+          },
+          {
+            "kind": "port",
+            "port": "Http",
+            "method": "Send",
+            "args": {
+              "url": "http://127.0.0.1:59112/events",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "timeoutSec": 10
+            }
+          },
+          {
+            "kind": "transport",
+            "url": "http://127.0.0.1:59112/events",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Key-Id": "test-only",
+              "X-Timestamp": "1794013200",
+              "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+            },
+            "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+            "timeoutSec": 10
+          },
+          {
+            "kind": "peer",
+            "bytes": 180,
+            "mode": "ok",
+            "request": {
+              "bodyHex": "7b22736368656d6156657273696f6e223a312c226576656e744964223a226576742d31222c2270726f6a6563744964223a22666978747572652d67756775626f617264222c227363686564756c655265766973696f6e223a312c226f636375727265644174223a22323032362d31312d30375430393a30303a30302b30383a3030222c226576656e7454797065223a2277616b657570222c2274617267657452756e6e65724964223a2272756e6e65722d31227d",
+              "headers": {
+                "Accept-Encoding": "identity",
+                "Content-Length": "180",
+                "Host": "127.0.0.1:59112",
+                "User-Agent": "Python-urllib/3.10",
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139",
+                "Connection": "close"
+              },
+              "path": "/events",
+              "mode": "ok"
+            }
+          }
+        ],
+        "invocations": [
+          {
+            "operation": "GetRunnerView",
+            "pid": "control-thread-21116",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-pause-noop",
+            "request": {}
+          },
+          {
+            "operation": "PauseDelivery",
+            "pid": "control-thread-32192",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-pause-noop",
+            "request": {
+              "paused": true
+            }
+          },
+          {
+            "operation": "DeliverPending",
+            "pid": "control-thread-31676",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-pause-noop",
+            "request": {}
+          },
+          {
+            "operation": "DeliverPending",
+            "pid": "control-thread-31676",
+            "trustedPrincipal": {
+              "actor": "human-1",
+              "developer": "dev-1",
+              "verifier": "qa-1",
+              "reviewer": "review-1",
+              "session": "session-human",
+              "role": "admin"
+            },
+            "mode": "ui-pause-noop",
+            "request": {}
+          }
+        ],
+        "faultHitCounts": {},
+        "missingFaultPaths": [],
+        "notes": [
+          {
+            "browser": "156.0.8078.81",
+            "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\controls\\3\\TDD-UI-02-3\\ui-pause-noop\\TDD-UI-02-3.png"
+          }
+        ],
+        "snapshot": {
+          "outbox": [
+            {
+              "eventId": "evt-1",
+              "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+              "headers": {
+                "Content-Type": "application/json",
+                "X-Key-Id": "test-only",
+                "X-Timestamp": "1794013200",
+                "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+              },
+              "url": "http://127.0.0.1:59112/events",
+              "status": "pending",
+              "attempt": 0
+            }
+          ],
+          "inbox": [],
+          "journal": {},
+          "tickets": {
+            "FIX-1": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-2": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": []
+            },
+            "FIX-3": {
+              "status": "Todo",
+              "light": "Gray",
+              "dependsOn": [
+                "FIX-1"
+              ]
+            }
+          },
+          "leases": {},
+          "runs": [],
+          "config": {
+            "enabled": true,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1,
+            "paused": false
+          },
+          "cursor": 0,
+          "verifications": [],
+          "reviews": [],
+          "approvals": [],
+          "runLedger": {
+            "run-1": {
+              "runId": "run-1",
+              "ticketId": "FIX-1",
+              "projectId": "fixture-guguboard",
+              "owner": "dev-1",
+              "developerSession": "session-dev",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "workspace": "fixture-workspace-1"
+            }
+          },
+          "principals": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "pr": {
+            "id": "fixture-pr",
+            "merged": true,
+            "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          },
+          "evidence": {
+            "fixture://evidence": {
+              "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+              "exists": true
+            },
+            "fixture://qa": {
+              "exists": true
+            },
+            "fixture://review": {
+              "exists": true
+            }
+          },
+          "roleGrants": {
+            "dev-1": {
+              "role": "dev-agent",
+              "session": "session-dev"
+            },
+            "qa-1": {
+              "role": "verifier",
+              "session": "session-qa"
+            },
+            "review-1": {
+              "role": "reviewer",
+              "session": "session-review"
+            },
+            "human-1": {
+              "role": "admin",
+              "session": "session-human"
+            },
+            "viewer-1": {
+              "role": "viewer",
+              "session": "session-viewer"
+            },
+            "worker-a": {
+              "role": "dev-agent",
+              "session": "session-worker-a"
+            },
+            "worker-b": {
+              "role": "dev-agent",
+              "session": "session-worker-b"
+            }
+          },
+          "httpPolicy": {
+            "allowedOrigins": [
+              "http://127.0.0.1:59112"
+            ],
+            "timeoutSec": 10,
+            "followRedirects": false
+          },
+          "keyRef": "test-key-1",
+          "secret": "DO_NOT_RENDER_TEST_SECRET",
+          "runnerOnline": true
+        },
+        "lineage": {
+          "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+          "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+          "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+        },
+        "faultArmedHistory": [],
+        "failureHandlingQualified": null
+      }
+    }
+  ],
+  "date": "2026-11-07T01:07:59.703555+08:00",
+  "fixtureControls": {
+    "rpcPortInvocation": "PASS",
+    "rpcInjectedFault": "PASS",
+    "storeFault": "PASS",
+    "claimBarrier": "PASS",
+    "httpTimeout": "PASS",
+    "httpDisconnect": "PASS",
+    "realChildLifecycle": "PASS",
+    "durableReopen": "PASS",
+    "signedBytes": "PASS"
+  },
+  "results": [
+    {
+      "id": "TDD-UI-02-1",
+      "bdd": "S-UI-02-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "key reference displayed",
+          "actual": "",
+          "expected": "test-key-1",
+          "pass": false
+        },
+        {
+          "assertion": "secret absent from all DOM and wire responses",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetWebhookView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 31880,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "GetWebhookView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 26792,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\TDD-UI-02-1.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:58840"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        },
+        "keyRef": "test-key-1",
+        "secret": "DO_NOT_RENDER_TEST_SECRET",
+        "runnerOnline": true
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+        "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    },
+    {
+      "id": "TDD-UI-02-2",
+      "bdd": "S-UI-02-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "actual test delivery transport invoked",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "exact health-only response",
+          "actual": "",
+          "expected": "OK",
+          "pass": false
+        },
+        {
+          "assertion": "health request reached runner ingress",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "test-event mode sent on wire",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "test never starts real job",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "test creates no inbox or lease",
+          "actual": [
+            [],
+            {}
+          ],
+          "expected": [
+            [],
+            {}
+          ],
+          "pass": true
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetWebhookView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 19312,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "TestDelivery",
+          "request": {
+            "testEvent": true
+          },
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 24704,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\TDD-UI-02-2.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:58864"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        },
+        "keyRef": "test-key-1",
+        "secret": "DO_NOT_RENDER_TEST_SECRET",
+        "runnerOnline": true
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+        "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    },
+    {
+      "id": "TDD-UI-02-3",
+      "bdd": "S-UI-02-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "offline visible",
+          "actual": "",
+          "expected": "Offline",
+          "pass": false
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "click durably pauses delivery",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "paused delivery sends nothing",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "same due event can send when unpaused",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "no running job without matching authoritative lease",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        },
+        {
+          "assertion": "development cannot mark any task Done or Blue",
+          "actual": true,
+          "expected": true,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetRunnerView",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 9228,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "PauseDelivery",
+          "request": {
+            "paused": true
+          },
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 31356,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "DeliverPending",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 2128,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "DeliverPending",
+          "request": {},
+          "trustedPrincipal": {
+            "actor": "human-1",
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-human",
+            "role": "admin"
+          },
+          "pid": 26744,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\review-fixes-r3-evidence\\TDD-UI-02-3.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "body": "{\"schemaVersion\":1,\"eventId\":\"evt-1\",\"projectId\":\"fixture-guguboard\",\"scheduleRevision\":1,\"occurredAt\":\"2026-11-07T09:00:00+08:00\",\"eventType\":\"wakeup\",\"targetRunnerId\":\"runner-1\"}",
+            "headers": {
+              "Content-Type": "application/json",
+              "X-Key-Id": "test-only",
+              "X-Timestamp": "1794013200",
+              "X-Signature": "447d76e10400611492b4eb146b0ac259be8322376c4954eb7049d5c027133139"
+            },
+            "url": "http://127.0.0.1:58905/events",
+            "status": "pending",
+            "attempt": 0
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1,
+          "paused": false
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "runLedger": {
+          "run-1": {
+            "runId": "run-1",
+            "ticketId": "FIX-1",
+            "projectId": "fixture-guguboard",
+            "owner": "dev-1",
+            "developerSession": "session-dev",
+            "leaseGeneration": 1,
+            "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "workspace": "fixture-workspace-1"
+          }
+        },
+        "principals": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "pr": {
+          "id": "fixture-pr",
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        "evidence": {
+          "fixture://evidence": {
+            "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+            "exists": true
+          },
+          "fixture://qa": {
+            "exists": true
+          },
+          "fixture://review": {
+            "exists": true
+          }
+        },
+        "roleGrants": {
+          "dev-1": {
+            "role": "dev-agent",
+            "session": "session-dev"
+          },
+          "qa-1": {
+            "role": "verifier",
+            "session": "session-qa"
+          },
+          "review-1": {
+            "role": "reviewer",
+            "session": "session-review"
+          },
+          "human-1": {
+            "role": "admin",
+            "session": "session-human"
+          },
+          "viewer-1": {
+            "role": "viewer",
+            "session": "session-viewer"
+          },
+          "worker-a": {
+            "role": "dev-agent",
+            "session": "session-worker-a"
+          },
+          "worker-b": {
+            "role": "dev-agent",
+            "session": "session-worker-b"
+          }
+        },
+        "httpPolicy": {
+          "allowedOrigins": [
+            "http://127.0.0.1:58905"
+          ],
+          "timeoutSec": 10,
+          "followRedirects": false
+        },
+        "keyRef": "test-key-1",
+        "secret": "DO_NOT_RENDER_TEST_SECRET",
+        "runnerOnline": true
+      },
+      "lineage": {
+        "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+        "scenarioDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+        "fixtureDigest": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140"
+      },
+      "faultArmedHistory": [],
+      "failureHandlingQualified": null
+    }
+  ],
+  "red": 3,
+  "passed": 0,
+  "invalid": 0,
+  "productionChanged": false,
+  "independentAcceptance": "NOT RUN",
+  "provenance": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "files": {
+      "run_drivers.py": "e591fad0dcc16c0dd0e382999342e437552f0e18911b10da775dd3f01c4cc87a",
+      "driver_support.py": "be4465c4a6703efb7788590a078981f9bb1b28ba990adc682cfcba3895490418",
+      "Bridge.ps1": "56e8b7ff25d8896787f57a5dc7f84a9d7c409ee504d25ccabf6fe9a3f373c9c0",
+      "Skeleton.ps1": "f6e1a4e1aa4a6a425601ae3d3c4a97393d477727e020226fb52269b39829ea2e",
+      "ui-skeleton.html": "ab42c60cc6e7fb5594bbc4b42b786dcea681f383934354f84fac2b668f4eabcf",
+      "browser-driver.cjs": "643270765fe2c1060b487982b33c26f926baa061e5ddd251fb489f933b118937",
+      "PortProbe.ps1": "ae510e95f7ce884924a162a2e2cd1afbb96dd8c348d851b374c9e39ce8c67edb",
+      "cases.json": "fff710be1578de3982037b9aff563d48383d450710a7ed207f77c3329b6b5db3",
+      "review_strengthening.py": "7014ae12940e7a35d48caa2202295c0b0e2dc5e84cb5b4d82cb6c96f2654fe87",
+      "mutation_controls.py": "55141740ee975c3607f49e4517af3d13b59c151d4ee1315638bb8de202afa779",
+      "review-fixtures.json": "3e87f48c781a8c8ff76dd33cafc64b9dd66271e2a930bae08a9f2e80fe6c6140",
+      "review-case-inventory.json": "35e115237367bd88a859d978f1bf2221e8d6b1e42b53ececefd7c2d6521c68bb"
+    }
+  },
+  "qualification": "RED against test-only empty application skeleton. Unreached fault ports demonstrate missing orchestration, not exercised fault handling. Real browser drives test-only UI, not product UI."
+}

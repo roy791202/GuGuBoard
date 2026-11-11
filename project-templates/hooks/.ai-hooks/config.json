@@ -1,0 +1,19 @@
+{
+  "_說明": "AI Dev hooks 設定。改成 false 可關閉單項；enabled=false 全部停用（請先和團隊確認）。testCommands 留空=自動偵測 Cargo.toml / package.json。role=這個工作區 AI 的角色（dev-agent / verifier / high-tier / admin），也可用環境變數 AI_AGENT_ROLE 設定；high-tier/admin 才能改 .feature、hook 與 CI 設定或把卡片設成 Done。",
+  "enabled": true,
+  "blockDangerousShell": true,
+  "protectSecrets": true,
+  "formatOnEdit": true,
+  "guardOnEdit": true,
+  "stopTests": true,
+  "stopClippy": false,
+  "testTimeoutSec": 300,
+  "toolTimeoutSec": 60,
+  "logMaxKB": 1024,
+  "testCommands": [],
+  "role": "dev-agent",
+  "boardPath": ".ai-pm/board.json",
+  "boardGuard": true,
+  "protectSpecs": true,
+  "requireBoardUpdate": true
+}

@@ -1,0 +1,23 @@
+{
+  "serve-board.ps1": "2c79fee642f2b79bf7483a51e336cb37c5473d060d4b23ab8affc86298215007",
+  "serve-ext.ps1": "02b5ce7934cd286d6dfc84571e3c110458bb9ab393c0ffff67c5957639fbe037",
+  "board.html": "0ba6457f0e99f8b063436ef27448f7f68c72fe613512f4fffc80acf183a7e705",
+  "AGENTS.md": "79606f6c89397c92ffd9643de340418a6b204b4cded6e96927d006435778fc3d",
+  "docs/dispatch-plan/red/Skeleton.ps1": "f6e1a4e1aa4a6a425601ae3d3c4a97393d477727e020226fb52269b39829ea2e",
+  "docs/dispatch-plan/bdd/S-CMP-01.feature": "cfb6fe72a896c03f3684512491bbd67b943798bdbd106483e8892d79990a6dc4",
+  "docs/dispatch-plan/bdd/S-CMP-02.feature": "b9ac3f514d77e5e512ecde975540aa45acc44af59e8d3750508cb51bf32f4d24",
+  "docs/dispatch-plan/bdd/S-GOV-01.feature": "0bc9d1a182dcdc099c7bb0358df8902c8652ac042b196d7d38b78ad6ce092bad",
+  "docs/dispatch-plan/bdd/S-GOV-02.feature": "1ef91f219f69f99a16763aff0d3297b73f6fe8dff317f0bf5b7cff7fb8f3bb86",
+  "docs/dispatch-plan/bdd/S-INT-01.feature": "8d1fd0b4ca38ef3f2196e6b102933b530c274f646a0f6889f73a32e6c598c815",
+  "docs/dispatch-plan/bdd/S-RUN-01.feature": "f008a38a2a7f3f469d7948c9514a411f5f6ce588d41db664d5a173f769c159e3",
+  "docs/dispatch-plan/bdd/S-RUN-02.feature": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c",
+  "docs/dispatch-plan/bdd/S-RUN-03.feature": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94",
+  "docs/dispatch-plan/bdd/S-RUN-04.feature": "31b1ffdc0d92b75eb58256aca82347c687ac4b5d2f6db97eb807b9b98b4e58b9",
+  "docs/dispatch-plan/bdd/S-SCH-01.feature": "69fafe51de1978476fff28798ed682fd11c3cea041a5ea047a0dc61846913802",
+  "docs/dispatch-plan/bdd/S-SCH-02.feature": "2fa44f1725cc65ec9d175642340d221a95cc0a170537055e7eb6eeddc711ed9c",
+  "docs/dispatch-plan/bdd/S-UI-01.feature": "d5986ff5465ec9381321e1c52eaf6d3c589653e745a7a6a8ee7fd0cd58d6af35",
+  "docs/dispatch-plan/bdd/S-UI-02.feature": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731",
+  "docs/dispatch-plan/bdd/S-UI-03.feature": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123",
+  "docs/dispatch-plan/bdd/S-WH-01.feature": "0bf36427221a058deb349498d91767dbe16442512607578adc0e0e4a1a1b6cab",
+  "docs/dispatch-plan/bdd/S-WH-02.feature": "2e106bbe273a7b17d3e9eec8c98821d09a911622e2b365a79a38a1c3584395c7"
+}

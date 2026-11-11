@@ -462,7 +462,7 @@ function Start-DispatchRun($Pj, $cfg, $prof, [string]$ticket) {
   if ($psi.PSObject.Properties['ArgumentList']) { foreach ($x in $a) { $psi.ArgumentList.Add($x) } } else { $psi.Arguments = ($a | ForEach-Object { '"' + ($_ -replace '(\\*)"', '$1$1\"' -replace '(\\+)$', '$1$1') + '"' }) -join ' ' }
   $rid = (Get-Date).ToString('yyyyMMdd-HHmmss') + '-' + $ticket + '-' + $prof.id; $log = Join-Path (Get-RunDir $Pj) ($rid + '.log')
   try { $p = [Diagnostics.Process]::Start($psi); $p.StandardInput.Close() } catch { [IO.File]::WriteAllText($log, "無法啟動 $($prof.exe)：$($_.Exception.Message)`n", [Text.UTF8Encoding]::new($false)); Remove-Claim $Pj.id $ticket; return $null }
-  $runs[$rid] = @{ id = $rid; project = $Pj.id; ticket = $ticket; profile = [string]$prof.id; proc = $p; out = $p.StandardOutput.ReadToEndAsync(); err = $p.StandardError.ReadToEndAsync(); start = Get-Date; timeoutMin = [int]$prof.timeoutMin; log = $log; tokenId = $t.rec.id; status = 'running' }
+  $runs[$rid] = @{ id = $rid; project = $Pj.id; ticket = $ticket; profile = [string]$prof.id; proc = $p; startTime = (Get-ProcStartIso $p); out = $p.StandardOutput.ReadToEndAsync(); err = $p.StandardError.ReadToEndAsync(); start = Get-Date; timeoutMin = [int]$prof.timeoutMin; log = $log; tokenId = $t.rec.id; status = 'running' }
   [IO.File]::WriteAllText($log, "# $rid`n# 指令：$($prof.exe) $(($a | ForEach-Object { if ($_.Length -gt 80) { $_.Substring(0, 80) + '…' } else { $_ } }) -join ' ')`n# 開始：$(Get-NowIso)`n", [Text.UTF8Encoding]::new($false))
   Save-RunRecords $Pj.id
   Write-Host "$(Get-Date -f HH:mm:ss) [$($Pj.id)] 派工：$ticket → $($prof.id)"; Push-All 'dispatch' @{ p = $Pj.id; run = $rid; status = 'running' } $Pj.id
@@ -484,23 +484,32 @@ function Save-RunRecords([string]$pid_) {   # 只存還沒結束（running／stu
 function Resume-DispatchRuns {   # 啟動後第一次 tick：收拾上一次伺服器留下的執行（不接管，終止後交給核對流程）
   foreach ($Pj in @($projects.Values)) {
     $f = Get-RunRecordFile $Pj.id; if (-not (Test-Path -LiteralPath $f)) { continue }
-    $recs = @(); try { $recs = @(Get-Content -LiteralPath $f -Raw -Encoding UTF8 | ConvertFrom-Json | Where-Object { $_ }) } catch { Write-Warning "[$($Pj.id)] 無法讀取執行紀錄 $f" }
+    $recs = @(); try { $recs = @(Get-Content -LiteralPath $f -Raw -Encoding UTF8 | ConvertFrom-Json | Where-Object { $_ }) } catch { Write-Warning "[$($Pj.id)] 無法讀取執行紀錄 $f"; continue }
     foreach ($rec in $recs) {
-      if ($runs.ContainsKey([string]$rec.id)) { continue }
-      $note = '伺服器重啟時程序已不存在'
-      $p = $null; try { $p = [Diagnostics.Process]::GetProcessById([int]$rec.pid) } catch {}
-      if ($p) {
-        $st = [string]$rec.startTime; if ($st -and $rec.startTime -is [datetime]) { $st = $rec.startTime.ToString('o') }
-        if ($st -and (Get-ProcStartIso $p) -eq $st) { $note = $(if (Stop-RunTree $p) { '伺服器重啟時程序仍在執行，已終止整個程序樹' } else { '伺服器重啟時程序仍在執行，但無法確認已終止（需要人處理）' }) }
-        else { $note = "PID $($rec.pid) 已被其他程序使用，未終止" }
-      }
-      try { [IO.File]::AppendAllText([string]$rec.log, "`n# 結束：$(Get-NowIso)　狀態：interrupted　$note`n", [Text.UTF8Encoding]::new($false)) } catch {}
-      if ($rec.tokenId) { Revoke-RunToken ([string]$rec.tokenId) }
-      Set-TicketAfterRun $Pj ([string]$rec.ticket) 'interrupted' '?' ([string]$rec.log)
-      Remove-Claim $Pj.id ([string]$rec.ticket)
-      Write-Host "$(Get-Date -f HH:mm:ss) [$($Pj.id)] 派工：$($rec.ticket) 上次執行中斷（$note）"
+      try {   # 每筆各自保護：一筆壞掉不影響其他專案與其他紀錄
+        if ($runs.ContainsKey([string]$rec.id)) { continue }
+        $p = $null; try { $p = [Diagnostics.Process]::GetProcessById([int]$rec.pid) } catch {}
+        $stillRunning = $false
+        if ($p) {
+          $st = [string]$rec.startTime; if ($rec.startTime -is [datetime]) { $st = $rec.startTime.ToString('o') }
+          if ($st -and (Get-ProcStartIso $p) -eq $st) { $stillRunning = $true }   # 同一個程序：PID 與建立時間都相符
+        }
+        if ($stillRunning -and -not (Stop-RunTree $p)) {   # 仍在執行又殺不掉：標 stuck，放回 $runs 佔住名額、保留 claim 與紀錄，不撤 token／不釋放／不暫停工單
+          $runs[[string]$rec.id] = @{ id = [string]$rec.id; project = $Pj.id; ticket = [string]$rec.ticket; profile = 'resumed'; proc = $p; start = (Get-Date); timeoutMin = 0; log = [string]$rec.log; tokenId = [string]$rec.tokenId; status = 'stuck' }
+          $cl = Get-Claims $Pj.id; if ($cl.ContainsKey([string]$rec.ticket)) { $cl[[string]$rec.ticket].until = (Get-Date).AddYears(10); Save-Claims $Pj.id }
+          try { [IO.File]::AppendAllText([string]$rec.log, "`n# $(Get-NowIso)　重啟時程序仍在執行且無法終止，標為 stuck，需要人處理`n", [Text.UTF8Encoding]::new($false)) } catch {}
+          Push-All 'dispatch' @{ p = $Pj.id; run = [string]$rec.id; status = 'stuck' } $Pj.id
+          continue
+        }
+        $note = if (-not $p) { '伺服器重啟時程序已不存在' } elseif ($stillRunning) { '伺服器重啟時程序仍在執行，已終止整個程序樹' } else { "PID $($rec.pid) 已被其他程序使用，未終止" }
+        try { [IO.File]::AppendAllText([string]$rec.log, "`n# 結束：$(Get-NowIso)　狀態：interrupted　$note`n", [Text.UTF8Encoding]::new($false)) } catch {}
+        if ($rec.tokenId) { Revoke-RunToken ([string]$rec.tokenId) }
+        try { Set-TicketAfterRun $Pj ([string]$rec.ticket) 'interrupted' '?' ([string]$rec.log) } catch { Write-Warning "[$($Pj.id)] 重啟核對工單 $($rec.ticket) 失敗：$($_.Exception.Message)"; Disable-DispatchForSafety $Pj "重啟核對工單 $($rec.ticket) 失敗，派工器已停止（需要人處理）" }
+        Remove-Claim $Pj.id ([string]$rec.ticket)
+        Write-Host "$(Get-Date -f HH:mm:ss) [$($Pj.id)] 派工：$($rec.ticket) 上次執行中斷（$note）"
+      } catch { Write-Warning "[$($Pj.id)] 處理執行紀錄 $($rec.id) 失敗：$($_.Exception.Message)" }
     }
-    Save-RunRecords $Pj.id
+    Save-RunRecords $Pj.id   # stuck 的執行（status=stuck）會留在檔案；已處理完的不在 $runs，會被移除
   }
 }
 
@@ -519,14 +528,20 @@ function Get-ProcTreeIds([int]$rootId) {
   }
   $ids.ToArray()
 }
-function Stop-RunTree($proc, [int]$waitMs = 10000) {   # 回傳 $true＝整棵樹都已結束
-  $ids = @($proc.Id); try { $ids = @(Get-ProcTreeIds $proc.Id) } catch {}
-  try { $proc.Kill() } catch {}
+function Stop-RunTree($proc, [int]$waitMs = 10000) {   # 回傳 $true＝確定整棵樹都已結束；無法確定回 $false（交給 stuck 流程）
+  $ids = @($proc.Id); $enumerated = $false
+  if ($null -eq $IsWindows -or $IsWindows) { try { $ids = @(Get-ProcTreeIds $proc.Id); $enumerated = $true } catch { $enumerated = $false } }   # 列舉子樹靠 Get-CimInstance，只在 Windows 可用
+  $killedTree = $false
+  try { $proc.Kill($true); $killedTree = $true }   # PowerShell 7（.NET Core）：跨平台一次殺整棵樹
+  catch { try { $proc.Kill() } catch {} }           # Windows PowerShell 5.1 沒有這個多載：只殺父程序，靠下面用列舉結果補殺子程序
   foreach ($id in $ids) { if ($id -ne $proc.Id) { try { Stop-Process -Id $id -Force -ErrorAction Stop } catch {} } }
   $deadline = (Get-Date).AddMilliseconds($waitMs)
   do {
-    $alive = @($ids | Where-Object { $id = $_; if ($id -eq $proc.Id) { try { -not $proc.HasExited } catch { $false } } else { [bool](Get-Process -Id $id -ErrorAction SilentlyContinue) } })
-    if (-not $alive.Count) { return $true }
+    $alive = @($ids | Where-Object { if ($_ -eq $proc.Id) { try { -not $proc.HasExited } catch { $false } } else { [bool](Get-Process -Id $_ -ErrorAction SilentlyContinue) } })
+    if (-not $alive.Count) {
+      if (-not $enumerated -and -not $killedTree) { return $false }   # 既不能列舉子樹、也不能整棵樹殺：不敢保證沒有殘留的子程序
+      return $true
+    }
     Start-Sleep -Milliseconds 200
   } while ((Get-Date) -lt $deadline)
   $false
@@ -536,33 +551,40 @@ function Stop-Run($r, [string]$status) {   # 逾時／手動停止；無法確�
   $r.status = 'stuck'; Revoke-RunToken $r.tokenId
   $cl = Get-Claims $r.project; if ($cl.ContainsKey($r.ticket)) { $cl[$r.ticket].until = (Get-Date).AddYears(10); Save-Claims $r.project }
   [IO.File]::AppendAllText($r.log, "`n# $(Get-NowIso)　無法確認程序樹已結束（$status），標為 stuck，需要人處理`n", [Text.UTF8Encoding]::new($false))
-  $Pj = $projects[$r.project]; if ($Pj) { Set-TicketAfterRun $Pj $r.ticket 'stuck' '?' $r.log }
+  $Pj = $projects[$r.project]; if ($Pj) { try { Set-TicketAfterRun $Pj $r.ticket 'stuck' '?' $r.log } catch { Write-Warning "[$($r.project)] stuck 核對工單失敗：$($_.Exception.Message)"; Disable-DispatchForSafety $Pj "工單 $($r.ticket) stuck 且核對丟出例外，派工器已停止（需要人處理）" } }
   Save-RunRecords $r.project
   Push-All 'dispatch' @{ p = $r.project; run = $r.id; status = 'stuck' } $r.project
 }
 
+# 工單暫停不了（驗證失敗或寫入丟例外）就停掉整個專案的派工器，寧可停也不要無限重派
+function Disable-DispatchForSafety($Pj, [string]$reason) {
+  $c = Get-DispatchCfg $Pj.id; if (-not $c.enabled) { return }
+  $c.enabled = $false; $c.stoppedReason = $reason; Save-DispatchCfg $Pj.id $c; Push-All 'dispatch' @{ p = $Pj.id; stopped = $reason } $Pj.id
+}
 # ---- 執行結束後核對工單（T-DL-3）：工單還沒完成就暫停，避免下一次 tick 重派同一張而無限耗用 token ----
 function Set-TicketAfterRun($Pj, [string]$ticket, [string]$runStatus, $code, [string]$log) {
   $b = Read-BoardObj $Pj; $it = Find-Item $b $ticket; if (-not $it) { return }
   $st = [string]$it['status']; if ($st -cnotin 'Todo', 'In Progress') { return }   # In Review／Done 等：AI 已交付或有人處理，不動
-  $why = "派工執行結束但工單未完成（狀態 $st，exit=$code，$runStatus）"; $now = Get-NowIso; $from = "$st / $($it['light'])"
+  $lt = [string]$it['light']
+  $why = "派工執行結束但工單未完成（狀態 $st，exit=$code，$runStatus）"; $now = Get-NowIso; $from = "$st / $lt"
   if ([string](Get-V $it 'updatedAt') -ceq $now) { Start-Sleep -Milliseconds (1005 - (Get-Date).Millisecond); $now = Get-NowIso }   # updatedAt 只到秒；同一秒內再改會被 L7 判成沒更新
-  if ($st -ceq 'In Progress') { $it['light'] = 'Yellow'; $it['lightReason'] = $why }
-  $it['paused'] = $true; $it['pausedReason'] = $why; $it['updatedAt'] = $now
-  $it['history'] = @(@(Get-V $it 'history' | Where-Object { $_ }) + @([ordered]@{ at = $now; from = $from; to = "$st / $($it['light'])"; by = 'dispatcher'; note = $why }))
-  $it['notes'] = @(@(Get-V $it 'notes' | Where-Object { $_ }) + @([ordered]@{ at = $now; by = 'dispatcher'; text = "$why；log：$(Split-Path -Leaf $log)" }))
+  if ($st -ceq 'In Progress' -and $lt -ceq 'Green') { $it['light'] = 'Yellow'; $it['lightReason'] = $why }   # 只降綠燈；AI 自己設的紅／黃燈與原因保留（紅燈代表阻塞，由 tick 的紅燈停機機制處理）
+  $it['paused'] = $true; if (-not [string](Get-V $it 'pausedReason')) { $it['pausedReason'] = $why }   # 不覆寫 AI 已寫的原因
+  $it['updatedAt'] = $now
+  # 直接讀 $it['history']／$it['notes']，不走 Get-V：Get-V 的逗號防護在 pipeline 中會讓整個舊陣列變成單一元素，造成巢狀而驗證失敗
+  $oh = @(); if ($it.Contains('history') -and $null -ne $it['history']) { $oh = @($it['history']) }
+  $it['history'] = @($oh + [ordered]@{ at = $now; from = $from; to = "$st / $($it['light'])"; by = 'dispatcher'; note = $why })
+  $on = @(); if ($it.Contains('notes') -and $null -ne $it['notes']) { $on = @($it['notes']) }
+  $it['notes'] = @($on + [ordered]@{ at = $now; by = 'dispatcher'; text = "$why；log：$(Split-Path -Leaf $log)" })
   $errs = @(Write-BoardChecked $Pj $b 'dev-agent' 'dispatch-outcome')
-  if ($errs.Count) {   # 工單暫停不了就停掉整個專案的派工器，寧可停也不要無限重派
-    Write-Warning "[$($Pj.id)] 無法暫停工單 ${ticket}：$($errs -join '；')"
-    $c = Get-DispatchCfg $Pj.id; if ($c.enabled) { $c.enabled = $false; $c.stoppedReason = "工單 $ticket 執行結束但無法自動暫停，派工器已停止（需要人處理）"; Save-DispatchCfg $Pj.id $c; Push-All 'dispatch' @{ p = $Pj.id; stopped = $c.stoppedReason } $Pj.id }
-  }
+  if ($errs.Count) { Write-Warning "[$($Pj.id)] 無法暫停工單 ${ticket}：$($errs -join '；')"; Disable-DispatchForSafety $Pj "工單 $ticket 執行結束但無法自動暫停（$($errs[0])），派工器已停止（需要人處理）" }
 }
 function Complete-Run($r, [string]$status) {
   $r.status = $status; $o = ''; $e = ''; try { if ($r.out.Wait(2000)) { $o = $r.out.Result } } catch {}; try { if ($r.err.Wait(2000)) { $e = $r.err.Result } } catch {}
   $code = $(try { $r.proc.ExitCode } catch { -1 })
   [IO.File]::AppendAllText($r.log, "`n## stdout`n$o`n## stderr`n$e`n# 結束：$(Get-NowIso)　狀態：$status　exit=$code`n", [Text.UTF8Encoding]::new($false))
   Revoke-RunToken $r.tokenId
-  $Pj = $projects[$r.project]; if ($Pj) { try { Set-TicketAfterRun $Pj $r.ticket $status $code $r.log } catch { Write-Warning "[$($r.project)] 核對工單 $($r.ticket) 失敗：$($_.Exception.Message)" } }
+  $Pj = $projects[$r.project]; if ($Pj) { try { Set-TicketAfterRun $Pj $r.ticket $status $code $r.log } catch { Write-Warning "[$($r.project)] 核對工單 $($r.ticket) 失敗：$($_.Exception.Message)"; Disable-DispatchForSafety $Pj "工單 $($r.ticket) 執行結束但核對丟出例外（$($_.Exception.Message)），派工器已停止（需要人處理）" } }
   Remove-Claim $r.project $r.ticket; $r.exit = $code; $r.end = Get-Date
   Save-RunRecords $r.project
   Push-All 'dispatch' @{ p = $r.project; run = $r.id; status = $status } $r.project

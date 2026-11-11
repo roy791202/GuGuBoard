@@ -1,0 +1,53 @@
+{
+  "revision": 2,
+  "project": "fixture-guguboard",
+  "runLedger": {
+    "run-1": {
+      "runId": "run-1",
+      "ticketId": "FIX-1",
+      "projectId": "fixture-guguboard",
+      "owner": "dev-1",
+      "developerSession": "session-dev",
+      "leaseGeneration": 1,
+      "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "workspace": "fixture-workspace-1"
+    }
+  },
+  "principals": {
+    "dev-1": {
+      "role": "dev-agent",
+      "session": "session-dev"
+    },
+    "qa-1": {
+      "role": "verifier",
+      "session": "session-qa"
+    },
+    "review-1": {
+      "role": "reviewer",
+      "session": "session-review"
+    },
+    "human-1": {
+      "role": "admin",
+      "session": "session-human"
+    }
+  },
+  "pr": {
+    "id": "fixture-pr",
+    "merged": true,
+    "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  },
+  "evidence": {
+    "fixture://evidence": {
+      "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e",
+      "exists": true
+    },
+    "fixture://qa": {
+      "exists": true
+    },
+    "fixture://review": {
+      "exists": true
+    }
+  }
+}

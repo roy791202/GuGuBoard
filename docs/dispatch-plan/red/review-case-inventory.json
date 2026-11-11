@@ -1,0 +1,482 @@
+[
+  {
+    "id": "TDD-SCH-01-1",
+    "bdd": "S-SCH-01-1",
+    "module": "dispatch-scheduling",
+    "given": "有效排程在開始前一秒",
+    "when": "評估派工",
+    "then": "不產生事件",
+    "feature": "docs/dispatch-plan/bdd/S-SCH-01.feature",
+    "featureDigest": "69fafe51de1978476fff28798ed682fd11c3cea041a5ea047a0dc61846913802"
+  },
+  {
+    "id": "TDD-SCH-01-2",
+    "bdd": "S-SCH-01-2",
+    "module": "dispatch-scheduling",
+    "given": "有效排程剛好到期",
+    "when": "連續評估兩次",
+    "then": "只保存一個派工意圖",
+    "feature": "docs/dispatch-plan/bdd/S-SCH-01.feature",
+    "featureDigest": "69fafe51de1978476fff28798ed682fd11c3cea041a5ea047a0dc61846913802"
+  },
+  {
+    "id": "TDD-SCH-01-3",
+    "bdd": "S-SCH-01-3",
+    "module": "dispatch-scheduling",
+    "given": "時間未含時區或間隔小於五秒",
+    "when": "儲存設定",
+    "then": "拒絕設定且保留舊值",
+    "feature": "docs/dispatch-plan/bdd/S-SCH-01.feature",
+    "featureDigest": "69fafe51de1978476fff28798ed682fd11c3cea041a5ea047a0dc61846913802"
+  },
+  {
+    "id": "TDD-SCH-02-1",
+    "bdd": "S-SCH-02-1",
+    "module": "dispatch-scheduling",
+    "given": "專案已暫停",
+    "when": "到達派工時間",
+    "then": "不派工",
+    "feature": "docs/dispatch-plan/bdd/S-SCH-02.feature",
+    "featureDigest": "2fa44f1725cc65ec9d175642340d221a95cc0a170537055e7eb6eeddc711ed9c"
+  },
+  {
+    "id": "TDD-SCH-02-2",
+    "bdd": "S-SCH-02-2",
+    "module": "dispatch-scheduling",
+    "given": "服務錯過三個檢查週期",
+    "when": "恢復服務",
+    "then": "只重新評估目前工作且不補發三批",
+    "feature": "docs/dispatch-plan/bdd/S-SCH-02.feature",
+    "featureDigest": "2fa44f1725cc65ec9d175642340d221a95cc0a170537055e7eb6eeddc711ed9c"
+  },
+  {
+    "id": "TDD-SCH-02-3",
+    "bdd": "S-SCH-02-3",
+    "module": "dispatch-scheduling",
+    "given": "事件保存失敗",
+    "when": "評估到期排程",
+    "then": "不推進排程游標",
+    "feature": "docs/dispatch-plan/bdd/S-SCH-02.feature",
+    "featureDigest": "2fa44f1725cc65ec9d175642340d221a95cc0a170537055e7eb6eeddc711ed9c"
+  },
+  {
+    "id": "TDD-WH-01-1",
+    "bdd": "S-WH-01-1",
+    "module": "webhook-delivery",
+    "given": "有一筆待投遞事件",
+    "when": "接收端可靠接收",
+    "then": "事件標示已接收而非工作完成",
+    "feature": "docs/dispatch-plan/bdd/S-WH-01.feature",
+    "featureDigest": "0bf36427221a058deb349498d91767dbe16442512607578adc0e0e4a1a1b6cab"
+  },
+  {
+    "id": "TDD-WH-01-2",
+    "bdd": "S-WH-01-2",
+    "module": "webhook-delivery",
+    "given": "接收端逾時",
+    "when": "投遞事件",
+    "then": "保留待重試紀錄",
+    "feature": "docs/dispatch-plan/bdd/S-WH-01.feature",
+    "featureDigest": "0bf36427221a058deb349498d91767dbe16442512607578adc0e0e4a1a1b6cab"
+  },
+  {
+    "id": "TDD-WH-01-3",
+    "bdd": "S-WH-01-3",
+    "module": "webhook-delivery",
+    "given": "目標不在允許清單",
+    "when": "儲存目標",
+    "then": "拒絕目標且不連線",
+    "feature": "docs/dispatch-plan/bdd/S-WH-01.feature",
+    "featureDigest": "0bf36427221a058deb349498d91767dbe16442512607578adc0e0e4a1a1b6cab"
+  },
+  {
+    "id": "TDD-WH-02-1",
+    "bdd": "S-WH-02-1",
+    "module": "webhook-delivery",
+    "given": "事件已失敗一次",
+    "when": "到達下一重試時間",
+    "then": "使用相同事件識別重新投遞",
+    "feature": "docs/dispatch-plan/bdd/S-WH-02.feature",
+    "featureDigest": "2e106bbe273a7b17d3e9eec8c98821d09a911622e2b365a79a38a1c3584395c7"
+  },
+  {
+    "id": "TDD-WH-02-2",
+    "bdd": "S-WH-02-2",
+    "module": "webhook-delivery",
+    "given": "事件已連續失敗五次",
+    "when": "評估重試",
+    "then": "停止自動重試並顯示人工處理",
+    "feature": "docs/dispatch-plan/bdd/S-WH-02.feature",
+    "featureDigest": "2e106bbe273a7b17d3e9eec8c98821d09a911622e2b365a79a38a1c3584395c7"
+  },
+  {
+    "id": "TDD-WH-02-3",
+    "bdd": "S-WH-02-3",
+    "module": "webhook-delivery",
+    "given": "服務在重試前重啟",
+    "when": "恢復投遞",
+    "then": "保留次數與下次時間",
+    "feature": "docs/dispatch-plan/bdd/S-WH-02.feature",
+    "featureDigest": "2e106bbe273a7b17d3e9eec8c98821d09a911622e2b365a79a38a1c3584395c7"
+  },
+  {
+    "id": "TDD-RUN-01-1",
+    "bdd": "S-RUN-01-1",
+    "module": "ai-runner",
+    "given": "事件有效且佇列有空位",
+    "when": "接收兩次相同事件",
+    "then": "只保存一筆工作",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-01.feature",
+    "featureDigest": "f008a38a2a7f3f469d7948c9514a411f5f6ce588d41db664d5a173f769c159e3"
+  },
+  {
+    "id": "TDD-RUN-01-2",
+    "bdd": "S-RUN-01-2",
+    "module": "ai-runner",
+    "given": "事件已被竄改或超過五分鐘",
+    "when": "接收事件",
+    "then": "拒絕且不啟動工作",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-01.feature",
+    "featureDigest": "f008a38a2a7f3f469d7948c9514a411f5f6ce588d41db664d5a173f769c159e3"
+  },
+  {
+    "id": "TDD-RUN-01-3",
+    "bdd": "S-RUN-01-3",
+    "module": "ai-runner",
+    "given": "接收儲存失敗或佇列已滿",
+    "when": "接收事件",
+    "then": "不回覆成功且不遺失已接受工作",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-01.feature",
+    "featureDigest": "f008a38a2a7f3f469d7948c9514a411f5f6ce588d41db664d5a173f769c159e3"
+  },
+  {
+    "id": "TDD-RUN-02-1",
+    "bdd": "S-RUN-02-1",
+    "module": "ai-runner",
+    "given": "有兩個 Runner 同時要求一張工作",
+    "when": "領取工作",
+    "then": "只有有效租約持有人啟動",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+    "featureDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c"
+  },
+  {
+    "id": "TDD-RUN-02-2",
+    "bdd": "S-RUN-02-2",
+    "module": "ai-runner",
+    "given": "領取成功但程序無法啟動",
+    "when": "開始工作",
+    "then": "回報失敗並釋放租約",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+    "featureDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c"
+  },
+  {
+    "id": "TDD-RUN-02-3",
+    "bdd": "S-RUN-02-3",
+    "module": "ai-runner",
+    "given": "沒有可領工單",
+    "when": "請求工作",
+    "then": "進入等待且不啟動程序",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-02.feature",
+    "featureDigest": "83f2f547494b24a83f441929fa9c36eecd71301bd060ac7729bad6ee31d7bf5c"
+  },
+  {
+    "id": "TDD-RUN-03-1",
+    "bdd": "S-RUN-03-1",
+    "module": "ai-runner",
+    "given": "工作仍在執行且持有租約",
+    "when": "到達五分鐘續租點",
+    "then": "延長租約",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-03.feature",
+    "featureDigest": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94"
+  },
+  {
+    "id": "TDD-RUN-03-2",
+    "bdd": "S-RUN-03-2",
+    "module": "ai-runner",
+    "given": "續租無法在安全期限內確認",
+    "when": "處理租約失效",
+    "then": "停止整個受控程序樹且隔離工作區",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-03.feature",
+    "featureDigest": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94"
+  },
+  {
+    "id": "TDD-RUN-03-3",
+    "bdd": "S-RUN-03-3",
+    "module": "ai-runner",
+    "given": "Runner 重啟且舊程序狀態未知",
+    "when": "執行恢復對帳",
+    "then": "先隔離並確認舊程序停止再允許新執行",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-03.feature",
+    "featureDigest": "8ae2bbbee90ea2a7e73dfb8442bf92e6fa4784f623acc1310c52c9fe314abc94"
+  },
+  {
+    "id": "TDD-CMP-01-1",
+    "bdd": "S-CMP-01-1",
+    "module": "work-completion",
+    "given": "測試全綠且證據完整",
+    "when": "提交交付",
+    "then": "工單進入審查中並保存證據",
+    "feature": "docs/dispatch-plan/bdd/S-CMP-01.feature",
+    "featureDigest": "cfb6fe72a896c03f3684512491bbd67b943798bdbd106483e8892d79990a6dc4"
+  },
+  {
+    "id": "TDD-CMP-01-2",
+    "bdd": "S-CMP-01-2",
+    "module": "work-completion",
+    "given": "程序正常結束但缺測試證據",
+    "when": "提交交付",
+    "then": "拒絕成功交付且不設完成",
+    "feature": "docs/dispatch-plan/bdd/S-CMP-01.feature",
+    "featureDigest": "cfb6fe72a896c03f3684512491bbd67b943798bdbd106483e8892d79990a6dc4"
+  },
+  {
+    "id": "TDD-CMP-01-3",
+    "bdd": "S-CMP-01-3",
+    "module": "work-completion",
+    "given": "交付內容來自其他租約或版本",
+    "when": "提交交付",
+    "then": "拒絕回報且保留原工單",
+    "feature": "docs/dispatch-plan/bdd/S-CMP-01.feature",
+    "featureDigest": "cfb6fe72a896c03f3684512491bbd67b943798bdbd106483e8892d79990a6dc4"
+  },
+  {
+    "id": "TDD-CMP-02-1",
+    "bdd": "S-CMP-02-1",
+    "module": "work-completion",
+    "given": "交付已保存但回應遺失",
+    "when": "重送相同交付",
+    "then": "回傳原結果且不重複追加交付",
+    "feature": "docs/dispatch-plan/bdd/S-CMP-02.feature",
+    "featureDigest": "b9ac3f514d77e5e512ecde975540aa45acc44af59e8d3750508cb51bf32f4d24"
+  },
+  {
+    "id": "TDD-CMP-02-2",
+    "bdd": "S-CMP-02-2",
+    "module": "work-completion",
+    "given": "工單已進審查中但釋放失敗",
+    "when": "重試交付",
+    "then": "完成釋放並確認交付",
+    "feature": "docs/dispatch-plan/bdd/S-CMP-02.feature",
+    "featureDigest": "b9ac3f514d77e5e512ecde975540aa45acc44af59e8d3750508cb51bf32f4d24"
+  },
+  {
+    "id": "TDD-CMP-02-3",
+    "bdd": "S-CMP-02-3",
+    "module": "work-completion",
+    "given": "相同交付識別帶不同內容",
+    "when": "重新提交",
+    "then": "回報衝突且不覆寫原證據",
+    "feature": "docs/dispatch-plan/bdd/S-CMP-02.feature",
+    "featureDigest": "b9ac3f514d77e5e512ecde975540aa45acc44af59e8d3750508cb51bf32f4d24"
+  },
+  {
+    "id": "TDD-RUN-04-1",
+    "bdd": "S-RUN-04-1",
+    "module": "ai-runner",
+    "given": "上一張交付已確認且存在獨立就緒工單",
+    "when": "繼續領單",
+    "then": "在新工作階段執行下一張",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-04.feature",
+    "featureDigest": "31b1ffdc0d92b75eb58256aca82347c687ac4b5d2f6db97eb807b9b98b4e58b9"
+  },
+  {
+    "id": "TDD-RUN-04-2",
+    "bdd": "S-RUN-04-2",
+    "module": "ai-runner",
+    "given": "下一張相依工單尚未核准合併",
+    "when": "繼續領單",
+    "then": "不領取相依工單",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-04.feature",
+    "featureDigest": "31b1ffdc0d92b75eb58256aca82347c687ac4b5d2f6db97eb807b9b98b4e58b9"
+  },
+  {
+    "id": "TDD-RUN-04-3",
+    "bdd": "S-RUN-04-3",
+    "module": "ai-runner",
+    "given": "上一張交付結果未知",
+    "when": "繼續執行",
+    "then": "先對帳且不接新工單",
+    "feature": "docs/dispatch-plan/bdd/S-RUN-04.feature",
+    "featureDigest": "31b1ffdc0d92b75eb58256aca82347c687ac4b5d2f6db97eb807b9b98b4e58b9"
+  },
+  {
+    "id": "TDD-GOV-01-1",
+    "bdd": "S-GOV-01-1",
+    "module": "verification-approval",
+    "given": "驗證者是原開發者或同一工作階段",
+    "when": "提交驗證",
+    "then": "拒絕驗收",
+    "feature": "docs/dispatch-plan/bdd/S-GOV-01.feature",
+    "featureDigest": "0bc9d1a182dcdc099c7bb0358df8902c8652ac042b196d7d38b78ad6ce092bad"
+  },
+  {
+    "id": "TDD-GOV-01-2",
+    "bdd": "S-GOV-01-2",
+    "module": "verification-approval",
+    "given": "獨立驗證者完成實測",
+    "when": "提交證據",
+    "then": "保存驗證結果但不自動完成",
+    "feature": "docs/dispatch-plan/bdd/S-GOV-01.feature",
+    "featureDigest": "0bc9d1a182dcdc099c7bb0358df8902c8652ac042b196d7d38b78ad6ce092bad"
+  },
+  {
+    "id": "TDD-GOV-01-3",
+    "bdd": "S-GOV-01-3",
+    "module": "verification-approval",
+    "given": "獨立審查者與開發者身分不同",
+    "when": "提交審查",
+    "then": "保存審查結果且不提升角色",
+    "feature": "docs/dispatch-plan/bdd/S-GOV-01.feature",
+    "featureDigest": "0bc9d1a182dcdc099c7bb0358df8902c8652ac042b196d7d38b78ad6ce092bad"
+  },
+  {
+    "id": "TDD-GOV-02-1",
+    "bdd": "S-GOV-02-1",
+    "module": "verification-approval",
+    "given": "尚未驗證或尚未合併",
+    "when": "要求完成工單",
+    "then": "拒絕完成",
+    "feature": "docs/dispatch-plan/bdd/S-GOV-02.feature",
+    "featureDigest": "1ef91f219f69f99a16763aff0d3297b73f6fe8dff317f0bf5b7cff7fb8f3bb86"
+  },
+  {
+    "id": "TDD-GOV-02-2",
+    "bdd": "S-GOV-02-2",
+    "module": "verification-approval",
+    "given": "驗證審查核准皆通過且證據對應已合併版本",
+    "when": "授權者確認完成",
+    "then": "工單設完成與藍燈並保存歷程",
+    "feature": "docs/dispatch-plan/bdd/S-GOV-02.feature",
+    "featureDigest": "1ef91f219f69f99a16763aff0d3297b73f6fe8dff317f0bf5b7cff7fb8f3bb86"
+  },
+  {
+    "id": "TDD-GOV-02-3",
+    "bdd": "S-GOV-02-3",
+    "module": "verification-approval",
+    "given": "開發者或派工憑證嘗試核准",
+    "when": "要求完成工單",
+    "then": "拒絕且保留狀態",
+    "feature": "docs/dispatch-plan/bdd/S-GOV-02.feature",
+    "featureDigest": "1ef91f219f69f99a16763aff0d3297b73f6fe8dff317f0bf5b7cff7fb8f3bb86"
+  },
+  {
+    "id": "TDD-UI-01-1",
+    "bdd": "S-UI-01-1",
+    "module": "dispatch-scheduling",
+    "given": "管理者開啟新排程",
+    "when": "檢視設定",
+    "then": "顯示停用與並行一個的預設值",
+    "feature": "docs/dispatch-plan/bdd/S-UI-01.feature",
+    "featureDigest": "d5986ff5465ec9381321e1c52eaf6d3c589653e745a7a6a8ee7fd0cd58d6af35"
+  },
+  {
+    "id": "TDD-UI-01-2",
+    "bdd": "S-UI-01-2",
+    "module": "dispatch-scheduling",
+    "given": "開始時間無效",
+    "when": "儲存設定",
+    "then": "顯示欄位錯誤且保留舊設定",
+    "feature": "docs/dispatch-plan/bdd/S-UI-01.feature",
+    "featureDigest": "d5986ff5465ec9381321e1c52eaf6d3c589653e745a7a6a8ee7fd0cd58d6af35"
+  },
+  {
+    "id": "TDD-UI-01-3",
+    "bdd": "S-UI-01-3",
+    "module": "dispatch-scheduling",
+    "given": "唯讀使用者開啟設定",
+    "when": "嘗試變更",
+    "then": "無法儲存且顯示權限原因",
+    "feature": "docs/dispatch-plan/bdd/S-UI-01.feature",
+    "featureDigest": "d5986ff5465ec9381321e1c52eaf6d3c589653e745a7a6a8ee7fd0cd58d6af35"
+  },
+  {
+    "id": "TDD-UI-02-1",
+    "bdd": "S-UI-02-1",
+    "module": "webhook-delivery",
+    "given": "管理者設定金鑰",
+    "when": "重新開啟設定",
+    "then": "只顯示金鑰參照且不回傳秘密",
+    "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+    "featureDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731"
+  },
+  {
+    "id": "TDD-UI-02-2",
+    "bdd": "S-UI-02-2",
+    "module": "webhook-delivery",
+    "given": "管理者發出測試事件",
+    "when": "檢視結果",
+    "then": "顯示連線結果且不啟動正式工單",
+    "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+    "featureDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731"
+  },
+  {
+    "id": "TDD-UI-02-3",
+    "bdd": "S-UI-02-3",
+    "module": "webhook-delivery",
+    "given": "Runner 離線",
+    "when": "檢視設定",
+    "then": "顯示離線狀態且可暫停投遞",
+    "feature": "docs/dispatch-plan/bdd/S-UI-02.feature",
+    "featureDigest": "696b02020c0f122b528f1ae94dc9def95cff358ce98bdf84c8301f547c009731"
+  },
+  {
+    "id": "TDD-UI-03-1",
+    "bdd": "S-UI-03-1",
+    "module": "verification-approval",
+    "given": "程序已結束但交付未確認",
+    "when": "檢視工單",
+    "then": "分別呈現程序與交付狀態",
+    "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+    "featureDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123"
+  },
+  {
+    "id": "TDD-UI-03-2",
+    "bdd": "S-UI-03-2",
+    "module": "verification-approval",
+    "given": "尚未合併工單",
+    "when": "檢視關卡",
+    "then": "完成控制停用並說明原因",
+    "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+    "featureDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123"
+  },
+  {
+    "id": "TDD-UI-03-3",
+    "bdd": "S-UI-03-3",
+    "module": "verification-approval",
+    "given": "沒有執行紀錄",
+    "when": "檢視紀錄",
+    "then": "呈現空狀態且不顯示成功",
+    "feature": "docs/dispatch-plan/bdd/S-UI-03.feature",
+    "featureDigest": "13f7de59bd4f89bef329458c41856a6facd4819fa16ac0e6ca6d4b07e22d2123"
+  },
+  {
+    "id": "TDD-INT-01-1",
+    "bdd": "S-INT-01-1",
+    "module": "dispatch-integration",
+    "given": "兩張獨立已就緒工作與一張未解除相依工作",
+    "when": "完成第一張交付",
+    "then": "第二張開始且第一張等待獨立驗證並不領第三張",
+    "feature": "docs/dispatch-plan/bdd/S-INT-01.feature",
+    "featureDigest": "8d1fd0b4ca38ef3f2196e6b102933b530c274f646a0f6889f73a32e6c598c815"
+  },
+  {
+    "id": "TDD-INT-01-2",
+    "bdd": "S-INT-01-2",
+    "module": "dispatch-integration",
+    "given": "事件重送且交付中途斷線",
+    "when": "服務恢復對帳",
+    "then": "不重複執行且能確認交付",
+    "feature": "docs/dispatch-plan/bdd/S-INT-01.feature",
+    "featureDigest": "8d1fd0b4ca38ef3f2196e6b102933b530c274f646a0f6889f73a32e6c598c815"
+  },
+  {
+    "id": "TDD-INT-01-3",
+    "bdd": "S-INT-01-3",
+    "module": "dispatch-integration",
+    "given": "開發完成後由不同身分驗證審查並核准已合併版本",
+    "when": "完成驗收",
+    "then": "僅此時變藍並解除相依",
+    "feature": "docs/dispatch-plan/bdd/S-INT-01.feature",
+    "featureDigest": "8d1fd0b4ca38ef3f2196e6b102933b530c274f646a0f6889f73a32e6c598c815"
+  }
+]

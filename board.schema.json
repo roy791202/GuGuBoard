@@ -1,0 +1,679 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Dev Skills board.json",
+  "type": "object",
+  "required": [
+    "version",
+    "project",
+    "updatedAt",
+    "items"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "project": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "items": {
+      "type": "array",
+      "maxItems": 2000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "level",
+          "title",
+          "status",
+          "light"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]{1,40}$"
+          },
+          "level": {
+            "enum": [
+              "Epic",
+              "Feature",
+              "Story",
+              "Task",
+              "Deployment"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "parentId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "enum": [
+              "Backlog",
+              "Todo",
+              "In Progress",
+              "In Review",
+              "Done",
+              "Planned",
+              "Deploying",
+              "Verifying",
+              "Released",
+              "Rolled Back"
+            ]
+          },
+          "light": {
+            "enum": [
+              "Gray",
+              "Green",
+              "Yellow",
+              "Red",
+              "Blue"
+            ]
+          },
+          "lightReason": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "estimate": {
+            "type": "object",
+            "properties": {
+              "storyPoints": {
+                "type": "number",
+                "minimum": 0
+              },
+              "hours": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "additionalProperties": false
+          },
+          "owner": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "sprint": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "所屬 Sprint／里程碑 id（對應 sprints[].id）"
+          },
+          "tdd": {
+            "enum": [
+              "None",
+              "Red",
+              "Green"
+            ]
+          },
+          "prUrl": {
+            "type": "string",
+            "pattern": "^https?://"
+          },
+          "ci": {
+            "enum": [
+              "None",
+              "Pending",
+              "Green",
+              "Red"
+            ]
+          },
+          "acceptance": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bdd": {
+            "type": "array",
+            "maxItems": 50,
+            "description": "Story 的 BDD 情境",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "title",
+                "status"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9._-]{1,40}$"
+                },
+                "title": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "tests": {
+                  "type": "array",
+                  "maxItems": 50,
+                  "items": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                },
+                "status": {
+                  "enum": [
+                    "None",
+                    "Red",
+                    "Green"
+                  ]
+                }
+              }
+            }
+          },
+          "scenarioIds": {
+            "type": "array",
+            "maxItems": 50,
+            "description": "Task 涵蓋的情境 ID",
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            }
+          },
+          "notes": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "type": "object",
+              "required": [
+                "text"
+              ],
+              "properties": {
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "by": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                }
+              }
+            }
+          },
+          "remark": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "(Z|[+-]\\d\\d:\\d\\d)$"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "(Z|[+-]\\d\\d:\\d\\d)$"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "(Z|[+-]\\d\\d:\\d\\d)$"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "(Z|[+-]\\d\\d:\\d\\d)$"
+          },
+          "history": {
+            "type": "array",
+            "maxItems": 200,
+            "items": {
+              "type": "object",
+              "required": [
+                "at"
+              ],
+              "properties": {
+                "at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "from": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "to": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "by": {
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "note": {
+                  "type": "string",
+                  "maxLength": 1000
+                }
+              }
+            }
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-(alpha|beta|rc)\\.(0|[1-9]\\d*))?$"
+          },
+          "releaseType": {
+            "enum": [
+              "Major",
+              "Minor",
+              "Patch",
+              "Hotfix",
+              "RC"
+            ]
+          },
+          "environment": {
+            "enum": [
+              "Dev",
+              "Staging",
+              "Prod"
+            ]
+          },
+          "strategy": {
+            "enum": [
+              "Direct",
+              "Canary",
+              "Gradual",
+              "FeatureFlag"
+            ]
+          },
+          "rolloutPercent": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "featureFlags": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "type": "string",
+              "maxLength": 60
+            }
+          },
+          "includes": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "type": "string",
+              "maxLength": 60
+            }
+          },
+          "gitRef": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "commitSha": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F]{7,40}$"
+          },
+          "changelogUrl": {
+            "type": "string",
+            "pattern": "^https?://"
+          },
+          "buildUrl": {
+            "type": "string",
+            "pattern": "^https?://"
+          },
+          "healthChecks": {
+            "enum": [
+              "None",
+              "Pending",
+              "Green",
+              "Yellow",
+              "Red"
+            ]
+          },
+          "rollbackPlan": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "rollbackRef": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "deployedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "approvedBy": {
+            "type": "string",
+            "maxLength": 100,
+            "not": {
+              "pattern": "(?i)dev[-_ ]?agent"
+            }
+          },
+          "example": {
+            "type": "boolean",
+            "description": "true 表示這張是 board.example.json 的範例工單，可用「清除範例工單」移除"
+          },
+          "plannedStart": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$|^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d(:\\d\\d(\\.\\d+)?)?(Z|[+-]\\d\\d:\\d\\d)$",
+            "description": "預計開始（甘特圖用；沒有 startedAt 時採用）"
+          },
+          "due": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$|^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d(:\\d\\d(\\.\\d+)?)?(Z|[+-]\\d\\d:\\d\\d)$",
+            "description": "預計完成／截止日（甘特圖用；沒有 completedAt 時採用）"
+          },
+          "dependsOn": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9._-]{1,40}$"
+            },
+            "description": "相依的工單 id（甘特圖畫相依箭頭；不可循環）"
+          },
+          "assignee": {
+            "type": "string",
+            "pattern": "^(group:[a-z0-9][a-z0-9-]{0,39}|[A-Za-z0-9._-]{1,32})$",
+            "description": "負責人：看板帳號名稱，或 group:<群組 id>"
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "[L2] 進行中但暫停：可用灰燈，需填 pausedReason"
+          },
+          "pausedReason": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "tests": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "enum": [
+                  "None",
+                  "Pending",
+                  "Green",
+                  "Red"
+                ]
+              },
+              "passed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "failed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "url": {
+                "type": "string"
+              }
+            },
+            "description": "[L6] In Review 綠燈需要 tests.status = Green（或 tdd = Green）"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "level": {
+                  "const": "Task"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "estimate": {
+                  "not": {
+                    "required": [
+                      "storyPoints"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "level": {
+                  "const": "Story"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "estimate": {
+                  "not": {
+                    "required": [
+                      "hours"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "light": {
+                  "enum": [
+                    "Yellow",
+                    "Red"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "lightReason"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "level": {
+                  "const": "Deployment"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "version",
+                "releaseType",
+                "environment"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "Planned",
+                    "Deploying",
+                    "Verifying",
+                    "Released",
+                    "Rolled Back"
+                  ]
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "Backlog",
+                    "Todo",
+                    "In Progress",
+                    "In Review",
+                    "Done"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "environment": {
+                  "const": "Prod"
+                }
+              },
+              "required": [
+                "environment"
+              ]
+            },
+            "then": {
+              "required": [
+                "rollbackPlan",
+                "approvedBy"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "Done",
+                    "Released"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "light": {
+                  "const": "Blue"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "light": {
+                  "const": "Blue"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "Done",
+                    "Released"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "Rolled Back"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "light": {
+                  "const": "Red"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "releaseType": {
+                  "const": "Hotfix"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "version": {
+                  "pattern": "\\.[1-9]\\d*$"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sprints": {
+      "type": "array",
+      "maxItems": 200,
+      "description": "Sprint／里程碑（燃盡圖用）",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "start",
+          "end"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]{1,40}$"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "start": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$|^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d(:\\d\\d(\\.\\d+)?)?(Z|[+-]\\d\\d:\\d\\d)$"
+          },
+          "end": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d\\d-\\d\\d$|^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d(:\\d\\d(\\.\\d+)?)?(Z|[+-]\\d\\d:\\d\\d)$"
+          },
+          "goal": {
+            "type": "string",
+            "maxLength": 500
+          }
+        }
+      }
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "每次寫入遞增；不可倒退"
+    },
+    "removed": {
+      "type": "array",
+      "maxItems": 5000,
+      "description": "被移除工單的紀錄（不可直接刪卡）",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string"
+          },
+          "by": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "description": "健康燈號規則 [L1]–[L7] 見 validate-board.ps1 的 Test-LightRule／Test-BoardBookkeeping"
+}

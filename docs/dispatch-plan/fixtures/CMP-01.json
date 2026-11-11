@@ -1,0 +1,46 @@
+{
+  "task": "CMP-01",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-CMP-01-1",
+      "given": "測試全綠且證據完整",
+      "when": "提交交付",
+      "then": "工單進入審查中並保存證據",
+      "test": "TDD-CMP-01-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-CMP-01-2",
+      "given": "程序正常結束但缺測試證據",
+      "when": "提交交付",
+      "then": "拒絕成功交付且不設完成",
+      "test": "TDD-CMP-01-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-CMP-01-3",
+      "given": "交付內容來自其他租約或版本",
+      "when": "提交交付",
+      "then": "拒絕回報且保留原工單",
+      "test": "TDD-CMP-01-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

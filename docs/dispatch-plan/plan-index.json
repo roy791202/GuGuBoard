@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-07",
+  "approval": "Scope and detailed specification approved; production envelope not frozen",
+  "implementation": "NOT_READY_FOR_IMPLEMENTATION",
+  "modules": [
+    {
+      "id": "dispatch-scheduling",
+      "html": ".devworkflow/modules/dispatch-scheduling/module.html"
+    },
+    {
+      "id": "webhook-delivery",
+      "html": ".devworkflow/modules/webhook-delivery/module.html"
+    },
+    {
+      "id": "ai-runner",
+      "html": ".devworkflow/modules/ai-runner/module.html"
+    },
+    {
+      "id": "work-completion",
+      "html": ".devworkflow/modules/work-completion/module.html"
+    },
+    {
+      "id": "verification-approval",
+      "html": ".devworkflow/modules/verification-approval/module.html"
+    },
+    {
+      "id": "dispatch-integration",
+      "html": ".devworkflow/modules/dispatch-integration/module.html"
+    }
+  ],
+  "tickets": [
+    {
+      "id": "SCH-01",
+      "module": "dispatch-scheduling",
+      "path": "tasks/dispatch-scheduling/SCH-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "SCH-02",
+      "module": "dispatch-scheduling",
+      "path": "tasks/dispatch-scheduling/SCH-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "UI-01",
+      "module": "dispatch-scheduling",
+      "path": "tasks/dispatch-scheduling/UI-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "WH-01",
+      "module": "webhook-delivery",
+      "path": "tasks/webhook-delivery/WH-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "WH-02",
+      "module": "webhook-delivery",
+      "path": "tasks/webhook-delivery/WH-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "UI-02",
+      "module": "webhook-delivery",
+      "path": "tasks/webhook-delivery/UI-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "RUN-01",
+      "module": "ai-runner",
+      "path": "tasks/ai-runner/RUN-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "RUN-02",
+      "module": "ai-runner",
+      "path": "tasks/ai-runner/RUN-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "RUN-03",
+      "module": "ai-runner",
+      "path": "tasks/ai-runner/RUN-03.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "RUN-04",
+      "module": "ai-runner",
+      "path": "tasks/ai-runner/RUN-04.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "CMP-01",
+      "module": "work-completion",
+      "path": "tasks/work-completion/CMP-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "CMP-02",
+      "module": "work-completion",
+      "path": "tasks/work-completion/CMP-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "GOV-01",
+      "module": "verification-approval",
+      "path": "tasks/verification-approval/GOV-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "GOV-02",
+      "module": "verification-approval",
+      "path": "tasks/verification-approval/GOV-02.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "UI-03",
+      "module": "verification-approval",
+      "path": "tasks/verification-approval/UI-03.json",
+      "status": "Backlog",
+      "light": "Gray"
+    },
+    {
+      "id": "INT-01",
+      "module": "dispatch-integration",
+      "path": "tasks/dispatch-integration/INT-01.json",
+      "status": "Backlog",
+      "light": "Gray"
+    }
+  ]
+}

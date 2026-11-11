@@ -1,0 +1,46 @@
+{
+  "task": "WH-02",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-WH-02-1",
+      "given": "事件已失敗一次",
+      "when": "到達下一重試時間",
+      "then": "使用相同事件識別重新投遞",
+      "test": "TDD-WH-02-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-WH-02-2",
+      "given": "事件已連續失敗五次",
+      "when": "評估重試",
+      "then": "停止自動重試並顯示人工處理",
+      "test": "TDD-WH-02-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-WH-02-3",
+      "given": "服務在重試前重啟",
+      "when": "恢復投遞",
+      "then": "保留次數與下次時間",
+      "test": "TDD-WH-02-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

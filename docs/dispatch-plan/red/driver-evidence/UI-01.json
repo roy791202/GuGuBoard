@@ -1,0 +1,137 @@
+{
+  "date": "2026-11-07T00:12:12.018361+08:00",
+  "fixtureControls": {
+    "rpcPortInvocation": "PASS",
+    "rpcInjectedFault": "PASS",
+    "storeFault": "PASS",
+    "claimBarrier": "PASS",
+    "httpTimeout": "PASS",
+    "httpDisconnect": "PASS",
+    "realChildLifecycle": "PASS",
+    "durableReopen": "PASS",
+    "signedBytes": "PASS"
+  },
+  "results": [
+    {
+      "id": "TDD-UI-01-1",
+      "bdd": "S-UI-01-1",
+      "status": "INVALID_RED",
+      "error": "can only concatenate str (not \"NoneType\") to str",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\GuGuBoard\\docs\\dispatch-plan\\red\\run_drivers.py\", line 136, in run_case\n    if p.returncode:raise FixtureError('browser driver:'+p.stderr)\nTypeError: can only concatenate str (not \"NoneType\") to str\n",
+      "checks": []
+    },
+    {
+      "id": "TDD-UI-01-2",
+      "bdd": "S-UI-01-2",
+      "status": "INVALID_RED",
+      "error": "can only concatenate str (not \"NoneType\") to str",
+      "traceback": "Traceback (most recent call last):\n  File \"D:\\GuGuBoard\\docs\\dispatch-plan\\red\\run_drivers.py\", line 136, in run_case\n    if p.returncode:raise FixtureError('browser driver:'+p.stderr)\nTypeError: can only concatenate str (not \"NoneType\") to str\n",
+      "checks": []
+    },
+    {
+      "id": "TDD-UI-01-3",
+      "bdd": "S-UI-01-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "viewer save disabled",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "viewer cannot write config",
+          "actual": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "expected": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetScheduleView",
+          "pid": 8964,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SaveScheduleView",
+          "pid": 27392,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-01-3.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    }
+  ],
+  "red": 1,
+  "passed": 0,
+  "invalid": 2,
+  "productionChanged": false,
+  "independentAcceptance": "NOT RUN",
+  "qualification": "RED against test-only empty application skeleton. Unreached fault ports demonstrate missing orchestration, not exercised fault handling. Real browser drives test-only UI, not product UI."
+}

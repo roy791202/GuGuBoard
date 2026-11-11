@@ -1,0 +1,512 @@
+{
+  "version": 1,
+  "project": "SGenAxis 線上點餐與追蹤",
+  "updatedAt": "2026-11-01T11:00:00+08:00",
+  "items": [
+    {
+      "id": "E-1",
+      "level": "Epic",
+      "title": "建立線上點餐與追蹤系統",
+      "parentId": null,
+      "status": "In Progress",
+      "light": "Yellow",
+      "lightReason": "F-2 有風險",
+      "owner": "Kuan Yu",
+      "role": "使用者",
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "startedAt": "2026-10-28T10:00:00+08:00",
+      "example": true,
+      "due": "2026-11-20"
+    },
+    {
+      "id": "F-1",
+      "level": "Feature",
+      "title": "即時訂單追蹤功能",
+      "parentId": "E-1",
+      "status": "In Progress",
+      "light": "Yellow",
+      "sprint": "S1",
+      "lightReason": "S-1 有風險",
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "startedAt": "2026-10-28T10:00:00+08:00",
+      "example": true,
+      "due": "2026-11-06"
+    },
+    {
+      "id": "F-2",
+      "level": "Feature",
+      "title": "線上付款",
+      "parentId": "E-1",
+      "status": "In Progress",
+      "light": "Yellow",
+      "lightReason": "S-3 估算超支",
+      "sprint": "S2",
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "startedAt": "2026-10-28T10:00:00+08:00",
+      "example": true,
+      "plannedStart": "2026-11-02",
+      "due": "2026-11-20"
+    },
+    {
+      "id": "S-1",
+      "level": "Story",
+      "title": "作為消費者，我想要在地圖上看到外送員的即時位置",
+      "parentId": "F-1",
+      "status": "In Progress",
+      "light": "Yellow",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "sprint": "S1",
+      "acceptance": [
+        "地圖每 5 秒更新位置",
+        "外送員離線時顯示最後位置"
+      ],
+      "lightReason": "T-3 有風險",
+      "bdd": [
+        {
+          "id": "S-1-1",
+          "title": "Given 訂單已出餐 When 消費者開啟追蹤頁 Then 地圖顯示外送員目前位置",
+          "tests": [
+            "s_1_1_顯示外送員位置",
+            "track.feature:S-1-1"
+          ],
+          "status": "Green"
+        },
+        {
+          "id": "S-1-2",
+          "title": "Given 外送員移動 When 經過 5 秒 Then 地圖標記更新到新位置",
+          "tests": [
+            "s_1_2_每5秒更新"
+          ],
+          "status": "Green"
+        },
+        {
+          "id": "S-1-3",
+          "title": "Given 外送員離線 When 消費者查看 Then 顯示最後位置與離線提示",
+          "tests": [
+            "s_1_3_離線顯示最後位置"
+          ],
+          "status": "Red"
+        },
+        {
+          "id": "S-1-4",
+          "title": "Given 消費者 A When 查詢消費者 B 的訂單位置 Then 回傳 403（BOLA）",
+          "tests": [
+            "s_1_4_拒絕他人訂單"
+          ],
+          "status": "Green"
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-10-30T15:20:00+08:00",
+          "by": "高階模型",
+          "text": "決策：位置推播用 WebSocket，斷線時退回 5 秒輪詢。"
+        },
+        {
+          "at": "2026-11-01T10:05:00+08:00",
+          "by": "dev-agent-3",
+          "text": "阻擋：S-1-3 需要離線事件，\n等 T-3 插值完成後再接。"
+        }
+      ],
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "startedAt": "2026-10-28T10:00:00+08:00",
+      "history": [
+        {
+          "at": "2026-10-28T10:00:00+08:00",
+          "from": "Todo / Gray",
+          "to": "In Progress / Green",
+          "by": "高階模型"
+        },
+        {
+          "at": "2026-11-01T09:30:00+08:00",
+          "from": "Green",
+          "to": "Yellow",
+          "by": "高階模型",
+          "note": "T-3 TDD Red 超過 2 小時"
+        }
+      ],
+      "example": true,
+      "due": "2026-11-06"
+    },
+    {
+      "id": "T-1",
+      "level": "Task",
+      "title": "串接 Google Maps API",
+      "parentId": "S-1",
+      "status": "Done",
+      "light": "Blue",
+      "estimate": {
+        "hours": 6
+      },
+      "owner": "dev-agent-01",
+      "role": "開發",
+      "sprint": "S1",
+      "tdd": "Green",
+      "prUrl": "https://github.com/example/sgenaxis/pull/12",
+      "ci": "Green",
+      "scenarioIds": [
+        "S-1-1"
+      ],
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "startedAt": "2026-10-28T10:00:00+08:00",
+      "completedAt": "2026-10-30T17:40:00+08:00",
+      "history": [
+        {
+          "at": "2026-10-28T10:00:00+08:00",
+          "from": "Todo",
+          "to": "In Progress",
+          "by": "dev-agent-01"
+        },
+        {
+          "at": "2026-10-30T11:00:00+08:00",
+          "from": "In Progress",
+          "to": "In Review",
+          "by": "dev-agent-01",
+          "note": "READY_FOR_TDD"
+        },
+        {
+          "at": "2026-10-30T17:40:00+08:00",
+          "from": "In Review / Green",
+          "to": "Done / Blue",
+          "by": "高階模型",
+          "note": "獨立驗證通過，PR #12 已合併"
+        }
+      ],
+      "example": true
+    },
+    {
+      "id": "T-2",
+      "level": "Task",
+      "title": "位置推播 WebSocket",
+      "parentId": "S-1",
+      "status": "In Review",
+      "light": "Green",
+      "estimate": {
+        "hours": 8
+      },
+      "owner": "verify-agent-02",
+      "role": "驗證",
+      "sprint": "S1",
+      "tdd": "Green",
+      "prUrl": "https://github.com/example/sgenaxis/pull/13",
+      "ci": "Green",
+      "scenarioIds": [
+        "S-1-2",
+        "S-1-4"
+      ],
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "startedAt": "2026-10-28T10:00:00+08:00",
+      "example": true,
+      "dependsOn": [
+        "T-1"
+      ],
+      "assignee": "dev"
+    },
+    {
+      "id": "T-3",
+      "level": "Task",
+      "title": "撰寫單元測試：座標插值",
+      "parentId": "S-1",
+      "status": "In Progress",
+      "light": "Yellow",
+      "lightReason": "TDD Red 超過 2 小時",
+      "estimate": {
+        "hours": 3
+      },
+      "owner": "dev-agent-03",
+      "role": "開發",
+      "sprint": "S1",
+      "tdd": "Red",
+      "ci": "Pending",
+      "scenarioIds": [
+        "S-1-3"
+      ],
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "startedAt": "2026-10-28T10:00:00+08:00",
+      "example": true,
+      "dependsOn": [
+        "T-2"
+      ],
+      "due": "2026-11-05"
+    },
+    {
+      "id": "S-3",
+      "level": "Story",
+      "title": "作為消費者，我想要用信用卡付款",
+      "parentId": "F-2",
+      "status": "In Progress",
+      "light": "Yellow",
+      "lightReason": "估算 8 SP 已超支",
+      "estimate": {
+        "storyPoints": 8
+      },
+      "sprint": "S2",
+      "bdd": [
+        {
+          "id": "S-3-1",
+          "title": "Given 有效信用卡 When 付款 Then 訂單變成已付款",
+          "tests": [
+            "s_3_1_付款成功"
+          ],
+          "status": "Red"
+        },
+        {
+          "id": "S-3-2",
+          "title": "Given 金額為 0 或負數 When 付款 Then 拒絕並顯示錯誤",
+          "tests": [
+            "s_3_2_金額邊界"
+          ],
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "startedAt": "2026-10-28T10:00:00+08:00",
+      "example": true,
+      "due": "2026-11-20"
+    },
+    {
+      "id": "T-4",
+      "level": "Task",
+      "title": "付款閘道 Port/Adapter",
+      "parentId": "S-3",
+      "status": "In Progress",
+      "light": "Yellow",
+      "lightReason": "已退回一次",
+      "estimate": {
+        "hours": 10
+      },
+      "owner": "dev-agent-04",
+      "role": "開發",
+      "sprint": "S2",
+      "tdd": "Red",
+      "ci": "Pending",
+      "remark": "付款閘道沙盒帳號申請中",
+      "scenarioIds": [
+        "S-3-1"
+      ],
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "startedAt": "2026-10-28T10:00:00+08:00",
+      "example": true,
+      "assignee": "group:backend",
+      "due": "2026-11-12"
+    },
+    {
+      "id": "T-5",
+      "level": "Task",
+      "title": "退款流程",
+      "parentId": "S-3",
+      "status": "Todo",
+      "light": "Gray",
+      "estimate": {
+        "hours": 5
+      },
+      "sprint": "S2",
+      "tdd": "None",
+      "scenarioIds": [
+        "S-3-2"
+      ],
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "example": true,
+      "plannedStart": "2026-11-12",
+      "due": "2026-11-16",
+      "dependsOn": [
+        "T-4"
+      ],
+      "assignee": "group:backend"
+    },
+    {
+      "id": "S-4",
+      "level": "Story",
+      "title": "作為店家，我想要匯出月報表",
+      "parentId": "F-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "lightReason": "On Hold：優先級調整",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "createdAt": "2026-10-26T09:00:00+08:00",
+      "updatedAt": "2026-11-01T09:30:00+08:00",
+      "example": true,
+      "plannedStart": "2026-11-16",
+      "due": "2026-11-20"
+    },
+    {
+      "level": "Deployment",
+      "parentId": null,
+      "createdAt": "2026-10-29T09:00:00+08:00",
+      "updatedAt": "2026-11-01T10:30:00+08:00",
+      "id": "D-1",
+      "title": "Hotfix v1.2.1：修正付款金額四捨五入",
+      "status": "Released",
+      "light": "Blue",
+      "version": "v1.2.1",
+      "releaseType": "Hotfix",
+      "environment": "Prod",
+      "strategy": "Direct",
+      "rolloutPercent": 100,
+      "healthChecks": "Green",
+      "includes": [
+        "T-6"
+      ],
+      "gitRef": "hotfix/1.2.1 → tag v1.2.1",
+      "commitSha": "9f3c2a1",
+      "changelogUrl": "https://github.com/example/sgenaxis/blob/main/CHANGELOG.md#121",
+      "rollbackPlan": "Revert 合併 commit，updater manifest 指回 v1.2.0",
+      "rollbackRef": "v1.2.0",
+      "deployedAt": "2026-10-29T22:10:00+08:00",
+      "approvedBy": "Kuan Yu",
+      "startedAt": "2026-10-29T20:00:00+08:00",
+      "completedAt": "2026-10-29T23:00:00+08:00",
+      "history": [
+        {
+          "at": "2026-10-29T20:00:00+08:00",
+          "from": "Planned",
+          "to": "Deploying",
+          "by": "高階模型",
+          "note": "Prod 金額錯誤，緊急修復"
+        },
+        {
+          "at": "2026-10-29T22:10:00+08:00",
+          "from": "Deploying",
+          "to": "Verifying",
+          "by": "verify-agent-02"
+        },
+        {
+          "at": "2026-10-29T23:00:00+08:00",
+          "from": "Verifying",
+          "to": "Released / Blue",
+          "by": "Kuan Yu",
+          "note": "已 back-merge 回 main"
+        }
+      ],
+      "example": true
+    },
+    {
+      "level": "Deployment",
+      "parentId": null,
+      "createdAt": "2026-10-29T09:00:00+08:00",
+      "updatedAt": "2026-11-01T10:30:00+08:00",
+      "id": "D-2",
+      "title": "v1.3.0-rc.1 上 Staging（即時追蹤）",
+      "status": "Released",
+      "light": "Blue",
+      "version": "v1.3.0-rc.1",
+      "releaseType": "RC",
+      "environment": "Staging",
+      "strategy": "Direct",
+      "healthChecks": "Green",
+      "includes": [
+        "S-1",
+        "T-1",
+        "T-2"
+      ],
+      "gitRef": "tag v1.3.0-rc.1",
+      "commitSha": "4b7e9d0",
+      "buildUrl": "https://github.com/example/sgenaxis/actions/runs/1201",
+      "deployedAt": "2026-10-31T15:00:00+08:00",
+      "approvedBy": "高階模型",
+      "startedAt": "2026-10-31T14:00:00+08:00",
+      "completedAt": "2026-10-31T18:00:00+08:00",
+      "example": true,
+      "dependsOn": [
+        "D-1"
+      ]
+    },
+    {
+      "level": "Deployment",
+      "parentId": null,
+      "createdAt": "2026-10-29T09:00:00+08:00",
+      "updatedAt": "2026-11-01T10:30:00+08:00",
+      "id": "D-3",
+      "title": "v1.3.0 Gradual Rollout 到 Prod",
+      "status": "Verifying",
+      "light": "Yellow",
+      "lightReason": "5% 階段崩潰率 0.4%，觀察中",
+      "version": "v1.3.0",
+      "releaseType": "Minor",
+      "environment": "Prod",
+      "strategy": "Gradual",
+      "rolloutPercent": 5,
+      "healthChecks": "Yellow",
+      "featureFlags": [
+        "live_tracking_map"
+      ],
+      "includes": [
+        "S-1",
+        "T-1",
+        "T-2",
+        "D-2"
+      ],
+      "gitRef": "tag v1.3.0",
+      "commitSha": "a1c5e77",
+      "changelogUrl": "https://github.com/example/sgenaxis/blob/main/CHANGELOG.md#130",
+      "buildUrl": "https://github.com/example/sgenaxis/actions/runs/1215",
+      "rollbackPlan": "關閉 live_tracking_map 旗標；若仍異常，updater manifest 指回 v1.2.1 並 Revert",
+      "rollbackRef": "v1.2.1",
+      "deployedAt": "2026-11-01T10:00:00+08:00",
+      "approvedBy": "Kuan Yu",
+      "startedAt": "2026-11-01T09:40:00+08:00",
+      "history": [
+        {
+          "at": "2026-11-01T09:40:00+08:00",
+          "from": "Planned",
+          "to": "Deploying",
+          "by": "高階模型"
+        },
+        {
+          "at": "2026-11-01T10:00:00+08:00",
+          "from": "Deploying",
+          "to": "Verifying",
+          "by": "高階模型",
+          "note": "stable 頻道 5% 放量"
+        },
+        {
+          "at": "2026-11-01T10:30:00+08:00",
+          "from": "Green",
+          "to": "Yellow",
+          "by": "verify-agent-02",
+          "note": "崩潰率 0.4% > 預算 0.2%，暫停放量"
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-11-01T10:35:00+08:00",
+          "by": "高階模型",
+          "text": "決策：維持 5%，等 T-3 修正後再升到 50%。"
+        }
+      ],
+      "example": true,
+      "dependsOn": [
+        "D-2"
+      ],
+      "due": "2026-11-04"
+    }
+  ],
+  "sprints": [
+    {
+      "id": "S1",
+      "name": "Sprint 1：即時追蹤",
+      "start": "2026-10-26",
+      "end": "2026-11-06"
+    },
+    {
+      "id": "S2",
+      "name": "Sprint 2：線上付款",
+      "start": "2026-11-09",
+      "end": "2026-11-20"
+    }
+  ]
+}

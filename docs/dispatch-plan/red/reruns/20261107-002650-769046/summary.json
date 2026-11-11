@@ -1,0 +1,31 @@
+{
+  "executionStatus": "FAIL",
+  "executed": 48,
+  "passed": 0,
+  "failedAssertionsCases": 48,
+  "infrastructureOrFixtureErrors": 0,
+  "exitCode": 1,
+  "fixtureControls": {
+    "rpcPortInvocation": "PASS",
+    "rpcInjectedFault": "PASS",
+    "storeFault": "PASS",
+    "claimBarrier": "PASS",
+    "httpTimeout": "PASS",
+    "httpDisconnect": "PASS",
+    "realChildLifecycle": "PASS",
+    "durableReopen": "PASS",
+    "signedBytes": "PASS"
+  },
+  "browserScreenshots": 9,
+  "priorIndependentQualityVerdicts": {
+    "INVALID_RED": 2,
+    "VALID_RED": 11,
+    "PARTIAL_RED": 35
+  },
+  "qualityVerdictsRequalified": false,
+  "sourcesOriginalEvidenceAndReviewUnchanged": true,
+  "productOrTestCodeChanged": false,
+  "boardStatusChanged": false,
+  "readyForAIImplementation": false,
+  "method": "Re-execution by original development agent; not independent acceptance"
+}

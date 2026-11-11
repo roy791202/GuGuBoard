@@ -1,0 +1,5 @@
+#!/bin/sh
+# AI Dev Skills：Conventional Commits 檢查
+PS=$(command -v pwsh || command -v powershell || command -v powershell.exe)
+[ -z "$PS" ] && { echo "找不到 PowerShell，無法執行 commit-msg 檢查" >&2; exit 1; }
+exec "$PS" -NoProfile -ExecutionPolicy Bypass -File "$(git rev-parse --show-toplevel)/.githooks/check.ps1" -Mode commit-msg -MsgFile "$1"

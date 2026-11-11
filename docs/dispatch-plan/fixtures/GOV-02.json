@@ -1,0 +1,46 @@
+{
+  "task": "GOV-02",
+  "clock": "2026-11-06T09:00:00+08:00",
+  "project": "fixture-guguboard",
+  "ticket": "FIX-1",
+  "nextIndependent": "FIX-2",
+  "dependent": "FIX-3",
+  "eventId": "evt-fixture-1",
+  "completionId": "cmp-fixture-1",
+  "identities": {
+    "developer": "dev-1",
+    "verifier": "qa-1",
+    "reviewer": "review-1",
+    "approver": "human-1"
+  },
+  "secrets": "test doubles only; no real credentials",
+  "cases": [
+    {
+      "id": "S-GOV-02-1",
+      "given": "尚未驗證或尚未合併",
+      "when": "要求完成工單",
+      "then": "拒絕完成",
+      "test": "TDD-GOV-02-1",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-GOV-02-2",
+      "given": "驗證審查核准皆通過且證據對應已合併版本",
+      "when": "授權者確認完成",
+      "then": "工單設完成與藍燈並保存歷程",
+      "test": "TDD-GOV-02-2",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    },
+    {
+      "id": "S-GOV-02-3",
+      "given": "開發者或派工憑證嘗試核准",
+      "when": "要求完成工單",
+      "then": "拒絕且保留狀態",
+      "test": "TDD-GOV-02-3",
+      "level": "L2",
+      "result": "BEHAVIOR_RED"
+    }
+  ]
+}

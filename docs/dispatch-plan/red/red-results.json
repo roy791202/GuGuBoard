@@ -1,0 +1,875 @@
+{
+  "independentAcceptance": "NOT RUN",
+  "invalid": 0,
+  "layer": "test-only contract skeleton",
+  "red": 48,
+  "passed": 0,
+  "productionCodeChanged": false,
+  "date": "2026-11-07T00:01:16.0243509+08:00",
+  "results": [
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "NotDue",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-SCH-01-1",
+      "bdd": "S-SCH-01-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Scheduled",
+          "field": "outcome"
+        },
+        {
+          "actual": 0,
+          "expected": 1,
+          "field": "eventCount"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-SCH-01-2",
+      "bdd": "S-SCH-01-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "configurationPreserved"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-SCH-01-3",
+      "bdd": "S-SCH-01-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Paused",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-SCH-02-1",
+      "bdd": "S-SCH-02-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Reconciled",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 1,
+          "field": "evaluationCount"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-SCH-02-2",
+      "bdd": "S-SCH-02-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Unavailable",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "cursorPreserved"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-SCH-02-3",
+      "bdd": "S-SCH-02-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Delivered",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": false,
+          "field": "workCompleted"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-WH-01-1",
+      "bdd": "S-WH-01-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "RetryPending",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "eventPreserved"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-WH-01-2",
+      "bdd": "S-WH-01-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 0,
+          "field": "httpCalls"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-WH-01-3",
+      "bdd": "S-WH-01-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Retried",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "evt-1",
+          "field": "eventId"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-WH-02-1",
+      "bdd": "S-WH-02-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "ManualRequired",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 0,
+          "field": "httpCalls"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-WH-02-2",
+      "bdd": "S-WH-02-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Recovered",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 2,
+          "field": "attempt"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "2026-11-06T09:00:30+08:00",
+          "field": "nextAt"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-WH-02-3",
+      "bdd": "S-WH-02-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "AcceptedDuplicate",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 1,
+          "field": "inboxCount"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-01-1",
+      "bdd": "S-RUN-01-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Unauthorized",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-01-2",
+      "bdd": "S-RUN-01-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Unavailable",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": false,
+          "field": "acknowledged"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-01-3",
+      "bdd": "S-RUN-01-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Started",
+          "field": "outcome"
+        },
+        {
+          "actual": 0,
+          "expected": 1,
+          "field": "processStarts"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-02-1",
+      "bdd": "S-RUN-02-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "StartFailed",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "leaseReleased"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-02-2",
+      "bdd": "S-RUN-02-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Idle",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-02-3",
+      "bdd": "S-RUN-02-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Renewed",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 1,
+          "field": "renewCalls"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-03-1",
+      "bdd": "S-RUN-03-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Stopped",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "processTreeExited"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-03-2",
+      "bdd": "S-RUN-03-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Quarantined",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-03-3",
+      "bdd": "S-RUN-03-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Confirmed",
+          "field": "outcome"
+        },
+        {
+          "actual": "In Progress",
+          "expected": "In Review",
+          "field": "ticketStatus"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-CMP-01-1",
+      "bdd": "S-CMP-01-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-CMP-01-2",
+      "bdd": "S-CMP-01-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Conflict",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-CMP-01-3",
+      "bdd": "S-CMP-01-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Confirmed",
+          "field": "outcome"
+        },
+        {
+          "actual": 0,
+          "expected": 1,
+          "field": "completionCount"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-CMP-02-1",
+      "bdd": "S-CMP-02-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Confirmed",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "leaseReleased"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-CMP-02-2",
+      "bdd": "S-CMP-02-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Conflict",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "originalEvidencePreserved"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-CMP-02-3",
+      "bdd": "S-CMP-02-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Started",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "FIX-2",
+          "field": "ticketId"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "newSession"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-04-1",
+      "bdd": "S-RUN-04-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Idle",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-04-2",
+      "bdd": "S-RUN-04-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "ReconcileRequired",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-RUN-04-3",
+      "bdd": "S-RUN-04-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Unauthorized",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 0,
+          "field": "verificationCount"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-GOV-01-1",
+      "bdd": "S-GOV-01-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "VerificationSaved",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-GOV-01-2",
+      "bdd": "S-GOV-01-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "ReviewSaved",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "roleUnchanged"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-GOV-01-3",
+      "bdd": "S-GOV-01-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "GateRejected",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-GOV-02-1",
+      "bdd": "S-GOV-02-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Approved",
+          "field": "outcome"
+        },
+        {
+          "actual": "In Review",
+          "expected": "Done",
+          "field": "ticketStatus"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "Blue",
+          "field": "light"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-GOV-02-2",
+      "bdd": "S-GOV-02-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Unauthorized",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-GOV-02-3",
+      "bdd": "S-GOV-02-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "View",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": false,
+          "field": "enabled"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 1,
+          "field": "maxConcurrent"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-UI-01-1",
+      "bdd": "S-UI-01-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "notBefore",
+          "field": "fieldError"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "configurationPreserved"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-UI-01-2",
+      "bdd": "S-UI-01-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Unauthorized",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": false,
+          "field": "saveEnabled"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-UI-01-3",
+      "bdd": "S-UI-01-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "View",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "test-key-1",
+          "field": "keyRef"
+        },
+        {
+          "actual": "<absent>",
+          "expected": false,
+          "field": "secretReturned"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-UI-02-1",
+      "bdd": "S-UI-02-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "HealthChecked",
+          "field": "outcome"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-UI-02-2",
+      "bdd": "S-UI-02-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "View",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "Offline",
+          "field": "runnerStatus"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "pauseEnabled"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-UI-02-3",
+      "bdd": "S-UI-02-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "View",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "Exited",
+          "field": "processStatus"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "Unknown",
+          "field": "completionStatus"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-UI-03-1",
+      "bdd": "S-UI-03-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "View",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": false,
+          "field": "completeEnabled"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "PR_NOT_MERGED",
+          "field": "disabledReason"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-UI-03-2",
+      "bdd": "S-UI-03-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "View",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "empty"
+        },
+        {
+          "actual": "<absent>",
+          "expected": false,
+          "field": "successShown"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-UI-03-3",
+      "bdd": "S-UI-03-3"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "NextStarted",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "FIX-2",
+          "field": "ticketId"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "In Review",
+          "field": "firstStatus"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 0,
+          "field": "dependentStarts"
+        }
+      ],
+      "assertions": 4,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-INT-01-1",
+      "bdd": "S-INT-01-1"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Confirmed",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": 1,
+          "field": "firstProcessStarts"
+        }
+      ],
+      "assertions": 2,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-INT-01-2",
+      "bdd": "S-INT-01-2"
+    },
+    {
+      "mismatches": [
+        {
+          "actual": "NotImplemented",
+          "expected": "Approved",
+          "field": "outcome"
+        },
+        {
+          "actual": "<absent>",
+          "expected": "Blue",
+          "field": "light"
+        },
+        {
+          "actual": "<absent>",
+          "expected": true,
+          "field": "dependentUnblocked"
+        }
+      ],
+      "assertions": 3,
+      "status": "BEHAVIOR_RED",
+      "id": "TDD-INT-01-3",
+      "bdd": "S-INT-01-3"
+    }
+  ]
+}

@@ -1,0 +1,8108 @@
+{
+  "date": "2026-11-07T00:15:51.361505+08:00",
+  "fixtureControls": {
+    "rpcPortInvocation": "PASS",
+    "rpcInjectedFault": "PASS",
+    "storeFault": "PASS",
+    "claimBarrier": "PASS",
+    "httpTimeout": "PASS",
+    "httpDisconnect": "PASS",
+    "realChildLifecycle": "PASS",
+    "durableReopen": "PASS",
+    "signedBytes": "PASS"
+  },
+  "results": [
+    {
+      "id": "TDD-SCH-01-1",
+      "bdd": "S-SCH-01-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "no event before boundary",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "clock consulted",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "NotDue",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "EvaluateDue",
+          "pid": 26700,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "notBefore": 1794013200,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-SCH-01-2",
+      "bdd": "S-SCH-01-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "one durable event after two invocations",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "EvaluateDue",
+          "pid": 29716,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "EvaluateDue",
+          "pid": 14644,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "notBefore": 1794013200,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-SCH-01-3",
+      "bdd": "S-SCH-01-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "invalid config preserves persisted state",
+          "actual": {
+            "enabled": true,
+            "notBefore": 1794013200,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "expected": {
+            "enabled": true,
+            "notBefore": 1794013200,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ConfigureSchedule",
+          "pid": 28572,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "notBefore": 1794013200,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-SCH-02-1",
+      "bdd": "S-SCH-02-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "paused config read through store",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "paused schedule emits no event",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "EvaluateDue",
+          "pid": 7016,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "paused": true,
+          "notBefore": 1794013199,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-SCH-02-2",
+      "bdd": "S-SCH-02-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "one current evaluation after reopen",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "cursor catches up",
+          "actual": 1794013020,
+          "expected": 1794013200,
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ReconcileSchedule",
+          "pid": 22632,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "notBefore": 1794013020,
+          "intervalSec": 60,
+          "revision": 1
+        },
+        "cursor": 1794013020,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-SCH-02-3",
+      "bdd": "S-SCH-02-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "commit fault reached",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "failed atomic write preserves snapshot",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": true,
+              "notBefore": 1794013200,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": true,
+              "notBefore": 1794013200,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Unavailable",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "EvaluateDue",
+          "pid": 22932,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {
+        "Store.Commit": 0
+      },
+      "missingFaultPaths": [
+        "Store.Commit"
+      ],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "notBefore": 1794013200,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-WH-01-1",
+      "bdd": "S-WH-01-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "real HTTP received request",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "durable delivery receipt",
+          "actual": "pending",
+          "expected": "delivered",
+          "pass": false
+        },
+        {
+          "assertion": "not work completion",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "DeliverPending",
+          "pid": 24604,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "status": "pending",
+            "attempt": 0
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-WH-01-2",
+      "bdd": "S-WH-01-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "timeout peer contacted",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "retry state persisted",
+          "actual": "pending",
+          "expected": "retry",
+          "pass": false
+        },
+        {
+          "assertion": "event preserved",
+          "actual": "evt-1",
+          "expected": "evt-1",
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "DeliverPending",
+          "pid": 29432,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "status": "pending",
+            "attempt": 0
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-WH-01-3",
+      "bdd": "S-WH-01-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "no rejected network contact",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "config unchanged",
+          "actual": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "expected": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ConfigureTarget",
+          "pid": 21340,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "status": "pending",
+            "attempt": 0
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-WH-02-1",
+      "bdd": "S-WH-02-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "no early retry",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "actual retry at boundary",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "stable event ID",
+          "actual": "evt-1",
+          "expected": "evt-1",
+          "pass": true
+        },
+        {
+          "assertion": "stable body",
+          "actual": "immutable-payload",
+          "expected": "immutable-payload",
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RetryDue",
+          "pid": 26124,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RetryDue",
+          "pid": 20976,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "body": "immutable-payload",
+            "status": "retry",
+            "attempt": 1,
+            "nextAt": 1794013210
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-WH-02-2",
+      "bdd": "S-WH-02-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "bounded retries",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "durable dead letter",
+          "actual": "retry",
+          "expected": "manual",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RetryDue",
+          "pid": 29876,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "body": "immutable-payload",
+            "status": "retry",
+            "attempt": 5,
+            "nextAt": 1794013200
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-WH-02-3",
+      "bdd": "S-WH-02-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "retry count survives reopen",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "retry time survives reopen",
+          "actual": 1794013210,
+          "expected": 1794013210,
+          "pass": true
+        },
+        {
+          "assertion": "recovered retry delivered",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ReconcileDelivery",
+          "pid": 8936,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RetryDue",
+          "pid": 14060,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [
+          {
+            "eventId": "evt-1",
+            "body": "immutable-payload",
+            "status": "retry",
+            "attempt": 1,
+            "nextAt": 1794013210
+          }
+        ],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-01-1",
+      "bdd": "S-RUN-01-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "durable HTTP dedup",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "first acceptance",
+          "actual": 200,
+          "expected": 202,
+          "pass": false
+        },
+        {
+          "assertion": "duplicate status",
+          "actual": 200,
+          "expected": 200,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "AcceptWakeup",
+          "pid": 24580,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "AcceptWakeup",
+          "pid": 26704,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-01-2",
+      "bdd": "S-RUN-01-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "tampered signed bytes rejected",
+          "actual": 200,
+          "expected": 401,
+          "pass": false
+        },
+        {
+          "assertion": "stale signed bytes rejected",
+          "actual": 200,
+          "expected": 401,
+          "pass": false
+        },
+        {
+          "assertion": "no unauthorized process",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "no unauthorized inbox",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "AcceptWakeup",
+          "pid": 9980,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "AcceptWakeup",
+          "pid": 13280,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-01-3",
+      "bdd": "S-RUN-01-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "durability fault reached",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "failed persistence no ack",
+          "actual": 200,
+          "expected": 503,
+          "pass": false
+        },
+        {
+          "assertion": "existing inbox preserved",
+          "actual": [
+            {
+              "eventId": "existing",
+              "body": "preserve"
+            }
+          ],
+          "expected": [
+            {
+              "eventId": "existing",
+              "body": "preserve"
+            }
+          ],
+          "pass": true
+        },
+        {
+          "assertion": "full inbox backpressure",
+          "actual": 200,
+          "expected": 429,
+          "pass": false
+        },
+        {
+          "assertion": "bounded inbox",
+          "actual": 1000,
+          "expected": 1000,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "AcceptWakeup",
+          "pid": 13816,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "AcceptWakeup",
+          "pid": 28900,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [
+          {
+            "eventId": "old-0"
+          },
+          {
+            "eventId": "old-1"
+          },
+          {
+            "eventId": "old-2"
+          },
+          {
+            "eventId": "old-3"
+          },
+          {
+            "eventId": "old-4"
+          },
+          {
+            "eventId": "old-5"
+          },
+          {
+            "eventId": "old-6"
+          },
+          {
+            "eventId": "old-7"
+          },
+          {
+            "eventId": "old-8"
+          },
+          {
+            "eventId": "old-9"
+          },
+          {
+            "eventId": "old-10"
+          },
+          {
+            "eventId": "old-11"
+          },
+          {
+            "eventId": "old-12"
+          },
+          {
+            "eventId": "old-13"
+          },
+          {
+            "eventId": "old-14"
+          },
+          {
+            "eventId": "old-15"
+          },
+          {
+            "eventId": "old-16"
+          },
+          {
+            "eventId": "old-17"
+          },
+          {
+            "eventId": "old-18"
+          },
+          {
+            "eventId": "old-19"
+          },
+          {
+            "eventId": "old-20"
+          },
+          {
+            "eventId": "old-21"
+          },
+          {
+            "eventId": "old-22"
+          },
+          {
+            "eventId": "old-23"
+          },
+          {
+            "eventId": "old-24"
+          },
+          {
+            "eventId": "old-25"
+          },
+          {
+            "eventId": "old-26"
+          },
+          {
+            "eventId": "old-27"
+          },
+          {
+            "eventId": "old-28"
+          },
+          {
+            "eventId": "old-29"
+          },
+          {
+            "eventId": "old-30"
+          },
+          {
+            "eventId": "old-31"
+          },
+          {
+            "eventId": "old-32"
+          },
+          {
+            "eventId": "old-33"
+          },
+          {
+            "eventId": "old-34"
+          },
+          {
+            "eventId": "old-35"
+          },
+          {
+            "eventId": "old-36"
+          },
+          {
+            "eventId": "old-37"
+          },
+          {
+            "eventId": "old-38"
+          },
+          {
+            "eventId": "old-39"
+          },
+          {
+            "eventId": "old-40"
+          },
+          {
+            "eventId": "old-41"
+          },
+          {
+            "eventId": "old-42"
+          },
+          {
+            "eventId": "old-43"
+          },
+          {
+            "eventId": "old-44"
+          },
+          {
+            "eventId": "old-45"
+          },
+          {
+            "eventId": "old-46"
+          },
+          {
+            "eventId": "old-47"
+          },
+          {
+            "eventId": "old-48"
+          },
+          {
+            "eventId": "old-49"
+          },
+          {
+            "eventId": "old-50"
+          },
+          {
+            "eventId": "old-51"
+          },
+          {
+            "eventId": "old-52"
+          },
+          {
+            "eventId": "old-53"
+          },
+          {
+            "eventId": "old-54"
+          },
+          {
+            "eventId": "old-55"
+          },
+          {
+            "eventId": "old-56"
+          },
+          {
+            "eventId": "old-57"
+          },
+          {
+            "eventId": "old-58"
+          },
+          {
+            "eventId": "old-59"
+          },
+          {
+            "eventId": "old-60"
+          },
+          {
+            "eventId": "old-61"
+          },
+          {
+            "eventId": "old-62"
+          },
+          {
+            "eventId": "old-63"
+          },
+          {
+            "eventId": "old-64"
+          },
+          {
+            "eventId": "old-65"
+          },
+          {
+            "eventId": "old-66"
+          },
+          {
+            "eventId": "old-67"
+          },
+          {
+            "eventId": "old-68"
+          },
+          {
+            "eventId": "old-69"
+          },
+          {
+            "eventId": "old-70"
+          },
+          {
+            "eventId": "old-71"
+          },
+          {
+            "eventId": "old-72"
+          },
+          {
+            "eventId": "old-73"
+          },
+          {
+            "eventId": "old-74"
+          },
+          {
+            "eventId": "old-75"
+          },
+          {
+            "eventId": "old-76"
+          },
+          {
+            "eventId": "old-77"
+          },
+          {
+            "eventId": "old-78"
+          },
+          {
+            "eventId": "old-79"
+          },
+          {
+            "eventId": "old-80"
+          },
+          {
+            "eventId": "old-81"
+          },
+          {
+            "eventId": "old-82"
+          },
+          {
+            "eventId": "old-83"
+          },
+          {
+            "eventId": "old-84"
+          },
+          {
+            "eventId": "old-85"
+          },
+          {
+            "eventId": "old-86"
+          },
+          {
+            "eventId": "old-87"
+          },
+          {
+            "eventId": "old-88"
+          },
+          {
+            "eventId": "old-89"
+          },
+          {
+            "eventId": "old-90"
+          },
+          {
+            "eventId": "old-91"
+          },
+          {
+            "eventId": "old-92"
+          },
+          {
+            "eventId": "old-93"
+          },
+          {
+            "eventId": "old-94"
+          },
+          {
+            "eventId": "old-95"
+          },
+          {
+            "eventId": "old-96"
+          },
+          {
+            "eventId": "old-97"
+          },
+          {
+            "eventId": "old-98"
+          },
+          {
+            "eventId": "old-99"
+          },
+          {
+            "eventId": "old-100"
+          },
+          {
+            "eventId": "old-101"
+          },
+          {
+            "eventId": "old-102"
+          },
+          {
+            "eventId": "old-103"
+          },
+          {
+            "eventId": "old-104"
+          },
+          {
+            "eventId": "old-105"
+          },
+          {
+            "eventId": "old-106"
+          },
+          {
+            "eventId": "old-107"
+          },
+          {
+            "eventId": "old-108"
+          },
+          {
+            "eventId": "old-109"
+          },
+          {
+            "eventId": "old-110"
+          },
+          {
+            "eventId": "old-111"
+          },
+          {
+            "eventId": "old-112"
+          },
+          {
+            "eventId": "old-113"
+          },
+          {
+            "eventId": "old-114"
+          },
+          {
+            "eventId": "old-115"
+          },
+          {
+            "eventId": "old-116"
+          },
+          {
+            "eventId": "old-117"
+          },
+          {
+            "eventId": "old-118"
+          },
+          {
+            "eventId": "old-119"
+          },
+          {
+            "eventId": "old-120"
+          },
+          {
+            "eventId": "old-121"
+          },
+          {
+            "eventId": "old-122"
+          },
+          {
+            "eventId": "old-123"
+          },
+          {
+            "eventId": "old-124"
+          },
+          {
+            "eventId": "old-125"
+          },
+          {
+            "eventId": "old-126"
+          },
+          {
+            "eventId": "old-127"
+          },
+          {
+            "eventId": "old-128"
+          },
+          {
+            "eventId": "old-129"
+          },
+          {
+            "eventId": "old-130"
+          },
+          {
+            "eventId": "old-131"
+          },
+          {
+            "eventId": "old-132"
+          },
+          {
+            "eventId": "old-133"
+          },
+          {
+            "eventId": "old-134"
+          },
+          {
+            "eventId": "old-135"
+          },
+          {
+            "eventId": "old-136"
+          },
+          {
+            "eventId": "old-137"
+          },
+          {
+            "eventId": "old-138"
+          },
+          {
+            "eventId": "old-139"
+          },
+          {
+            "eventId": "old-140"
+          },
+          {
+            "eventId": "old-141"
+          },
+          {
+            "eventId": "old-142"
+          },
+          {
+            "eventId": "old-143"
+          },
+          {
+            "eventId": "old-144"
+          },
+          {
+            "eventId": "old-145"
+          },
+          {
+            "eventId": "old-146"
+          },
+          {
+            "eventId": "old-147"
+          },
+          {
+            "eventId": "old-148"
+          },
+          {
+            "eventId": "old-149"
+          },
+          {
+            "eventId": "old-150"
+          },
+          {
+            "eventId": "old-151"
+          },
+          {
+            "eventId": "old-152"
+          },
+          {
+            "eventId": "old-153"
+          },
+          {
+            "eventId": "old-154"
+          },
+          {
+            "eventId": "old-155"
+          },
+          {
+            "eventId": "old-156"
+          },
+          {
+            "eventId": "old-157"
+          },
+          {
+            "eventId": "old-158"
+          },
+          {
+            "eventId": "old-159"
+          },
+          {
+            "eventId": "old-160"
+          },
+          {
+            "eventId": "old-161"
+          },
+          {
+            "eventId": "old-162"
+          },
+          {
+            "eventId": "old-163"
+          },
+          {
+            "eventId": "old-164"
+          },
+          {
+            "eventId": "old-165"
+          },
+          {
+            "eventId": "old-166"
+          },
+          {
+            "eventId": "old-167"
+          },
+          {
+            "eventId": "old-168"
+          },
+          {
+            "eventId": "old-169"
+          },
+          {
+            "eventId": "old-170"
+          },
+          {
+            "eventId": "old-171"
+          },
+          {
+            "eventId": "old-172"
+          },
+          {
+            "eventId": "old-173"
+          },
+          {
+            "eventId": "old-174"
+          },
+          {
+            "eventId": "old-175"
+          },
+          {
+            "eventId": "old-176"
+          },
+          {
+            "eventId": "old-177"
+          },
+          {
+            "eventId": "old-178"
+          },
+          {
+            "eventId": "old-179"
+          },
+          {
+            "eventId": "old-180"
+          },
+          {
+            "eventId": "old-181"
+          },
+          {
+            "eventId": "old-182"
+          },
+          {
+            "eventId": "old-183"
+          },
+          {
+            "eventId": "old-184"
+          },
+          {
+            "eventId": "old-185"
+          },
+          {
+            "eventId": "old-186"
+          },
+          {
+            "eventId": "old-187"
+          },
+          {
+            "eventId": "old-188"
+          },
+          {
+            "eventId": "old-189"
+          },
+          {
+            "eventId": "old-190"
+          },
+          {
+            "eventId": "old-191"
+          },
+          {
+            "eventId": "old-192"
+          },
+          {
+            "eventId": "old-193"
+          },
+          {
+            "eventId": "old-194"
+          },
+          {
+            "eventId": "old-195"
+          },
+          {
+            "eventId": "old-196"
+          },
+          {
+            "eventId": "old-197"
+          },
+          {
+            "eventId": "old-198"
+          },
+          {
+            "eventId": "old-199"
+          },
+          {
+            "eventId": "old-200"
+          },
+          {
+            "eventId": "old-201"
+          },
+          {
+            "eventId": "old-202"
+          },
+          {
+            "eventId": "old-203"
+          },
+          {
+            "eventId": "old-204"
+          },
+          {
+            "eventId": "old-205"
+          },
+          {
+            "eventId": "old-206"
+          },
+          {
+            "eventId": "old-207"
+          },
+          {
+            "eventId": "old-208"
+          },
+          {
+            "eventId": "old-209"
+          },
+          {
+            "eventId": "old-210"
+          },
+          {
+            "eventId": "old-211"
+          },
+          {
+            "eventId": "old-212"
+          },
+          {
+            "eventId": "old-213"
+          },
+          {
+            "eventId": "old-214"
+          },
+          {
+            "eventId": "old-215"
+          },
+          {
+            "eventId": "old-216"
+          },
+          {
+            "eventId": "old-217"
+          },
+          {
+            "eventId": "old-218"
+          },
+          {
+            "eventId": "old-219"
+          },
+          {
+            "eventId": "old-220"
+          },
+          {
+            "eventId": "old-221"
+          },
+          {
+            "eventId": "old-222"
+          },
+          {
+            "eventId": "old-223"
+          },
+          {
+            "eventId": "old-224"
+          },
+          {
+            "eventId": "old-225"
+          },
+          {
+            "eventId": "old-226"
+          },
+          {
+            "eventId": "old-227"
+          },
+          {
+            "eventId": "old-228"
+          },
+          {
+            "eventId": "old-229"
+          },
+          {
+            "eventId": "old-230"
+          },
+          {
+            "eventId": "old-231"
+          },
+          {
+            "eventId": "old-232"
+          },
+          {
+            "eventId": "old-233"
+          },
+          {
+            "eventId": "old-234"
+          },
+          {
+            "eventId": "old-235"
+          },
+          {
+            "eventId": "old-236"
+          },
+          {
+            "eventId": "old-237"
+          },
+          {
+            "eventId": "old-238"
+          },
+          {
+            "eventId": "old-239"
+          },
+          {
+            "eventId": "old-240"
+          },
+          {
+            "eventId": "old-241"
+          },
+          {
+            "eventId": "old-242"
+          },
+          {
+            "eventId": "old-243"
+          },
+          {
+            "eventId": "old-244"
+          },
+          {
+            "eventId": "old-245"
+          },
+          {
+            "eventId": "old-246"
+          },
+          {
+            "eventId": "old-247"
+          },
+          {
+            "eventId": "old-248"
+          },
+          {
+            "eventId": "old-249"
+          },
+          {
+            "eventId": "old-250"
+          },
+          {
+            "eventId": "old-251"
+          },
+          {
+            "eventId": "old-252"
+          },
+          {
+            "eventId": "old-253"
+          },
+          {
+            "eventId": "old-254"
+          },
+          {
+            "eventId": "old-255"
+          },
+          {
+            "eventId": "old-256"
+          },
+          {
+            "eventId": "old-257"
+          },
+          {
+            "eventId": "old-258"
+          },
+          {
+            "eventId": "old-259"
+          },
+          {
+            "eventId": "old-260"
+          },
+          {
+            "eventId": "old-261"
+          },
+          {
+            "eventId": "old-262"
+          },
+          {
+            "eventId": "old-263"
+          },
+          {
+            "eventId": "old-264"
+          },
+          {
+            "eventId": "old-265"
+          },
+          {
+            "eventId": "old-266"
+          },
+          {
+            "eventId": "old-267"
+          },
+          {
+            "eventId": "old-268"
+          },
+          {
+            "eventId": "old-269"
+          },
+          {
+            "eventId": "old-270"
+          },
+          {
+            "eventId": "old-271"
+          },
+          {
+            "eventId": "old-272"
+          },
+          {
+            "eventId": "old-273"
+          },
+          {
+            "eventId": "old-274"
+          },
+          {
+            "eventId": "old-275"
+          },
+          {
+            "eventId": "old-276"
+          },
+          {
+            "eventId": "old-277"
+          },
+          {
+            "eventId": "old-278"
+          },
+          {
+            "eventId": "old-279"
+          },
+          {
+            "eventId": "old-280"
+          },
+          {
+            "eventId": "old-281"
+          },
+          {
+            "eventId": "old-282"
+          },
+          {
+            "eventId": "old-283"
+          },
+          {
+            "eventId": "old-284"
+          },
+          {
+            "eventId": "old-285"
+          },
+          {
+            "eventId": "old-286"
+          },
+          {
+            "eventId": "old-287"
+          },
+          {
+            "eventId": "old-288"
+          },
+          {
+            "eventId": "old-289"
+          },
+          {
+            "eventId": "old-290"
+          },
+          {
+            "eventId": "old-291"
+          },
+          {
+            "eventId": "old-292"
+          },
+          {
+            "eventId": "old-293"
+          },
+          {
+            "eventId": "old-294"
+          },
+          {
+            "eventId": "old-295"
+          },
+          {
+            "eventId": "old-296"
+          },
+          {
+            "eventId": "old-297"
+          },
+          {
+            "eventId": "old-298"
+          },
+          {
+            "eventId": "old-299"
+          },
+          {
+            "eventId": "old-300"
+          },
+          {
+            "eventId": "old-301"
+          },
+          {
+            "eventId": "old-302"
+          },
+          {
+            "eventId": "old-303"
+          },
+          {
+            "eventId": "old-304"
+          },
+          {
+            "eventId": "old-305"
+          },
+          {
+            "eventId": "old-306"
+          },
+          {
+            "eventId": "old-307"
+          },
+          {
+            "eventId": "old-308"
+          },
+          {
+            "eventId": "old-309"
+          },
+          {
+            "eventId": "old-310"
+          },
+          {
+            "eventId": "old-311"
+          },
+          {
+            "eventId": "old-312"
+          },
+          {
+            "eventId": "old-313"
+          },
+          {
+            "eventId": "old-314"
+          },
+          {
+            "eventId": "old-315"
+          },
+          {
+            "eventId": "old-316"
+          },
+          {
+            "eventId": "old-317"
+          },
+          {
+            "eventId": "old-318"
+          },
+          {
+            "eventId": "old-319"
+          },
+          {
+            "eventId": "old-320"
+          },
+          {
+            "eventId": "old-321"
+          },
+          {
+            "eventId": "old-322"
+          },
+          {
+            "eventId": "old-323"
+          },
+          {
+            "eventId": "old-324"
+          },
+          {
+            "eventId": "old-325"
+          },
+          {
+            "eventId": "old-326"
+          },
+          {
+            "eventId": "old-327"
+          },
+          {
+            "eventId": "old-328"
+          },
+          {
+            "eventId": "old-329"
+          },
+          {
+            "eventId": "old-330"
+          },
+          {
+            "eventId": "old-331"
+          },
+          {
+            "eventId": "old-332"
+          },
+          {
+            "eventId": "old-333"
+          },
+          {
+            "eventId": "old-334"
+          },
+          {
+            "eventId": "old-335"
+          },
+          {
+            "eventId": "old-336"
+          },
+          {
+            "eventId": "old-337"
+          },
+          {
+            "eventId": "old-338"
+          },
+          {
+            "eventId": "old-339"
+          },
+          {
+            "eventId": "old-340"
+          },
+          {
+            "eventId": "old-341"
+          },
+          {
+            "eventId": "old-342"
+          },
+          {
+            "eventId": "old-343"
+          },
+          {
+            "eventId": "old-344"
+          },
+          {
+            "eventId": "old-345"
+          },
+          {
+            "eventId": "old-346"
+          },
+          {
+            "eventId": "old-347"
+          },
+          {
+            "eventId": "old-348"
+          },
+          {
+            "eventId": "old-349"
+          },
+          {
+            "eventId": "old-350"
+          },
+          {
+            "eventId": "old-351"
+          },
+          {
+            "eventId": "old-352"
+          },
+          {
+            "eventId": "old-353"
+          },
+          {
+            "eventId": "old-354"
+          },
+          {
+            "eventId": "old-355"
+          },
+          {
+            "eventId": "old-356"
+          },
+          {
+            "eventId": "old-357"
+          },
+          {
+            "eventId": "old-358"
+          },
+          {
+            "eventId": "old-359"
+          },
+          {
+            "eventId": "old-360"
+          },
+          {
+            "eventId": "old-361"
+          },
+          {
+            "eventId": "old-362"
+          },
+          {
+            "eventId": "old-363"
+          },
+          {
+            "eventId": "old-364"
+          },
+          {
+            "eventId": "old-365"
+          },
+          {
+            "eventId": "old-366"
+          },
+          {
+            "eventId": "old-367"
+          },
+          {
+            "eventId": "old-368"
+          },
+          {
+            "eventId": "old-369"
+          },
+          {
+            "eventId": "old-370"
+          },
+          {
+            "eventId": "old-371"
+          },
+          {
+            "eventId": "old-372"
+          },
+          {
+            "eventId": "old-373"
+          },
+          {
+            "eventId": "old-374"
+          },
+          {
+            "eventId": "old-375"
+          },
+          {
+            "eventId": "old-376"
+          },
+          {
+            "eventId": "old-377"
+          },
+          {
+            "eventId": "old-378"
+          },
+          {
+            "eventId": "old-379"
+          },
+          {
+            "eventId": "old-380"
+          },
+          {
+            "eventId": "old-381"
+          },
+          {
+            "eventId": "old-382"
+          },
+          {
+            "eventId": "old-383"
+          },
+          {
+            "eventId": "old-384"
+          },
+          {
+            "eventId": "old-385"
+          },
+          {
+            "eventId": "old-386"
+          },
+          {
+            "eventId": "old-387"
+          },
+          {
+            "eventId": "old-388"
+          },
+          {
+            "eventId": "old-389"
+          },
+          {
+            "eventId": "old-390"
+          },
+          {
+            "eventId": "old-391"
+          },
+          {
+            "eventId": "old-392"
+          },
+          {
+            "eventId": "old-393"
+          },
+          {
+            "eventId": "old-394"
+          },
+          {
+            "eventId": "old-395"
+          },
+          {
+            "eventId": "old-396"
+          },
+          {
+            "eventId": "old-397"
+          },
+          {
+            "eventId": "old-398"
+          },
+          {
+            "eventId": "old-399"
+          },
+          {
+            "eventId": "old-400"
+          },
+          {
+            "eventId": "old-401"
+          },
+          {
+            "eventId": "old-402"
+          },
+          {
+            "eventId": "old-403"
+          },
+          {
+            "eventId": "old-404"
+          },
+          {
+            "eventId": "old-405"
+          },
+          {
+            "eventId": "old-406"
+          },
+          {
+            "eventId": "old-407"
+          },
+          {
+            "eventId": "old-408"
+          },
+          {
+            "eventId": "old-409"
+          },
+          {
+            "eventId": "old-410"
+          },
+          {
+            "eventId": "old-411"
+          },
+          {
+            "eventId": "old-412"
+          },
+          {
+            "eventId": "old-413"
+          },
+          {
+            "eventId": "old-414"
+          },
+          {
+            "eventId": "old-415"
+          },
+          {
+            "eventId": "old-416"
+          },
+          {
+            "eventId": "old-417"
+          },
+          {
+            "eventId": "old-418"
+          },
+          {
+            "eventId": "old-419"
+          },
+          {
+            "eventId": "old-420"
+          },
+          {
+            "eventId": "old-421"
+          },
+          {
+            "eventId": "old-422"
+          },
+          {
+            "eventId": "old-423"
+          },
+          {
+            "eventId": "old-424"
+          },
+          {
+            "eventId": "old-425"
+          },
+          {
+            "eventId": "old-426"
+          },
+          {
+            "eventId": "old-427"
+          },
+          {
+            "eventId": "old-428"
+          },
+          {
+            "eventId": "old-429"
+          },
+          {
+            "eventId": "old-430"
+          },
+          {
+            "eventId": "old-431"
+          },
+          {
+            "eventId": "old-432"
+          },
+          {
+            "eventId": "old-433"
+          },
+          {
+            "eventId": "old-434"
+          },
+          {
+            "eventId": "old-435"
+          },
+          {
+            "eventId": "old-436"
+          },
+          {
+            "eventId": "old-437"
+          },
+          {
+            "eventId": "old-438"
+          },
+          {
+            "eventId": "old-439"
+          },
+          {
+            "eventId": "old-440"
+          },
+          {
+            "eventId": "old-441"
+          },
+          {
+            "eventId": "old-442"
+          },
+          {
+            "eventId": "old-443"
+          },
+          {
+            "eventId": "old-444"
+          },
+          {
+            "eventId": "old-445"
+          },
+          {
+            "eventId": "old-446"
+          },
+          {
+            "eventId": "old-447"
+          },
+          {
+            "eventId": "old-448"
+          },
+          {
+            "eventId": "old-449"
+          },
+          {
+            "eventId": "old-450"
+          },
+          {
+            "eventId": "old-451"
+          },
+          {
+            "eventId": "old-452"
+          },
+          {
+            "eventId": "old-453"
+          },
+          {
+            "eventId": "old-454"
+          },
+          {
+            "eventId": "old-455"
+          },
+          {
+            "eventId": "old-456"
+          },
+          {
+            "eventId": "old-457"
+          },
+          {
+            "eventId": "old-458"
+          },
+          {
+            "eventId": "old-459"
+          },
+          {
+            "eventId": "old-460"
+          },
+          {
+            "eventId": "old-461"
+          },
+          {
+            "eventId": "old-462"
+          },
+          {
+            "eventId": "old-463"
+          },
+          {
+            "eventId": "old-464"
+          },
+          {
+            "eventId": "old-465"
+          },
+          {
+            "eventId": "old-466"
+          },
+          {
+            "eventId": "old-467"
+          },
+          {
+            "eventId": "old-468"
+          },
+          {
+            "eventId": "old-469"
+          },
+          {
+            "eventId": "old-470"
+          },
+          {
+            "eventId": "old-471"
+          },
+          {
+            "eventId": "old-472"
+          },
+          {
+            "eventId": "old-473"
+          },
+          {
+            "eventId": "old-474"
+          },
+          {
+            "eventId": "old-475"
+          },
+          {
+            "eventId": "old-476"
+          },
+          {
+            "eventId": "old-477"
+          },
+          {
+            "eventId": "old-478"
+          },
+          {
+            "eventId": "old-479"
+          },
+          {
+            "eventId": "old-480"
+          },
+          {
+            "eventId": "old-481"
+          },
+          {
+            "eventId": "old-482"
+          },
+          {
+            "eventId": "old-483"
+          },
+          {
+            "eventId": "old-484"
+          },
+          {
+            "eventId": "old-485"
+          },
+          {
+            "eventId": "old-486"
+          },
+          {
+            "eventId": "old-487"
+          },
+          {
+            "eventId": "old-488"
+          },
+          {
+            "eventId": "old-489"
+          },
+          {
+            "eventId": "old-490"
+          },
+          {
+            "eventId": "old-491"
+          },
+          {
+            "eventId": "old-492"
+          },
+          {
+            "eventId": "old-493"
+          },
+          {
+            "eventId": "old-494"
+          },
+          {
+            "eventId": "old-495"
+          },
+          {
+            "eventId": "old-496"
+          },
+          {
+            "eventId": "old-497"
+          },
+          {
+            "eventId": "old-498"
+          },
+          {
+            "eventId": "old-499"
+          },
+          {
+            "eventId": "old-500"
+          },
+          {
+            "eventId": "old-501"
+          },
+          {
+            "eventId": "old-502"
+          },
+          {
+            "eventId": "old-503"
+          },
+          {
+            "eventId": "old-504"
+          },
+          {
+            "eventId": "old-505"
+          },
+          {
+            "eventId": "old-506"
+          },
+          {
+            "eventId": "old-507"
+          },
+          {
+            "eventId": "old-508"
+          },
+          {
+            "eventId": "old-509"
+          },
+          {
+            "eventId": "old-510"
+          },
+          {
+            "eventId": "old-511"
+          },
+          {
+            "eventId": "old-512"
+          },
+          {
+            "eventId": "old-513"
+          },
+          {
+            "eventId": "old-514"
+          },
+          {
+            "eventId": "old-515"
+          },
+          {
+            "eventId": "old-516"
+          },
+          {
+            "eventId": "old-517"
+          },
+          {
+            "eventId": "old-518"
+          },
+          {
+            "eventId": "old-519"
+          },
+          {
+            "eventId": "old-520"
+          },
+          {
+            "eventId": "old-521"
+          },
+          {
+            "eventId": "old-522"
+          },
+          {
+            "eventId": "old-523"
+          },
+          {
+            "eventId": "old-524"
+          },
+          {
+            "eventId": "old-525"
+          },
+          {
+            "eventId": "old-526"
+          },
+          {
+            "eventId": "old-527"
+          },
+          {
+            "eventId": "old-528"
+          },
+          {
+            "eventId": "old-529"
+          },
+          {
+            "eventId": "old-530"
+          },
+          {
+            "eventId": "old-531"
+          },
+          {
+            "eventId": "old-532"
+          },
+          {
+            "eventId": "old-533"
+          },
+          {
+            "eventId": "old-534"
+          },
+          {
+            "eventId": "old-535"
+          },
+          {
+            "eventId": "old-536"
+          },
+          {
+            "eventId": "old-537"
+          },
+          {
+            "eventId": "old-538"
+          },
+          {
+            "eventId": "old-539"
+          },
+          {
+            "eventId": "old-540"
+          },
+          {
+            "eventId": "old-541"
+          },
+          {
+            "eventId": "old-542"
+          },
+          {
+            "eventId": "old-543"
+          },
+          {
+            "eventId": "old-544"
+          },
+          {
+            "eventId": "old-545"
+          },
+          {
+            "eventId": "old-546"
+          },
+          {
+            "eventId": "old-547"
+          },
+          {
+            "eventId": "old-548"
+          },
+          {
+            "eventId": "old-549"
+          },
+          {
+            "eventId": "old-550"
+          },
+          {
+            "eventId": "old-551"
+          },
+          {
+            "eventId": "old-552"
+          },
+          {
+            "eventId": "old-553"
+          },
+          {
+            "eventId": "old-554"
+          },
+          {
+            "eventId": "old-555"
+          },
+          {
+            "eventId": "old-556"
+          },
+          {
+            "eventId": "old-557"
+          },
+          {
+            "eventId": "old-558"
+          },
+          {
+            "eventId": "old-559"
+          },
+          {
+            "eventId": "old-560"
+          },
+          {
+            "eventId": "old-561"
+          },
+          {
+            "eventId": "old-562"
+          },
+          {
+            "eventId": "old-563"
+          },
+          {
+            "eventId": "old-564"
+          },
+          {
+            "eventId": "old-565"
+          },
+          {
+            "eventId": "old-566"
+          },
+          {
+            "eventId": "old-567"
+          },
+          {
+            "eventId": "old-568"
+          },
+          {
+            "eventId": "old-569"
+          },
+          {
+            "eventId": "old-570"
+          },
+          {
+            "eventId": "old-571"
+          },
+          {
+            "eventId": "old-572"
+          },
+          {
+            "eventId": "old-573"
+          },
+          {
+            "eventId": "old-574"
+          },
+          {
+            "eventId": "old-575"
+          },
+          {
+            "eventId": "old-576"
+          },
+          {
+            "eventId": "old-577"
+          },
+          {
+            "eventId": "old-578"
+          },
+          {
+            "eventId": "old-579"
+          },
+          {
+            "eventId": "old-580"
+          },
+          {
+            "eventId": "old-581"
+          },
+          {
+            "eventId": "old-582"
+          },
+          {
+            "eventId": "old-583"
+          },
+          {
+            "eventId": "old-584"
+          },
+          {
+            "eventId": "old-585"
+          },
+          {
+            "eventId": "old-586"
+          },
+          {
+            "eventId": "old-587"
+          },
+          {
+            "eventId": "old-588"
+          },
+          {
+            "eventId": "old-589"
+          },
+          {
+            "eventId": "old-590"
+          },
+          {
+            "eventId": "old-591"
+          },
+          {
+            "eventId": "old-592"
+          },
+          {
+            "eventId": "old-593"
+          },
+          {
+            "eventId": "old-594"
+          },
+          {
+            "eventId": "old-595"
+          },
+          {
+            "eventId": "old-596"
+          },
+          {
+            "eventId": "old-597"
+          },
+          {
+            "eventId": "old-598"
+          },
+          {
+            "eventId": "old-599"
+          },
+          {
+            "eventId": "old-600"
+          },
+          {
+            "eventId": "old-601"
+          },
+          {
+            "eventId": "old-602"
+          },
+          {
+            "eventId": "old-603"
+          },
+          {
+            "eventId": "old-604"
+          },
+          {
+            "eventId": "old-605"
+          },
+          {
+            "eventId": "old-606"
+          },
+          {
+            "eventId": "old-607"
+          },
+          {
+            "eventId": "old-608"
+          },
+          {
+            "eventId": "old-609"
+          },
+          {
+            "eventId": "old-610"
+          },
+          {
+            "eventId": "old-611"
+          },
+          {
+            "eventId": "old-612"
+          },
+          {
+            "eventId": "old-613"
+          },
+          {
+            "eventId": "old-614"
+          },
+          {
+            "eventId": "old-615"
+          },
+          {
+            "eventId": "old-616"
+          },
+          {
+            "eventId": "old-617"
+          },
+          {
+            "eventId": "old-618"
+          },
+          {
+            "eventId": "old-619"
+          },
+          {
+            "eventId": "old-620"
+          },
+          {
+            "eventId": "old-621"
+          },
+          {
+            "eventId": "old-622"
+          },
+          {
+            "eventId": "old-623"
+          },
+          {
+            "eventId": "old-624"
+          },
+          {
+            "eventId": "old-625"
+          },
+          {
+            "eventId": "old-626"
+          },
+          {
+            "eventId": "old-627"
+          },
+          {
+            "eventId": "old-628"
+          },
+          {
+            "eventId": "old-629"
+          },
+          {
+            "eventId": "old-630"
+          },
+          {
+            "eventId": "old-631"
+          },
+          {
+            "eventId": "old-632"
+          },
+          {
+            "eventId": "old-633"
+          },
+          {
+            "eventId": "old-634"
+          },
+          {
+            "eventId": "old-635"
+          },
+          {
+            "eventId": "old-636"
+          },
+          {
+            "eventId": "old-637"
+          },
+          {
+            "eventId": "old-638"
+          },
+          {
+            "eventId": "old-639"
+          },
+          {
+            "eventId": "old-640"
+          },
+          {
+            "eventId": "old-641"
+          },
+          {
+            "eventId": "old-642"
+          },
+          {
+            "eventId": "old-643"
+          },
+          {
+            "eventId": "old-644"
+          },
+          {
+            "eventId": "old-645"
+          },
+          {
+            "eventId": "old-646"
+          },
+          {
+            "eventId": "old-647"
+          },
+          {
+            "eventId": "old-648"
+          },
+          {
+            "eventId": "old-649"
+          },
+          {
+            "eventId": "old-650"
+          },
+          {
+            "eventId": "old-651"
+          },
+          {
+            "eventId": "old-652"
+          },
+          {
+            "eventId": "old-653"
+          },
+          {
+            "eventId": "old-654"
+          },
+          {
+            "eventId": "old-655"
+          },
+          {
+            "eventId": "old-656"
+          },
+          {
+            "eventId": "old-657"
+          },
+          {
+            "eventId": "old-658"
+          },
+          {
+            "eventId": "old-659"
+          },
+          {
+            "eventId": "old-660"
+          },
+          {
+            "eventId": "old-661"
+          },
+          {
+            "eventId": "old-662"
+          },
+          {
+            "eventId": "old-663"
+          },
+          {
+            "eventId": "old-664"
+          },
+          {
+            "eventId": "old-665"
+          },
+          {
+            "eventId": "old-666"
+          },
+          {
+            "eventId": "old-667"
+          },
+          {
+            "eventId": "old-668"
+          },
+          {
+            "eventId": "old-669"
+          },
+          {
+            "eventId": "old-670"
+          },
+          {
+            "eventId": "old-671"
+          },
+          {
+            "eventId": "old-672"
+          },
+          {
+            "eventId": "old-673"
+          },
+          {
+            "eventId": "old-674"
+          },
+          {
+            "eventId": "old-675"
+          },
+          {
+            "eventId": "old-676"
+          },
+          {
+            "eventId": "old-677"
+          },
+          {
+            "eventId": "old-678"
+          },
+          {
+            "eventId": "old-679"
+          },
+          {
+            "eventId": "old-680"
+          },
+          {
+            "eventId": "old-681"
+          },
+          {
+            "eventId": "old-682"
+          },
+          {
+            "eventId": "old-683"
+          },
+          {
+            "eventId": "old-684"
+          },
+          {
+            "eventId": "old-685"
+          },
+          {
+            "eventId": "old-686"
+          },
+          {
+            "eventId": "old-687"
+          },
+          {
+            "eventId": "old-688"
+          },
+          {
+            "eventId": "old-689"
+          },
+          {
+            "eventId": "old-690"
+          },
+          {
+            "eventId": "old-691"
+          },
+          {
+            "eventId": "old-692"
+          },
+          {
+            "eventId": "old-693"
+          },
+          {
+            "eventId": "old-694"
+          },
+          {
+            "eventId": "old-695"
+          },
+          {
+            "eventId": "old-696"
+          },
+          {
+            "eventId": "old-697"
+          },
+          {
+            "eventId": "old-698"
+          },
+          {
+            "eventId": "old-699"
+          },
+          {
+            "eventId": "old-700"
+          },
+          {
+            "eventId": "old-701"
+          },
+          {
+            "eventId": "old-702"
+          },
+          {
+            "eventId": "old-703"
+          },
+          {
+            "eventId": "old-704"
+          },
+          {
+            "eventId": "old-705"
+          },
+          {
+            "eventId": "old-706"
+          },
+          {
+            "eventId": "old-707"
+          },
+          {
+            "eventId": "old-708"
+          },
+          {
+            "eventId": "old-709"
+          },
+          {
+            "eventId": "old-710"
+          },
+          {
+            "eventId": "old-711"
+          },
+          {
+            "eventId": "old-712"
+          },
+          {
+            "eventId": "old-713"
+          },
+          {
+            "eventId": "old-714"
+          },
+          {
+            "eventId": "old-715"
+          },
+          {
+            "eventId": "old-716"
+          },
+          {
+            "eventId": "old-717"
+          },
+          {
+            "eventId": "old-718"
+          },
+          {
+            "eventId": "old-719"
+          },
+          {
+            "eventId": "old-720"
+          },
+          {
+            "eventId": "old-721"
+          },
+          {
+            "eventId": "old-722"
+          },
+          {
+            "eventId": "old-723"
+          },
+          {
+            "eventId": "old-724"
+          },
+          {
+            "eventId": "old-725"
+          },
+          {
+            "eventId": "old-726"
+          },
+          {
+            "eventId": "old-727"
+          },
+          {
+            "eventId": "old-728"
+          },
+          {
+            "eventId": "old-729"
+          },
+          {
+            "eventId": "old-730"
+          },
+          {
+            "eventId": "old-731"
+          },
+          {
+            "eventId": "old-732"
+          },
+          {
+            "eventId": "old-733"
+          },
+          {
+            "eventId": "old-734"
+          },
+          {
+            "eventId": "old-735"
+          },
+          {
+            "eventId": "old-736"
+          },
+          {
+            "eventId": "old-737"
+          },
+          {
+            "eventId": "old-738"
+          },
+          {
+            "eventId": "old-739"
+          },
+          {
+            "eventId": "old-740"
+          },
+          {
+            "eventId": "old-741"
+          },
+          {
+            "eventId": "old-742"
+          },
+          {
+            "eventId": "old-743"
+          },
+          {
+            "eventId": "old-744"
+          },
+          {
+            "eventId": "old-745"
+          },
+          {
+            "eventId": "old-746"
+          },
+          {
+            "eventId": "old-747"
+          },
+          {
+            "eventId": "old-748"
+          },
+          {
+            "eventId": "old-749"
+          },
+          {
+            "eventId": "old-750"
+          },
+          {
+            "eventId": "old-751"
+          },
+          {
+            "eventId": "old-752"
+          },
+          {
+            "eventId": "old-753"
+          },
+          {
+            "eventId": "old-754"
+          },
+          {
+            "eventId": "old-755"
+          },
+          {
+            "eventId": "old-756"
+          },
+          {
+            "eventId": "old-757"
+          },
+          {
+            "eventId": "old-758"
+          },
+          {
+            "eventId": "old-759"
+          },
+          {
+            "eventId": "old-760"
+          },
+          {
+            "eventId": "old-761"
+          },
+          {
+            "eventId": "old-762"
+          },
+          {
+            "eventId": "old-763"
+          },
+          {
+            "eventId": "old-764"
+          },
+          {
+            "eventId": "old-765"
+          },
+          {
+            "eventId": "old-766"
+          },
+          {
+            "eventId": "old-767"
+          },
+          {
+            "eventId": "old-768"
+          },
+          {
+            "eventId": "old-769"
+          },
+          {
+            "eventId": "old-770"
+          },
+          {
+            "eventId": "old-771"
+          },
+          {
+            "eventId": "old-772"
+          },
+          {
+            "eventId": "old-773"
+          },
+          {
+            "eventId": "old-774"
+          },
+          {
+            "eventId": "old-775"
+          },
+          {
+            "eventId": "old-776"
+          },
+          {
+            "eventId": "old-777"
+          },
+          {
+            "eventId": "old-778"
+          },
+          {
+            "eventId": "old-779"
+          },
+          {
+            "eventId": "old-780"
+          },
+          {
+            "eventId": "old-781"
+          },
+          {
+            "eventId": "old-782"
+          },
+          {
+            "eventId": "old-783"
+          },
+          {
+            "eventId": "old-784"
+          },
+          {
+            "eventId": "old-785"
+          },
+          {
+            "eventId": "old-786"
+          },
+          {
+            "eventId": "old-787"
+          },
+          {
+            "eventId": "old-788"
+          },
+          {
+            "eventId": "old-789"
+          },
+          {
+            "eventId": "old-790"
+          },
+          {
+            "eventId": "old-791"
+          },
+          {
+            "eventId": "old-792"
+          },
+          {
+            "eventId": "old-793"
+          },
+          {
+            "eventId": "old-794"
+          },
+          {
+            "eventId": "old-795"
+          },
+          {
+            "eventId": "old-796"
+          },
+          {
+            "eventId": "old-797"
+          },
+          {
+            "eventId": "old-798"
+          },
+          {
+            "eventId": "old-799"
+          },
+          {
+            "eventId": "old-800"
+          },
+          {
+            "eventId": "old-801"
+          },
+          {
+            "eventId": "old-802"
+          },
+          {
+            "eventId": "old-803"
+          },
+          {
+            "eventId": "old-804"
+          },
+          {
+            "eventId": "old-805"
+          },
+          {
+            "eventId": "old-806"
+          },
+          {
+            "eventId": "old-807"
+          },
+          {
+            "eventId": "old-808"
+          },
+          {
+            "eventId": "old-809"
+          },
+          {
+            "eventId": "old-810"
+          },
+          {
+            "eventId": "old-811"
+          },
+          {
+            "eventId": "old-812"
+          },
+          {
+            "eventId": "old-813"
+          },
+          {
+            "eventId": "old-814"
+          },
+          {
+            "eventId": "old-815"
+          },
+          {
+            "eventId": "old-816"
+          },
+          {
+            "eventId": "old-817"
+          },
+          {
+            "eventId": "old-818"
+          },
+          {
+            "eventId": "old-819"
+          },
+          {
+            "eventId": "old-820"
+          },
+          {
+            "eventId": "old-821"
+          },
+          {
+            "eventId": "old-822"
+          },
+          {
+            "eventId": "old-823"
+          },
+          {
+            "eventId": "old-824"
+          },
+          {
+            "eventId": "old-825"
+          },
+          {
+            "eventId": "old-826"
+          },
+          {
+            "eventId": "old-827"
+          },
+          {
+            "eventId": "old-828"
+          },
+          {
+            "eventId": "old-829"
+          },
+          {
+            "eventId": "old-830"
+          },
+          {
+            "eventId": "old-831"
+          },
+          {
+            "eventId": "old-832"
+          },
+          {
+            "eventId": "old-833"
+          },
+          {
+            "eventId": "old-834"
+          },
+          {
+            "eventId": "old-835"
+          },
+          {
+            "eventId": "old-836"
+          },
+          {
+            "eventId": "old-837"
+          },
+          {
+            "eventId": "old-838"
+          },
+          {
+            "eventId": "old-839"
+          },
+          {
+            "eventId": "old-840"
+          },
+          {
+            "eventId": "old-841"
+          },
+          {
+            "eventId": "old-842"
+          },
+          {
+            "eventId": "old-843"
+          },
+          {
+            "eventId": "old-844"
+          },
+          {
+            "eventId": "old-845"
+          },
+          {
+            "eventId": "old-846"
+          },
+          {
+            "eventId": "old-847"
+          },
+          {
+            "eventId": "old-848"
+          },
+          {
+            "eventId": "old-849"
+          },
+          {
+            "eventId": "old-850"
+          },
+          {
+            "eventId": "old-851"
+          },
+          {
+            "eventId": "old-852"
+          },
+          {
+            "eventId": "old-853"
+          },
+          {
+            "eventId": "old-854"
+          },
+          {
+            "eventId": "old-855"
+          },
+          {
+            "eventId": "old-856"
+          },
+          {
+            "eventId": "old-857"
+          },
+          {
+            "eventId": "old-858"
+          },
+          {
+            "eventId": "old-859"
+          },
+          {
+            "eventId": "old-860"
+          },
+          {
+            "eventId": "old-861"
+          },
+          {
+            "eventId": "old-862"
+          },
+          {
+            "eventId": "old-863"
+          },
+          {
+            "eventId": "old-864"
+          },
+          {
+            "eventId": "old-865"
+          },
+          {
+            "eventId": "old-866"
+          },
+          {
+            "eventId": "old-867"
+          },
+          {
+            "eventId": "old-868"
+          },
+          {
+            "eventId": "old-869"
+          },
+          {
+            "eventId": "old-870"
+          },
+          {
+            "eventId": "old-871"
+          },
+          {
+            "eventId": "old-872"
+          },
+          {
+            "eventId": "old-873"
+          },
+          {
+            "eventId": "old-874"
+          },
+          {
+            "eventId": "old-875"
+          },
+          {
+            "eventId": "old-876"
+          },
+          {
+            "eventId": "old-877"
+          },
+          {
+            "eventId": "old-878"
+          },
+          {
+            "eventId": "old-879"
+          },
+          {
+            "eventId": "old-880"
+          },
+          {
+            "eventId": "old-881"
+          },
+          {
+            "eventId": "old-882"
+          },
+          {
+            "eventId": "old-883"
+          },
+          {
+            "eventId": "old-884"
+          },
+          {
+            "eventId": "old-885"
+          },
+          {
+            "eventId": "old-886"
+          },
+          {
+            "eventId": "old-887"
+          },
+          {
+            "eventId": "old-888"
+          },
+          {
+            "eventId": "old-889"
+          },
+          {
+            "eventId": "old-890"
+          },
+          {
+            "eventId": "old-891"
+          },
+          {
+            "eventId": "old-892"
+          },
+          {
+            "eventId": "old-893"
+          },
+          {
+            "eventId": "old-894"
+          },
+          {
+            "eventId": "old-895"
+          },
+          {
+            "eventId": "old-896"
+          },
+          {
+            "eventId": "old-897"
+          },
+          {
+            "eventId": "old-898"
+          },
+          {
+            "eventId": "old-899"
+          },
+          {
+            "eventId": "old-900"
+          },
+          {
+            "eventId": "old-901"
+          },
+          {
+            "eventId": "old-902"
+          },
+          {
+            "eventId": "old-903"
+          },
+          {
+            "eventId": "old-904"
+          },
+          {
+            "eventId": "old-905"
+          },
+          {
+            "eventId": "old-906"
+          },
+          {
+            "eventId": "old-907"
+          },
+          {
+            "eventId": "old-908"
+          },
+          {
+            "eventId": "old-909"
+          },
+          {
+            "eventId": "old-910"
+          },
+          {
+            "eventId": "old-911"
+          },
+          {
+            "eventId": "old-912"
+          },
+          {
+            "eventId": "old-913"
+          },
+          {
+            "eventId": "old-914"
+          },
+          {
+            "eventId": "old-915"
+          },
+          {
+            "eventId": "old-916"
+          },
+          {
+            "eventId": "old-917"
+          },
+          {
+            "eventId": "old-918"
+          },
+          {
+            "eventId": "old-919"
+          },
+          {
+            "eventId": "old-920"
+          },
+          {
+            "eventId": "old-921"
+          },
+          {
+            "eventId": "old-922"
+          },
+          {
+            "eventId": "old-923"
+          },
+          {
+            "eventId": "old-924"
+          },
+          {
+            "eventId": "old-925"
+          },
+          {
+            "eventId": "old-926"
+          },
+          {
+            "eventId": "old-927"
+          },
+          {
+            "eventId": "old-928"
+          },
+          {
+            "eventId": "old-929"
+          },
+          {
+            "eventId": "old-930"
+          },
+          {
+            "eventId": "old-931"
+          },
+          {
+            "eventId": "old-932"
+          },
+          {
+            "eventId": "old-933"
+          },
+          {
+            "eventId": "old-934"
+          },
+          {
+            "eventId": "old-935"
+          },
+          {
+            "eventId": "old-936"
+          },
+          {
+            "eventId": "old-937"
+          },
+          {
+            "eventId": "old-938"
+          },
+          {
+            "eventId": "old-939"
+          },
+          {
+            "eventId": "old-940"
+          },
+          {
+            "eventId": "old-941"
+          },
+          {
+            "eventId": "old-942"
+          },
+          {
+            "eventId": "old-943"
+          },
+          {
+            "eventId": "old-944"
+          },
+          {
+            "eventId": "old-945"
+          },
+          {
+            "eventId": "old-946"
+          },
+          {
+            "eventId": "old-947"
+          },
+          {
+            "eventId": "old-948"
+          },
+          {
+            "eventId": "old-949"
+          },
+          {
+            "eventId": "old-950"
+          },
+          {
+            "eventId": "old-951"
+          },
+          {
+            "eventId": "old-952"
+          },
+          {
+            "eventId": "old-953"
+          },
+          {
+            "eventId": "old-954"
+          },
+          {
+            "eventId": "old-955"
+          },
+          {
+            "eventId": "old-956"
+          },
+          {
+            "eventId": "old-957"
+          },
+          {
+            "eventId": "old-958"
+          },
+          {
+            "eventId": "old-959"
+          },
+          {
+            "eventId": "old-960"
+          },
+          {
+            "eventId": "old-961"
+          },
+          {
+            "eventId": "old-962"
+          },
+          {
+            "eventId": "old-963"
+          },
+          {
+            "eventId": "old-964"
+          },
+          {
+            "eventId": "old-965"
+          },
+          {
+            "eventId": "old-966"
+          },
+          {
+            "eventId": "old-967"
+          },
+          {
+            "eventId": "old-968"
+          },
+          {
+            "eventId": "old-969"
+          },
+          {
+            "eventId": "old-970"
+          },
+          {
+            "eventId": "old-971"
+          },
+          {
+            "eventId": "old-972"
+          },
+          {
+            "eventId": "old-973"
+          },
+          {
+            "eventId": "old-974"
+          },
+          {
+            "eventId": "old-975"
+          },
+          {
+            "eventId": "old-976"
+          },
+          {
+            "eventId": "old-977"
+          },
+          {
+            "eventId": "old-978"
+          },
+          {
+            "eventId": "old-979"
+          },
+          {
+            "eventId": "old-980"
+          },
+          {
+            "eventId": "old-981"
+          },
+          {
+            "eventId": "old-982"
+          },
+          {
+            "eventId": "old-983"
+          },
+          {
+            "eventId": "old-984"
+          },
+          {
+            "eventId": "old-985"
+          },
+          {
+            "eventId": "old-986"
+          },
+          {
+            "eventId": "old-987"
+          },
+          {
+            "eventId": "old-988"
+          },
+          {
+            "eventId": "old-989"
+          },
+          {
+            "eventId": "old-990"
+          },
+          {
+            "eventId": "old-991"
+          },
+          {
+            "eventId": "old-992"
+          },
+          {
+            "eventId": "old-993"
+          },
+          {
+            "eventId": "old-994"
+          },
+          {
+            "eventId": "old-995"
+          },
+          {
+            "eventId": "old-996"
+          },
+          {
+            "eventId": "old-997"
+          },
+          {
+            "eventId": "old-998"
+          },
+          {
+            "eventId": "old-999"
+          }
+        ],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-02-1",
+      "bdd": "S-RUN-02-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "two contenders cross actual barrier",
+          "actual": 2,
+          "expected": 2,
+          "pass": true
+        },
+        {
+          "assertion": "separate command processes",
+          "actual": 2,
+          "expected": 2,
+          "pass": true
+        },
+        {
+          "assertion": "one valid lease",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "one real process start",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RunNext",
+          "pid": 10756,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RunNext",
+          "pid": 25304,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-02-2",
+      "bdd": "S-RUN-02-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "actual start fault reached",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "compensating release called",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "no leaked lease",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RunNext",
+          "pid": 28544,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {
+        "Process.Start": 0
+      },
+      "missingFaultPaths": [
+        "Process.Start"
+      ],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-02-3",
+      "bdd": "S-RUN-02-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "claim attempted against empty board",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "no process",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Idle",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RunNext",
+          "pid": 25740,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {},
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-03-1",
+      "bdd": "S-RUN-03-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "renew reached board port",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "valid lease child remains alive",
+          "actual": null,
+          "expected": null,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RenewRun",
+          "pid": 25624,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1,
+            "owner": "worker",
+            "until": 1794014100
+          }
+        },
+        "runs": [
+          {
+            "pid": 14260,
+            "ticket": "FIX-1",
+            "session": "session-14260"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-03-2",
+      "bdd": "S-RUN-03-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "renew fault reached",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "actual child stopped before expiry",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "stop confirmation called",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RenewRun",
+          "pid": 1864,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {
+        "Board.Renew": 0
+      },
+      "missingFaultPaths": [
+        "Board.Renew"
+      ],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1,
+            "owner": "worker",
+            "until": 1794014100
+          }
+        },
+        "runs": [
+          {
+            "pid": 14888,
+            "ticket": "FIX-1",
+            "session": "session-14888"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-03-3",
+      "bdd": "S-RUN-03-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "old child observable after reconstruct",
+          "actual": null,
+          "expected": null,
+          "pass": true
+        },
+        {
+          "assertion": "durable run quarantine",
+          "actual": null,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "no new process",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Quarantined",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ReconcileRun",
+          "pid": 24304,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1,
+            "owner": "worker",
+            "until": 1794014100
+          }
+        },
+        "runs": [
+          {
+            "pid": 10340,
+            "ticket": "FIX-1",
+            "session": "session-10340"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-CMP-01-1",
+      "bdd": "S-CMP-01-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "durable completion journal",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "delivery awaits independent review",
+          "actual": "In Progress",
+          "expected": "In Review",
+          "pass": false
+        },
+        {
+          "assertion": "lease released",
+          "actual": 1,
+          "expected": 0,
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "SubmitCompletion",
+          "pid": 10752,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "In Progress",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1,
+            "owner": "dev-1"
+          }
+        },
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-CMP-01-2",
+      "bdd": "S-CMP-01-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "invalid delivery preserves snapshot",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Progress",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {
+              "FIX-1": {
+                "generation": 1,
+                "owner": "dev-1"
+              }
+            },
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Progress",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {
+              "FIX-1": {
+                "generation": 1,
+                "owner": "dev-1"
+              }
+            },
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Validation",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "SubmitCompletion",
+          "pid": 26748,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "In Progress",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1,
+            "owner": "dev-1"
+          }
+        },
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-CMP-01-3",
+      "bdd": "S-CMP-01-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "invalid delivery preserves snapshot",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Progress",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {
+              "FIX-1": {
+                "generation": 1,
+                "owner": "dev-1"
+              }
+            },
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Progress",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {
+              "FIX-1": {
+                "generation": 1,
+                "owner": "dev-1"
+              }
+            },
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Conflict",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "SubmitCompletion",
+          "pid": 14752,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "In Progress",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1,
+            "owner": "dev-1"
+          }
+        },
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-CMP-02-1",
+      "bdd": "S-CMP-02-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "one journal after replay through fresh process",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "durable confirmed stage",
+          "actual": null,
+          "expected": "Confirmed",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "SubmitCompletion",
+          "pid": 3920,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SubmitCompletion",
+          "pid": 30292,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-CMP-02-2",
+      "bdd": "S-CMP-02-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "release fault reached",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "lease released after fresh process",
+          "actual": 1,
+          "expected": 0,
+          "pass": false
+        },
+        {
+          "assertion": "journal confirms",
+          "actual": "ReviewUpdated",
+          "expected": "Confirmed",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ReconcileCompletion",
+          "pid": 11584,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "ReconcileCompletion",
+          "pid": 15908,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {
+        "Board.Release": 0
+      },
+      "missingFaultPaths": [
+        "Board.Release"
+      ],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {
+          "cmp-1": {
+            "stage": "ReviewUpdated",
+            "payload": {
+              "completionId": "cmp-1",
+              "projectId": "fixture-guguboard",
+              "ticketId": "FIX-1",
+              "runId": "run-1",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "developer": "dev-1",
+              "session": "session-dev",
+              "tests": [
+                {
+                  "command": "fixture-check",
+                  "exit": 0,
+                  "passed": 3,
+                  "failed": 0
+                }
+              ],
+              "evidence": [
+                {
+                  "uri": "fixture://evidence",
+                  "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e"
+                }
+              ]
+            }
+          }
+        },
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {
+          "FIX-1": {
+            "generation": 1
+          }
+        },
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-CMP-02-3",
+      "bdd": "S-CMP-02-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "conflicting replay preserves evidence",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {
+              "cmp-1": {
+                "stage": "Confirmed",
+                "payload": {
+                  "completionId": "cmp-1",
+                  "projectId": "fixture-guguboard",
+                  "ticketId": "FIX-1",
+                  "runId": "run-1",
+                  "leaseGeneration": 1,
+                  "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "developer": "dev-1",
+                  "session": "session-dev",
+                  "tests": [
+                    {
+                      "command": "fixture-check",
+                      "exit": 0,
+                      "passed": 3,
+                      "failed": 0
+                    }
+                  ],
+                  "evidence": [
+                    {
+                      "uri": "fixture://evidence",
+                      "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e"
+                    }
+                  ]
+                },
+                "digest": "5e9dc4b0eed734544e7c3a87755570cebd2bb0ef141bc4f234e7e17564c473de"
+              }
+            },
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {
+              "cmp-1": {
+                "stage": "Confirmed",
+                "payload": {
+                  "completionId": "cmp-1",
+                  "projectId": "fixture-guguboard",
+                  "ticketId": "FIX-1",
+                  "runId": "run-1",
+                  "leaseGeneration": 1,
+                  "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "developer": "dev-1",
+                  "session": "session-dev",
+                  "tests": [
+                    {
+                      "command": "fixture-check",
+                      "exit": 0,
+                      "passed": 3,
+                      "failed": 0
+                    }
+                  ],
+                  "evidence": [
+                    {
+                      "uri": "fixture://evidence",
+                      "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e"
+                    }
+                  ]
+                },
+                "digest": "5e9dc4b0eed734544e7c3a87755570cebd2bb0ef141bc4f234e7e17564c473de"
+              }
+            },
+            "tickets": {
+              "FIX-1": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Conflict",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "SubmitCompletion",
+          "pid": 8384,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {
+          "cmp-1": {
+            "stage": "Confirmed",
+            "payload": {
+              "completionId": "cmp-1",
+              "projectId": "fixture-guguboard",
+              "ticketId": "FIX-1",
+              "runId": "run-1",
+              "leaseGeneration": 1,
+              "checkoutSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "developer": "dev-1",
+              "session": "session-dev",
+              "tests": [
+                {
+                  "command": "fixture-check",
+                  "exit": 0,
+                  "passed": 3,
+                  "failed": 0
+                }
+              ],
+              "evidence": [
+                {
+                  "uri": "fixture://evidence",
+                  "digest": "ee8250fb76e094b34b471f13a73dbbe51d1ae142e9df59d7c0d31ec20f0a0a8e"
+                }
+              ]
+            },
+            "digest": "5e9dc4b0eed734544e7c3a87755570cebd2bb0ef141bc4f234e7e17564c473de"
+          }
+        },
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-04-1",
+      "bdd": "S-RUN-04-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "independent next ticket actually runs",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "new execution session",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "first task still awaits verification",
+          "actual": "In Review",
+          "expected": "In Review",
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RunNext",
+          "pid": 14424,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {
+          "cmp-1": {
+            "stage": "Confirmed"
+          }
+        },
+        "tickets": {
+          "FIX-1": {
+            "status": "In Review",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [
+          {
+            "ticket": "FIX-1",
+            "session": "old-session"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-04-2",
+      "bdd": "S-RUN-04-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "no extra process",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Idle",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RunNext",
+          "pid": 29452,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {
+          "cmp-1": {
+            "stage": "Confirmed"
+          }
+        },
+        "tickets": {
+          "FIX-1": {
+            "status": "In Review",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [
+          {
+            "ticket": "FIX-1",
+            "session": "old-session"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-RUN-04-3",
+      "bdd": "S-RUN-04-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "no extra process",
+          "actual": 1,
+          "expected": 1,
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "ReconcileRequired",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "RunNext",
+          "pid": 25352,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {
+          "cmp-1": {
+            "stage": "Unknown"
+          }
+        },
+        "tickets": {
+          "FIX-1": {
+            "status": "In Review",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [
+          {
+            "ticket": "FIX-1",
+            "session": "old-session"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-GOV-01-1",
+      "bdd": "S-GOV-01-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Unauthorized",
+          "pass": false
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Unauthorized",
+          "pass": false
+        },
+        {
+          "assertion": "no self-verification record",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "SubmitVerification",
+          "pid": 14712,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SubmitVerification",
+          "pid": 25624,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "In Review",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-GOV-01-2",
+      "bdd": "S-GOV-01-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "independent evidence persisted",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "verification not completion",
+          "actual": "In Review",
+          "expected": "In Review",
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "SubmitVerification",
+          "pid": 6784,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "In Review",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-GOV-01-3",
+      "bdd": "S-GOV-01-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "review durable",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "trusted role not elevated",
+          "actual": {
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-review",
+            "role": "reviewer"
+          },
+          "expected": {
+            "developer": "dev-1",
+            "verifier": "qa-1",
+            "reviewer": "review-1",
+            "session": "session-review",
+            "role": "reviewer"
+          },
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "SubmitReview",
+          "pid": 3728,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "In Review",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-GOV-02-1",
+      "bdd": "S-GOV-02-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "incomplete gates cannot mutate",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Review",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": [],
+            "gates": {
+              "verified": false,
+              "reviewed": true,
+              "merged": true
+            }
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Review",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": [],
+            "gates": {
+              "verified": false,
+              "reviewed": true,
+              "merged": true
+            }
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "GateRejected",
+          "pass": false
+        },
+        {
+          "assertion": "incomplete gates cannot mutate",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Review",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": [],
+            "gates": {
+              "verified": true,
+              "reviewed": true,
+              "merged": false
+            }
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Review",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": [],
+            "gates": {
+              "verified": true,
+              "reviewed": true,
+              "merged": false
+            }
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "GateRejected",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ApproveCompletion",
+          "pid": 8132,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "ApproveCompletion",
+          "pid": 22112,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "In Review",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "gates": {
+          "verified": true,
+          "reviewed": true,
+          "merged": false
+        }
+      }
+    },
+    {
+      "id": "TDD-GOV-02-2",
+      "bdd": "S-GOV-02-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "fully accepted task done",
+          "actual": "In Review",
+          "expected": "Done",
+          "pass": false
+        },
+        {
+          "assertion": "fully accepted task blue",
+          "actual": "Gray",
+          "expected": "Blue",
+          "pass": false
+        },
+        {
+          "assertion": "approval history durable",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ApproveCompletion",
+          "pid": 29940,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "In Review",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "gates": {
+          "verified": true,
+          "reviewed": true,
+          "authorized": true,
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    },
+    {
+      "id": "TDD-GOV-02-3",
+      "bdd": "S-GOV-02-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "unauthorized identity cannot mutate",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Review",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Review",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Unauthorized",
+          "pass": false
+        },
+        {
+          "assertion": "unauthorized identity cannot mutate",
+          "actual": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Review",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "expected": {
+            "outbox": [],
+            "inbox": [],
+            "journal": {},
+            "tickets": {
+              "FIX-1": {
+                "status": "In Review",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-2": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": []
+              },
+              "FIX-3": {
+                "status": "Todo",
+                "light": "Gray",
+                "dependsOn": [
+                  "FIX-1"
+                ]
+              }
+            },
+            "leases": {},
+            "runs": [],
+            "config": {
+              "enabled": false,
+              "intervalSec": 60,
+              "maxConcurrent": 1,
+              "revision": 1
+            },
+            "cursor": 0,
+            "verifications": [],
+            "reviews": [],
+            "approvals": []
+          },
+          "pass": true
+        },
+        {
+          "assertion": "observable operation result",
+          "actual": "NotImplemented",
+          "expected": "Unauthorized",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "ApproveCompletion",
+          "pid": 22656,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "ApproveCompletion",
+          "pid": 10676,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "In Review",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-UI-01-1",
+      "bdd": "S-UI-01-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "default disabled checkbox",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        },
+        {
+          "assertion": "default concurrency visible",
+          "actual": "",
+          "expected": "1",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetScheduleView",
+          "pid": 5720,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-01-1.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-UI-01-2",
+      "bdd": "S-UI-01-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "validation alert after actual submit",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "persisted config preserved",
+          "actual": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "expected": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetScheduleView",
+          "pid": 26676,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SaveScheduleView",
+          "pid": 9768,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-01-2.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-UI-01-3",
+      "bdd": "S-UI-01-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "viewer save disabled",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "viewer cannot write config",
+          "actual": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "expected": {
+            "enabled": false,
+            "intervalSec": 60,
+            "maxConcurrent": 1,
+            "revision": 1
+          },
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetScheduleView",
+          "pid": 18284,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SaveScheduleView",
+          "pid": 27452,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-01-3.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-UI-02-1",
+      "bdd": "S-UI-02-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "key reference displayed",
+          "actual": "",
+          "expected": "test-key-1",
+          "pass": false
+        },
+        {
+          "assertion": "secret absent from DOM",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetWebhookView",
+          "pid": 29972,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "GetWebhookView",
+          "pid": 30020,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-02-1.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "keyRef": "test-key-1",
+        "secret": "DO_NOT_RENDER_TEST_SECRET",
+        "runnerOnline": true
+      }
+    },
+    {
+      "id": "TDD-UI-02-2",
+      "bdd": "S-UI-02-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "actual test delivery transport invoked",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "health outcome visible",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "test never starts real job",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetWebhookView",
+          "pid": 11096,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "TestDelivery",
+          "pid": 3344,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-02-2.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "keyRef": "test-key-1",
+        "secret": "DO_NOT_RENDER_TEST_SECRET",
+        "runnerOnline": true
+      }
+    },
+    {
+      "id": "TDD-UI-02-3",
+      "bdd": "S-UI-02-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "offline visible",
+          "actual": "",
+          "expected": "Offline",
+          "pass": false
+        },
+        {
+          "assertion": "pause usable",
+          "actual": false,
+          "expected": false,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetWebhookView",
+          "pid": 9740,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-02-3.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "keyRef": "test-key-1",
+        "secret": "DO_NOT_RENDER_TEST_SECRET",
+        "runnerOnline": false
+      }
+    },
+    {
+      "id": "TDD-UI-03-1",
+      "bdd": "S-UI-03-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "process exit visible",
+          "actual": "",
+          "expected": "Exited",
+          "pass": false
+        },
+        {
+          "assertion": "completion unknown visible separately",
+          "actual": "",
+          "expected": "Unknown",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetRunView",
+          "pid": 26120,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-03-1.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [
+          {
+            "processStatus": "Exited",
+            "completionStatus": "Unknown"
+          }
+        ],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-UI-03-2",
+      "bdd": "S-UI-03-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "unmerged completion disabled",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "disabled reason visible",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetGateView",
+          "pid": 15492,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-03-2.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "gates": {
+          "merged": false
+        }
+      }
+    },
+    {
+      "id": "TDD-UI-03-3",
+      "bdd": "S-UI-03-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "empty explanation visible",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "no invented success",
+          "actual": "",
+          "expected": "",
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "GetRunView",
+          "pid": 3024,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [
+        {
+          "browser": "156.0.8078.81",
+          "screenshot": "D:\\GuGuBoard\\docs\\dispatch-plan\\red\\driver-evidence\\TDD-UI-03-3.png"
+        }
+      ],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": false,
+          "intervalSec": 60,
+          "maxConcurrent": 1,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-INT-01-1",
+      "bdd": "S-INT-01-1",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "second independent process starts",
+          "actual": false,
+          "expected": true,
+          "pass": false
+        },
+        {
+          "assertion": "first task waits independent verification",
+          "actual": "Todo",
+          "expected": "In Review",
+          "pass": false
+        },
+        {
+          "assertion": "dependent never started",
+          "actual": 0,
+          "expected": 0,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "EvaluateDue",
+          "pid": 3928,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "DeliverPending",
+          "pid": 9096,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "AcceptWakeup",
+          "pid": 19960,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RunNext",
+          "pid": 1308,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SubmitCompletion",
+          "pid": 21564,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RunNext",
+          "pid": 424,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "notBefore": 1794013200,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-INT-01-2",
+      "bdd": "S-INT-01-2",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "one process despite replay",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "release interruption reached",
+          "actual": 0,
+          "expected": 1,
+          "pass": false
+        },
+        {
+          "assertion": "completion restored after restart",
+          "actual": null,
+          "expected": "Confirmed",
+          "pass": false
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "EvaluateDue",
+          "pid": 28088,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "DeliverPending",
+          "pid": 26184,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "AcceptWakeup",
+          "pid": 7156,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RunNext",
+          "pid": 27608,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "AcceptWakeup",
+          "pid": 18984,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SubmitCompletion",
+          "pid": 25836,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "ReconcileCompletion",
+          "pid": 14500,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {
+        "Board.Release": 0
+      },
+      "missingFaultPaths": [
+        "Board.Release"
+      ],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "notBefore": 1794013200,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": []
+      }
+    },
+    {
+      "id": "TDD-INT-01-3",
+      "bdd": "S-INT-01-3",
+      "status": "BEHAVIOR_RED",
+      "layer": "test-only input ports + executable boundary drivers",
+      "checks": [
+        {
+          "assertion": "independent accepted task blue",
+          "actual": "Gray",
+          "expected": "Blue",
+          "pass": false
+        },
+        {
+          "assertion": "only done task unblocks dependencies",
+          "actual": "Todo",
+          "expected": "Done",
+          "pass": false
+        },
+        {
+          "assertion": "all three independent gate commands sent",
+          "actual": 3,
+          "expected": 3,
+          "pass": true
+        }
+      ],
+      "trace": [],
+      "invocations": [
+        {
+          "operation": "EvaluateDue",
+          "pid": 25472,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "DeliverPending",
+          "pid": 24824,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "AcceptWakeup",
+          "pid": 11936,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RunNext",
+          "pid": 29368,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SubmitCompletion",
+          "pid": 19748,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SubmitVerification",
+          "pid": 9264,
+          "response": {
+            "kind": "result",
+            "value": {
+              "outcome": "NotImplemented"
+            }
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "SubmitReview",
+          "pid": 27064,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "ApproveCompletion",
+          "pid": 29804,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        },
+        {
+          "operation": "RunNext",
+          "pid": 13196,
+          "response": {
+            "value": {
+              "outcome": "NotImplemented"
+            },
+            "kind": "result"
+          },
+          "faultsReturned": 0
+        }
+      ],
+      "faultHitCounts": {},
+      "missingFaultPaths": [],
+      "notes": [],
+      "snapshot": {
+        "outbox": [],
+        "inbox": [],
+        "journal": {},
+        "tickets": {
+          "FIX-1": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-2": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": []
+          },
+          "FIX-3": {
+            "status": "Todo",
+            "light": "Gray",
+            "dependsOn": [
+              "FIX-1"
+            ]
+          }
+        },
+        "leases": {},
+        "runs": [],
+        "config": {
+          "enabled": true,
+          "notBefore": 1794013200,
+          "revision": 1
+        },
+        "cursor": 0,
+        "verifications": [],
+        "reviews": [],
+        "approvals": [],
+        "gates": {
+          "verified": true,
+          "reviewed": true,
+          "authorized": true,
+          "merged": true,
+          "candidateTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mergedTree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      }
+    }
+  ],
+  "red": 48,
+  "passed": 0,
+  "invalid": 0,
+  "productionChanged": false,
+  "independentAcceptance": "NOT RUN",
+  "provenance": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "platform": "Windows-10-10.0.19045-SP0",
+    "files": {
+      "run_drivers.py": "1a4af6488c2e9fca46225e45d6411eb0f3dc108758b3084926fb0ee45b4b77d1",
+      "driver_support.py": "ae6d8aae2255256417fb7335df552a8d85344c8b37791cc9d2b2a5c4f0f91acd",
+      "Bridge.ps1": "affa9de9c6d0a6fa08dfef7f01e979e15a8bd127983e0ffbed0c3f13d8bb93b4",
+      "Skeleton.ps1": "f6e1a4e1aa4a6a425601ae3d3c4a97393d477727e020226fb52269b39829ea2e",
+      "ui-skeleton.html": "681e8c554b506a176ae53d3951e374901518aecc812da21c4d11fa0857099c74",
+      "browser-driver.cjs": "1452732833809f0ca928a4f4145e5ee2e7a4068dec3d5d80d6fef96a23b7fec5",
+      "PortProbe.ps1": "ae510e95f7ce884924a162a2e2cd1afbb96dd8c348d851b374c9e39ce8c67edb",
+      "cases.json": "fff710be1578de3982037b9aff563d48383d450710a7ed207f77c3329b6b5db3"
+    }
+  },
+  "qualification": "RED against test-only empty application skeleton. Unreached fault ports demonstrate missing orchestration, not exercised fault handling. Real browser drives test-only UI, not product UI."
+}
