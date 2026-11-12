@@ -35,6 +35,11 @@ function Get-OriginClaim($fix, [string]$ticket) {
   $f = Join-Path $t "claims\$ticket.json"; $r = if (Test-Path $f) { Get-Content $f -Raw | ConvertFrom-Json } else { $null }
   Remove-Item $t -Recurse -Force -ErrorAction SilentlyContinue; $r
 }
+function Get-OriginDeadLetter($fix, [string]$ticket) {   # 讀 origin 上的死信檔，沒有回 $null
+  $t = Join-Path $fix.root ('dl-' + [guid]::NewGuid().ToString('N').Substring(0, 6)); git clone -q $fix.origin $t | Out-Null
+  $f = Join-Path $t "deadletters\$ticket.json"; $r = if (Test-Path $f) { Get-Content $f -Raw -Encoding UTF8 | ConvertFrom-Json } else { $null }
+  Remove-Item $t -Recurse -Force -ErrorAction SilentlyContinue; $r
+}
 function Get-OriginBoard($fix) {
   $t = Join-Path $fix.root ('insp-' + [guid]::NewGuid().ToString('N').Substring(0, 6)); git clone -q $fix.origin $t | Out-Null
   $b = ConvertFrom-JsonKeepDates (Get-Content (Join-Path $t 'board.json') -Raw -Encoding UTF8)   # 與受測碼同一套日期處理，updatedAt 斷言才看得到完整 ISO
