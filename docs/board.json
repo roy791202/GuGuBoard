@@ -1,7 +1,7 @@
 {
-  "version": 1,
+  "version": 1.0,
   "project": "GuGuBoard",
-  "updatedAt": "2026-11-07T12:15:00+08:00",
+  "updatedAt": "2026-11-12T18:01:38+08:00",
   "items": [
     {
       "id": "E-DL",
@@ -32,7 +32,7 @@
       "status": "Backlog",
       "light": "Gray",
       "estimate": {
-        "storyPoints": 1
+        "storyPoints": 1.0
       },
       "acceptance": [
         "notBefore 未到不派工；到期（含等於）照現有規則派工",
@@ -72,7 +72,7 @@
       "status": "Done",
       "light": "Blue",
       "estimate": {
-        "hours": 2
+        "hours": 2.0
       },
       "dependsOn": [],
       "scenarioIds": [
@@ -84,8 +84,8 @@
       "tdd": "Green",
       "tests": {
         "status": "Green",
-        "passed": 6,
-        "failed": 0
+        "passed": 6.0,
+        "failed": 0.0
       },
       "owner": "claude-dev-agent",
       "startedAt": "2026-11-07T02:05:00+08:00",
@@ -137,7 +137,7 @@
       "status": "Backlog",
       "light": "Gray",
       "estimate": {
-        "storyPoints": 2
+        "storyPoints": 2.0
       },
       "acceptance": [
         "逾時與手動停止都會結束父程序與所有子程序",
@@ -171,7 +171,7 @@
       "status": "Done",
       "light": "Blue",
       "estimate": {
-        "hours": 2
+        "hours": 2.0
       },
       "dependsOn": [],
       "scenarioIds": [
@@ -182,8 +182,8 @@
       "tdd": "Green",
       "tests": {
         "status": "Green",
-        "passed": 4,
-        "failed": 0
+        "passed": 4.0,
+        "failed": 0.0
       },
       "owner": "claude-dev-agent",
       "startedAt": "2026-11-07T02:05:00+08:00",
@@ -244,7 +244,7 @@
       "status": "Backlog",
       "light": "Gray",
       "estimate": {
-        "storyPoints": 2
+        "storyPoints": 2.0
       },
       "acceptance": [
         "執行結束後工單仍是 Todo 或 In Progress，就暫停並寫出原因",
@@ -279,7 +279,7 @@
       "status": "Done",
       "light": "Blue",
       "estimate": {
-        "hours": 3
+        "hours": 3.0
       },
       "dependsOn": [],
       "scenarioIds": [
@@ -290,8 +290,8 @@
       "tdd": "Green",
       "tests": {
         "status": "Green",
-        "passed": 7,
-        "failed": 0
+        "passed": 7.0,
+        "failed": 0.0
       },
       "owner": "claude-dev-agent",
       "startedAt": "2026-11-07T02:05:00+08:00",
@@ -352,7 +352,7 @@
       "status": "Backlog",
       "light": "Gray",
       "estimate": {
-        "storyPoints": 3
+        "storyPoints": 3.0
       },
       "acceptance": [
         "重啟時仍在跑的派工程序會被終止，工單依 T-DL-3 的規則暫停",
@@ -387,7 +387,7 @@
       "status": "Done",
       "light": "Blue",
       "estimate": {
-        "hours": 4
+        "hours": 4.0
       },
       "dependsOn": [
         "T-DL-2",
@@ -401,8 +401,8 @@
       "tdd": "Green",
       "tests": {
         "status": "Green",
-        "passed": 4,
-        "failed": 0
+        "passed": 4.0,
+        "failed": 0.0
       },
       "owner": "claude-dev-agent",
       "startedAt": "2026-11-07T02:05:00+08:00",
@@ -454,6 +454,487 @@
         }
       ],
       "approvedBy": "user（主對話授權）"
+    },
+    {
+      "id": "E-GIT",
+      "level": "Epic",
+      "title": "Git-based 跨機器派工（取代 dispatch-plan 的 Webhook/fencing/outbox）",
+      "parentId": null,
+      "status": "Backlog",
+      "light": "Gray",
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-08T06:30:00+08:00",
+      "remark": "用 Git 當跨機器的協調層與傳輸層，不自建 HTTP 派工協定。領工單＝改 board.json 標 claim→commit→push，push 成功才算領到（non-fast-forward 拒絕＝天然樂觀鎖/fencing）；回報＝commit 狀態/PR→push；程式碼走 branch/PR。認證用 SSH/token、權限用 repo access、稽核用 commit 歷史。\n取代：dispatch-plan 的 Webhook、HMAC、endpoint allowlist、lease generation、outbox、completion 冪等（Git 既有機制已涵蓋）。\n沿用：現有本機 push 式派工（Process.Start）維持不變，遠端改 pull 式，兩者並存。\n真正要設計的只有三點：claim 競爭退讓、board.json 併發 rebase 合併、runner 活著判斷。",
+      "notes": [
+        {
+          "at": "2026-11-08T06:30:00+08:00",
+          "by": "claude-dev-agent",
+          "text": "獨立驗收 A（實測）＋B（審查）：T-GIT-1/3 ACCEPT；T-GIT-2/4 RETURN。已修 BLOCKER-1（report push 前驗證補 -OldPath+-Role，L5 擋開發代理設 Done/藍燈）、BLOCKER-2（history from 用舊值）、MAJOR-3（history 補 note）、同秒 updatedAt 補毫秒；runner F2（損毀 claim try/catch）、F4（executor 例外釋放 claim）、F3（回報前 heartbeat LOST 檢查）；dependsOn 查無保守不領。補 10 個測試鎖住存活 mutation，共 24 綠（PS5.1 與 7）。"
+        }
+      ]
+    },
+    {
+      "id": "F-GIT",
+      "level": "Feature",
+      "title": "用 Git 當協調層的 pull 式派工",
+      "parentId": "E-GIT",
+      "status": "Backlog",
+      "light": "Gray",
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-07T04:00:00+08:00"
+    },
+    {
+      "id": "S-GIT-1",
+      "level": "Story",
+      "title": "作為 runner，我想用 git push 搶單，確保同一張工單只被一台領到",
+      "parentId": "F-GIT",
+      "status": "In Progress",
+      "light": "Green",
+      "estimate": {
+        "storyPoints": 5.0
+      },
+      "estimateNote": "初估，待團隊校準",
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-08T04:30:00+08:00",
+      "bdd": [
+        {
+          "id": "S-GIT-1-1",
+          "title": "Given 兩台 runner 同時 claim 同一張工單 When 各自 commit 並 push Then 只有一台 push 成功，另一台被 non-fast-forward 拒絕",
+          "status": "Green"
+        },
+        {
+          "id": "S-GIT-1-2",
+          "title": "Given claim 被拒 When pull --rebase 後發現該工單已被別台領 Then 放棄這張、改挑下一張未領工單",
+          "status": "Green"
+        },
+        {
+          "id": "S-GIT-1-3",
+          "title": "Given claim 被拒但 rebase 後該工單仍未被領（別人領的是別張） When 重新套用自己的 claim 並 push Then 成功領到",
+          "status": "Green"
+        }
+      ],
+      "history": [
+        {
+          "at": "2026-11-08T04:30:00+08:00",
+          "from": "Backlog / Gray",
+          "to": "In Progress / Green",
+          "by": "claude-dev-agent",
+          "note": "底下 T-GIT-1 進 In Review"
+        }
+      ]
+    },
+    {
+      "id": "T-GIT-1",
+      "level": "Task",
+      "title": "claim 競爭協議（push 搶單、被拒退讓與重試）",
+      "parentId": "S-GIT-1",
+      "status": "In Review",
+      "light": "Green",
+      "estimate": {
+        "hours": 8.0
+      },
+      "dependsOn": [],
+      "scenarioIds": [
+        "S-GIT-1-1",
+        "S-GIT-1-2",
+        "S-GIT-1-3"
+      ],
+      "tdd": "Green",
+      "tests": {
+        "status": "Green",
+        "passed": 4.0,
+        "failed": 0.0
+      },
+      "owner": "claude-dev-agent",
+      "startedAt": "2026-11-08T04:00:00+08:00",
+      "history": [
+        {
+          "at": "2026-11-08T04:00:00+08:00",
+          "from": "Backlog / Gray",
+          "to": "In Progress / Green",
+          "by": "claude-dev-agent",
+          "note": "開始實作；先寫 RED 測試（stub 回 NOT_IMPL）"
+        },
+        {
+          "at": "2026-11-08T04:30:00+08:00",
+          "from": "In Progress / Green",
+          "to": "In Review / Green",
+          "by": "claude-dev-agent",
+          "note": "READY_FOR_TDD：claims/<ticket>.json＋push 搶單；S-GIT-1-1~3 與真並行 1b 共 4 綠（PS5.1 與 7）"
+        }
+      ],
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-08T04:30:00+08:00",
+      "remark": "做法：claim＝在 board.json 的該 item 寫 claim{by,host,until}，commit「claim <id> by <runner>」，push。被拒→fetch+rebase→重判該 item：已被別台領（claim.by 非我且 until 未過期）就放棄挑下一張；仍未被領就重套 claim 再 push。定義最大重試次數與每次退讓（隨機抖動避免活鎖）。\n不要做：自建 lease generation／HTTP 鎖；一律靠 git push 的原子性。\n完成：三情境可用兩個本機 clone 模擬 push 競爭重現。"
+    },
+    {
+      "id": "S-GIT-2",
+      "level": "Story",
+      "title": "作為系統，我想讓多台改不同工單時能自動 rebase 合併、改同一張時安全停下",
+      "parentId": "F-GIT",
+      "status": "In Progress",
+      "light": "Green",
+      "estimate": {
+        "storyPoints": 5.0
+      },
+      "estimateNote": "初估，待團隊校準",
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-08T05:00:00+08:00",
+      "bdd": [
+        {
+          "id": "S-GIT-2-1",
+          "title": "Given A 領 T-1、B 領 T-2 When 兩台先後 push Then rebase 自動合併、兩筆 claim 都在、board.json 無衝突",
+          "status": "Green"
+        },
+        {
+          "id": "S-GIT-2-2",
+          "title": "Given 兩台改同一張工單的不同欄位 When rebase Then 偵測為衝突、停下交人工，不自動亂合",
+          "status": "Green"
+        },
+        {
+          "id": "S-GIT-2-3",
+          "title": "Given rebase 後 board.json 不符 L1–L7 When push 前驗證 Then 擋下 push 並回報原因",
+          "status": "Green"
+        }
+      ],
+      "history": [
+        {
+          "at": "2026-11-08T05:00:00+08:00",
+          "from": "Backlog / Gray",
+          "to": "In Progress / Green",
+          "by": "claude-dev-agent",
+          "note": "底下 T-GIT-2 進 In Review"
+        }
+      ]
+    },
+    {
+      "id": "T-GIT-2",
+      "level": "Task",
+      "title": "board.json 併發 rebase 合併與 push 前驗證",
+      "parentId": "S-GIT-2",
+      "status": "In Review",
+      "light": "Green",
+      "estimate": {
+        "hours": 8.0
+      },
+      "dependsOn": [
+        "T-GIT-1"
+      ],
+      "scenarioIds": [
+        "S-GIT-2-1",
+        "S-GIT-2-2",
+        "S-GIT-2-3"
+      ],
+      "tdd": "Green",
+      "tests": {
+        "status": "Green",
+        "passed": 4.0,
+        "failed": 0.0
+      },
+      "owner": "claude-dev-agent",
+      "startedAt": "2026-11-08T04:40:00+08:00",
+      "history": [
+        {
+          "at": "2026-11-08T04:40:00+08:00",
+          "from": "Backlog / Gray",
+          "to": "In Progress / Green",
+          "by": "claude-dev-agent",
+          "note": "開始實作；先寫 RED（stub NOT_IMPL）"
+        },
+        {
+          "at": "2026-11-08T05:00:00+08:00",
+          "from": "In Progress / Green",
+          "to": "In Review / Green",
+          "by": "claude-dev-agent",
+          "note": "READY_FOR_TDD：重放式樂觀鎖＋push 前驗 L1–L7；S-GIT-2-1~3 與真並行 1b 共 4 綠（PS5.1 與 7）"
+        }
+      ],
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-08T06:30:00+08:00",
+      "remark": "做法：以 item id 為單位的合併——不同 item 各自更新時 rebase 自動過；同一 item 同欄位衝突則標衝突交人工。push 前跑 validate-board.ps1（L1–L7），不過就拒 push。\n不要做：對整檔做文字級 merge（易錯）。\n完成：三情境以兩個 clone 製造併發 commit 重現。",
+      "notes": [
+        {
+          "at": "2026-11-08T06:30:00+08:00",
+          "by": "claude-dev-agent",
+          "text": "驗收 RETURN→修正：push 前驗證帶 OldPath+Role（L5/L7/完整性）、history from 修正、補 note、updatedAt 補毫秒；補 BLOCKER/R6b 測試。"
+        }
+      ]
+    },
+    {
+      "id": "S-GIT-3",
+      "level": "Story",
+      "title": "作為管理者，我想知道領了工單的 runner 是否還活著，死掉的工單能被重領",
+      "parentId": "F-GIT",
+      "status": "In Progress",
+      "light": "Green",
+      "estimate": {
+        "storyPoints": 3.0
+      },
+      "estimateNote": "初估，待團隊校準",
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-08T05:30:00+08:00",
+      "bdd": [
+        {
+          "id": "S-GIT-3-1",
+          "title": "Given runner 領工單後定時 push heartbeat（更新 claim.until） When 伺服器檢查 Then until 未過期視為存活",
+          "status": "Green"
+        },
+        {
+          "id": "S-GIT-3-2",
+          "title": "Given runner 當機不再 push When claim.until 過期 Then 該工單視為可重新領取",
+          "status": "Green"
+        },
+        {
+          "id": "S-GIT-3-3",
+          "title": "Given 續租 push 與別台 claim 衝突 When rebase 偵測 Then 以最新有效 claim 為準、過期者作廢",
+          "status": "Green"
+        }
+      ],
+      "history": [
+        {
+          "at": "2026-11-08T05:30:00+08:00",
+          "from": "Backlog / Gray",
+          "to": "In Progress / Green",
+          "by": "claude-dev-agent",
+          "note": "底下 T-GIT-3 進 In Review"
+        }
+      ]
+    },
+    {
+      "id": "T-GIT-3",
+      "level": "Task",
+      "title": "heartbeat 續租與逾期重領",
+      "parentId": "S-GIT-3",
+      "status": "In Review",
+      "light": "Green",
+      "estimate": {
+        "hours": 6.0
+      },
+      "dependsOn": [
+        "T-GIT-1"
+      ],
+      "scenarioIds": [
+        "S-GIT-3-1",
+        "S-GIT-3-2",
+        "S-GIT-3-3"
+      ],
+      "tdd": "Green",
+      "tests": {
+        "status": "Green",
+        "passed": 3.0,
+        "failed": 0.0
+      },
+      "owner": "claude-dev-agent",
+      "startedAt": "2026-11-08T05:10:00+08:00",
+      "history": [
+        {
+          "at": "2026-11-08T05:10:00+08:00",
+          "from": "Backlog / Gray",
+          "to": "In Progress / Green",
+          "by": "claude-dev-agent",
+          "note": "開始實作；先寫 RED（3-2 直接 PASS：逾期重領本來就被 claim 支援）"
+        },
+        {
+          "at": "2026-11-08T05:30:00+08:00",
+          "from": "In Progress / Green",
+          "to": "In Review / Green",
+          "by": "claude-dev-agent",
+          "note": "READY_FOR_TDD：heartbeat 續租 claims/<ticket>.json until；被接手回 LOST 不搶回；S-GIT-3-1~3 共 3 綠（PS5.1 與 7）"
+        }
+      ],
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-08T05:30:00+08:00",
+      "remark": "做法：claim.until 由 runner 定時 push 續租；伺服器與其他 runner 以 commit 時間與 until 判存活；until 過期即可被重領（走 T-GIT-1 的 claim 流程）。\n完成：三情境可模擬續租、逾期、續租衝突。"
+    },
+    {
+      "id": "S-GIT-4",
+      "level": "Story",
+      "title": "作為遠端機器，我想定時 pull 看板、領未執行工單、做完 push 回報",
+      "parentId": "F-GIT",
+      "status": "In Progress",
+      "light": "Green",
+      "estimate": {
+        "storyPoints": 5.0
+      },
+      "estimateNote": "初估，待團隊校準",
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-08T06:00:00+08:00",
+      "bdd": [
+        {
+          "id": "S-GIT-4-1",
+          "title": "Given 看板有未領、可領工單 When 遠端 runner pull 後執行迴圈 Then claim-push 成功並啟動 AI",
+          "status": "Green"
+        },
+        {
+          "id": "S-GIT-4-2",
+          "title": "Given AI 做完 When runner 更新 board.json 狀態與 PR 連結並 push Then 伺服器與其他 runner pull 後看到最新狀態",
+          "status": "Green"
+        },
+        {
+          "id": "S-GIT-4-3",
+          "title": "Given 沒有可領工單 When runner pull Then 進 idle、間隔後再 pull，不空轉搶單",
+          "status": "Green"
+        }
+      ],
+      "history": [
+        {
+          "at": "2026-11-08T06:00:00+08:00",
+          "from": "Backlog / Gray",
+          "to": "In Progress / Green",
+          "by": "claude-dev-agent",
+          "note": "底下 T-GIT-4 進 In Review"
+        }
+      ]
+    },
+    {
+      "id": "T-GIT-4",
+      "level": "Task",
+      "title": "遠端 runner pull 迴圈（pull→claim→執行→回報 push→idle）",
+      "parentId": "S-GIT-4",
+      "status": "In Review",
+      "light": "Green",
+      "estimate": {
+        "hours": 10.0
+      },
+      "dependsOn": [
+        "T-GIT-1",
+        "T-GIT-2",
+        "T-GIT-3"
+      ],
+      "scenarioIds": [
+        "S-GIT-4-1",
+        "S-GIT-4-2",
+        "S-GIT-4-3"
+      ],
+      "tdd": "Green",
+      "tests": {
+        "status": "Green",
+        "passed": 3.0,
+        "failed": 0.0
+      },
+      "owner": "claude-dev-agent",
+      "startedAt": "2026-11-08T05:40:00+08:00",
+      "history": [
+        {
+          "at": "2026-11-08T05:40:00+08:00",
+          "from": "Backlog / Gray",
+          "to": "In Progress / Green",
+          "by": "claude-dev-agent",
+          "note": "開始實作；先寫 RED"
+        },
+        {
+          "at": "2026-11-08T06:00:00+08:00",
+          "from": "In Progress / Green",
+          "to": "In Review / Green",
+          "by": "claude-dev-agent",
+          "note": "READY_FOR_TDD：pull→Select-ClaimableTicket→claim→executor→report→idle；Report 通用化支援任意欄位；S-GIT-4-1~3 共 3 綠（PS5.1 與 7）"
+        }
+      ],
+      "createdAt": "2026-11-07T04:00:00+08:00",
+      "updatedAt": "2026-11-08T06:30:00+08:00",
+      "remark": "做法：遠端 runner 定時 git pull → 挑未領可領工單 → T-GIT-1 claim → 啟動 AI CLI（沿用現有 profile/一次性 token 機制，但在遠端機）→ 完成 PATCH board.json＋PR→push→release；無工單進 idle。本機 push 式派工維持不變。\n完成：三情境以本機兩 clone 當作「伺服器端 repo＋遠端 runner」模擬。",
+      "notes": [
+        {
+          "at": "2026-11-08T06:30:00+08:00",
+          "by": "claude-dev-agent",
+          "text": "驗收 RETURN→修正：Select 損毀 claim try/catch 與 dependsOn 查無保守（F2）、executor 例外釋放 claim（F4）、回報前 heartbeat LOST 檢查（F3）；補 S2/S4/S5/F2/F4 測試。"
+        }
+      ]
+    },
+    {
+      "id": "T-GIT-5",
+      "level": "Task",
+      "title": "死信：工單連續 INVALID 達上限就停止重領（避免跨機器無限重跑）",
+      "parentId": "F-GIT",
+      "status": "In Review",
+      "light": "Green",
+      "estimate": {
+        "hours": 6.0
+      },
+      "dependsOn": [],
+      "createdAt": "2026-11-08T07:30:00+08:00",
+      "updatedAt": "2026-11-12T18:01:38+08:00",
+      "remark": "來源：git-dispatch 第二輪獨立驗收 B2 MAJOR-3。\n問題：executor 若「每次」產出不合 L1–L7 的更新（例：紅燈漏 lightReason、L6 測試沒綠），Git-Report 回 INVALID、runner 不釋放 claim → lease 過期 → 別台重領 → 再 INVALID…跨 N 台無限重跑、燒算力，無死信隔離。\n待決政策（開工前先定）：(a) 計數存哪——claim 檔 / 工單欄位 failCount；(b) 上限 N；(c) 達標後動作——Select 排除該工單、標記 blocked、記 note 交人工；(d) 誰清計數（人工介入後 reset）。\n完成定義：同一工單連續 N 次 INVALID 後，所有 runner 的 Select 不再挑它；工單留 note 說明原因；有測試用『executor 固定回 INVALID 更新』重現，斷言第 N+1 輪起該工單被跳過。\n相關：MINOR——INVALID/CONFLICT 後是否主動 Release-GitClaim（目前壓到過期）可一併在此決定。",
+      "owner": "claude-dev-agent",
+      "startedAt": "2026-11-12T16:30:00+08:00",
+      "tdd": "Green",
+      "tests": {
+        "status": "Green",
+        "passed": 5,
+        "failed": 0
+      },
+      "scenarioIds": [
+        "S-GIT-5-1",
+        "S-GIT-5-2",
+        "S-GIT-5-3",
+        "S-GIT-5-4",
+        "S-GIT-5-5"
+      ],
+      "bdd": [
+        {
+          "id": "S-GIT-5-1",
+          "title": "executor 固定回 INVALID：連續 N 次後該工單被所有 runner 跳過（done-definition）",
+          "status": "Green",
+          "tests": [
+            "deadletter.Tests.ps1::S-GIT-5-1"
+          ]
+        },
+        {
+          "id": "S-GIT-5-2",
+          "title": "Add-GitDeadLetterFail 連續計數在 origin 持久、Test-GitDeadLettered 於門檻翻轉",
+          "status": "Green",
+          "tests": [
+            "deadletter.Tests.ps1::S-GIT-5-2"
+          ]
+        },
+        {
+          "id": "S-GIT-5-3",
+          "title": "死信後所有 runner（含另一台）的 Select 都跳過該工單",
+          "status": "Green",
+          "tests": [
+            "deadletter.Tests.ps1::S-GIT-5-3"
+          ]
+        },
+        {
+          "id": "S-GIT-5-4",
+          "title": "人工 Clear-GitDeadLetter 後連續計數歸零、工單可再被挑",
+          "status": "Green",
+          "tests": [
+            "deadletter.Tests.ps1::S-GIT-5-4"
+          ]
+        },
+        {
+          "id": "S-GIT-5-5",
+          "title": "成功回報（REPORTED）會把連續計數歸零",
+          "status": "Green",
+          "tests": [
+            "deadletter.Tests.ps1::S-GIT-5-5"
+          ]
+        }
+      ],
+      "history": [
+        {
+          "at": "2026-11-12T16:30:00+08:00",
+          "from": "Backlog / Gray",
+          "to": "In Progress / Green",
+          "by": "claude-dev-agent",
+          "note": "開始實作；先寫 RED（deadletter.Tests.ps1 五情境先全失敗）"
+        },
+        {
+          "at": "2026-11-12T18:01:38+08:00",
+          "from": "In Progress / Green",
+          "to": "In Review / Green",
+          "by": "claude-dev-agent",
+          "note": "READY_FOR_TDD：死信檔 deadletters/<ticket>.json 連續 N 次 INVALID 隔離，Select 跳過、成功回報/人工清檔歸零；S-GIT-5-1~5 共 5 綠（PS5.1 與 pwsh7）"
+        }
+      ],
+      "notes": [
+        {
+          "at": "2026-11-12T18:01:38+08:00",
+          "by": "claude-dev-agent",
+          "text": "政策定案：計數存專屬檔 deadletters/<ticket>.json（不寫 board 免過驗證/免搶樂觀鎖）；上限 N 預設 3（可參數化）；達標後所有 runner Select 跳過＋工單留 note 交人工；成功回報或人工刪檔歸零。MINOR：INVALID 後主動 Release-GitClaim（不再壓到過期）。"
+        }
+      ]
     }
   ]
 }
