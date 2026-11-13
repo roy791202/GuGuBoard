@@ -1,7 +1,7 @@
 {
   "version": 1.0,
   "project": "GuGuBoard",
-  "updatedAt": "2026-11-12T18:01:38+08:00",
+  "updatedAt": "2026-11-12T23:08:03+08:00",
   "items": [
     {
       "id": "E-DL",
@@ -846,17 +846,19 @@
       "level": "Task",
       "title": "死信：工單連續 INVALID 達上限就停止重領（避免跨機器無限重跑）",
       "parentId": "F-GIT",
-      "status": "In Review",
-      "light": "Green",
+      "status": "Done",
+      "light": "Blue",
       "estimate": {
         "hours": 6.0
       },
       "dependsOn": [],
       "createdAt": "2026-11-08T07:30:00+08:00",
-      "updatedAt": "2026-11-12T18:01:38+08:00",
+      "updatedAt": "2026-11-12T23:08:03+08:00",
       "remark": "來源：git-dispatch 第二輪獨立驗收 B2 MAJOR-3。\n問題：executor 若「每次」產出不合 L1–L7 的更新（例：紅燈漏 lightReason、L6 測試沒綠），Git-Report 回 INVALID、runner 不釋放 claim → lease 過期 → 別台重領 → 再 INVALID…跨 N 台無限重跑、燒算力，無死信隔離。\n待決政策（開工前先定）：(a) 計數存哪——claim 檔 / 工單欄位 failCount；(b) 上限 N；(c) 達標後動作——Select 排除該工單、標記 blocked、記 note 交人工；(d) 誰清計數（人工介入後 reset）。\n完成定義：同一工單連續 N 次 INVALID 後，所有 runner 的 Select 不再挑它；工單留 note 說明原因；有測試用『executor 固定回 INVALID 更新』重現，斷言第 N+1 輪起該工單被跳過。\n相關：MINOR——INVALID/CONFLICT 後是否主動 Release-GitClaim（目前壓到過期）可一併在此決定。",
       "owner": "claude-dev-agent",
       "startedAt": "2026-11-12T16:30:00+08:00",
+      "completedAt": "2026-11-12T23:08:03+08:00",
+      "approvedBy": "使用者（人工授權）+ verify-review-a7f3（opus 審查）",
       "tdd": "Green",
       "tests": {
         "status": "Green",
@@ -926,6 +928,13 @@
           "to": "In Review / Green",
           "by": "claude-dev-agent",
           "note": "READY_FOR_TDD：死信檔 deadletters/<ticket>.json 連續 N 次 INVALID 隔離，Select 跳過、成功回報/人工清檔歸零；S-GIT-5-1~5 共 5 綠（PS5.1 與 pwsh7）"
+        },
+        {
+          "at": "2026-11-12T23:08:03+08:00",
+          "from": "In Review / Green",
+          "to": "Done / Blue",
+          "by": "opus-reviewer（使用者授權）",
+          "reason": "PR #1 已合併 master(2d314c9)；獨立實測(verify-test-ind/sonnet)5/5+33/0 雙直譯器 PASS、mutation 三項全抓；獨立審查(verify-review-a7f3/opus)10 項全過無 blocker；開發/實測/審查三者身分互異，驗收有效。藍燈/Done 經使用者授權由高階模型設定。"
         }
       ],
       "notes": [
