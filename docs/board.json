@@ -1,7 +1,7 @@
 {
   "version": 1.0,
   "project": "GuGuBoard",
-  "updatedAt": "2026-11-14T10:30:00+08:00",
+  "updatedAt": "2026-11-14T11:00:00+08:00",
   "items": [
     {
       "id": "E-DL",
@@ -1380,7 +1380,8 @@
       },
       "sprint": "acc-m1",
       "dependsOn": [
-        "T-ACC-32b"
+        "T-ACC-32b",
+        "T-ACC-22a"
       ],
       "scenarioIds": [
         "S-ACC-3-3-1",
@@ -1392,6 +1393,623 @@
       "createdAt": "2026-11-13T10:00:00+08:00",
       "updatedAt": "2026-11-13T10:00:00+08:00",
       "remark": "層級:腳本/infra(PowerShell adapter + hook)。可改:scripts/account-guard/Invoke-BoardGuard.ps1、validate-board.ps1 的 L5 呼叫點、hook 設定(此單即改 hook,需 guard-change 核准)、tests/account/guard-rebind.Tests.ps1。⚠ 跨里程碑:S-ACC-3-3-1「verifier 以金鑰驗證」需 M2 的 F-ACC-2 金鑰驗證(T-ACC-22a)。M1 只能交付接縫(改呼叫授權決策+脫鉤 AI_AGENT,以注入身分測 3-3-3);金鑰背書的擋/放 commit E2E 待 M2。建議排在 M2 之後,屆時把 T-ACC-22a 補入 dependsOn。TDD #11-14(Pester)。"
+    },
+    {
+      "id": "F-ACC-2",
+      "level": "Feature",
+      "title": "機器金鑰（派工憑證強化）",
+      "parentId": "E-ACC",
+      "status": "Backlog",
+      "light": "Gray",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "F-ACC-1",
+      "level": "Feature",
+      "title": "Web 帳號與登入",
+      "parentId": "E-ACC",
+      "status": "Backlog",
+      "light": "Gray",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-2-1",
+      "level": "Story",
+      "title": "作為管理者，我想為每個代理身分簽發機器金鑰並綁定角色，取代裸代號字串",
+      "parentId": "F-ACC-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "sprint": "acc-m2",
+      "bdd": [
+        {
+          "id": "S-ACC-2-1-1",
+          "title": "When 為 runner-01 簽發並綁 runner Then 回金鑰且綁定身分與角色",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-1-2",
+          "title": "When 簽發 Then 明文只回一次,之後只存不可還原雜湊",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-1-3",
+          "title": "Given dev-agent When 簽發 Then Forbidden 且不產生金鑰",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-1-4",
+          "title": "When 綁不存在角色 Then UnknownRole 且不產生金鑰",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-1-5",
+          "title": "When 簽發 Then 稽核 action=issue_key 不含明文",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-2-2",
+      "level": "Story",
+      "title": "作為系統，我想驗證代理以金鑰簽章的請求，通過才認可身分與角色",
+      "parentId": "F-ACC-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "sprint": "acc-m2",
+      "bdd": [
+        {
+          "id": "S-ACC-2-2-1",
+          "title": "When 有效簽章請求 Then 通過並解析 identity+role",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-2-2",
+          "title": "When 竄改內容或簽章 Then Unauthorized 不認可身分",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-2-3",
+          "title": "Given 金鑰過期 When 簽章請求 Then Unauthorized",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-2-4",
+          "title": "When 重放舊請求(相同 nonce/時間戳過舊) Then Unauthorized",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-2-5",
+          "title": "When 不存在身分或錯簽章 Then 一致 Unauthorized,不透露原因",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-2-6",
+          "title": "When 驗證後執行受保護動作 Then 稽核 actor 為可驗證金鑰身分非裸代號",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-2-3",
+      "level": "Story",
+      "title": "作為管理者，我想撤銷或輪替機器金鑰，讓外洩或退役的金鑰立即失效",
+      "parentId": "F-ACC-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "sprint": "acc-m2",
+      "bdd": [
+        {
+          "id": "S-ACC-2-3-1",
+          "title": "When 撤銷 Then 之後該金鑰簽章一律 Unauthorized",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-3-2",
+          "title": "When 輪替 Then 新金鑰通過、舊金鑰失敗",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-3-3",
+          "title": "Given dev-agent When 撤銷/輪替 Then Forbidden 且既有金鑰仍有效",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-3-4",
+          "title": "When 撤銷不存在金鑰 Then NotFound/無作用,不漏底層錯,不影響他鑰",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-2-3-5",
+          "title": "When 撤銷/輪替 Then 稽核 action=revoke_key/rotate_key 不含明文",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-1-1",
+      "level": "Story",
+      "title": "作為新使用者，我想用電子郵件與密碼註冊帳號",
+      "parentId": "F-ACC-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "sprint": "acc-m3",
+      "bdd": [
+        {
+          "id": "S-ACC-1-1-1",
+          "title": "When 以未註冊 email+合規密碼註冊 Then 成功且密碼不可還原",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-1-2",
+          "title": "Given email 已註冊 When 再註冊 Then 不建立第二帳號",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-1-3",
+          "title": "When 弱密碼註冊 Then 失敗並回不符規則,不建帳號",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-1-4",
+          "title": "When 以不合法 email 格式註冊 Then 格式錯誤被拒(參數化)",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-1-5",
+          "title": "Given email 已註冊 When 再註冊 Then 回中性一致訊息,不明示已存在",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-1-2",
+      "level": "Story",
+      "title": "作為使用者，我想用帳密登入並取得工作階段，且憑證受暴力破解防護",
+      "parentId": "F-ACC-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "sprint": "acc-m3",
+      "bdd": [
+        {
+          "id": "S-ACC-1-2-1",
+          "title": "When 正確帳密登入 Then 建立綁身分+角色的工作階段",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-2-2",
+          "title": "When 錯密登入 Then 失敗訊息與帳號不存在一致",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-2-3",
+          "title": "Given 連 5 次失敗 When 第 6 次(即使密碼對) Then 鎖定/退避並寫稽核",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-2-4",
+          "title": "Given 無有效工作階段 When 存取受保護資源 Then Unauthorized",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-2-5",
+          "title": "Given 工作階段逾時 When 存取 Then Unauthorized 要求重登",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-2-6",
+          "title": "When 成功登入 Then 稽核 action=login result=allowed",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-1-3",
+      "level": "Story",
+      "title": "作為使用者，我想登出並能變更密碼，讓失效或外洩的工作階段不再有效",
+      "parentId": "F-ACC-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "sprint": "acc-m3",
+      "bdd": [
+        {
+          "id": "S-ACC-1-3-1",
+          "title": "When 登出 Then 原工作階段立即失效,再存取 Unauthorized",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-3-2",
+          "title": "When 以正確現行密碼+合規新密碼變更 Then 成功且僅新密碼可登入",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-3-3",
+          "title": "When 以錯誤現行密碼變更 Then 被拒且密碼不變",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-3-4",
+          "title": "Given 另有有效工作階段 When 改密成功 Then 另一工作階段失效",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-3-5",
+          "title": "Given 無工作階段 When 改密 Then Unauthorized 且密碼不變",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-1-3-6",
+          "title": "When 登出或改密 Then 稽核各新增 action=logout/change_password",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "T-ACC-21a",
+      "level": "Task",
+      "title": "金鑰簽發 Use Case 與 KeyStore",
+      "parentId": "S-ACC-2-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 4
+      },
+      "sprint": "acc-m2",
+      "dependsOn": [
+        "T-ACC-41c",
+        "T-ACC-41a"
+      ],
+      "scenarioIds": [
+        "S-ACC-2-1-1",
+        "S-ACC-2-1-2",
+        "S-ACC-2-1-5"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app+定義 KeyStorePort/infra SqliteKeyStore。可改:src/app/account/issue-key.ts、src/domain/account/ports/key-store-port.ts、src/infra/account/sqlite-key-store.ts 及測試。簽發綁 identity+role;明文只回一次、存不可還原雜湊;簽發寫稽核不含明文。TDD #1/2/5。詳見 docs/account/tickets-m2m3.md。"
+    },
+    {
+      "id": "T-ACC-21b",
+      "level": "Task",
+      "title": "簽發授權與角色校驗",
+      "parentId": "S-ACC-2-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 3
+      },
+      "sprint": "acc-m2",
+      "dependsOn": [
+        "T-ACC-21a",
+        "T-ACC-32a",
+        "T-ACC-31a"
+      ],
+      "scenarioIds": [
+        "S-ACC-2-1-3",
+        "S-ACC-2-1-4"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app/domain。可改:src/app/account/issue-key.ts 授權分支及測試。非管理者簽發回 Forbidden 不產生金鑰;綁未知角色回 UnknownRole。TDD #3/4。"
+    },
+    {
+      "id": "T-ACC-22a",
+      "level": "Task",
+      "title": "金鑰簽章驗證",
+      "parentId": "S-ACC-2-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 5
+      },
+      "sprint": "acc-m2",
+      "dependsOn": [
+        "T-ACC-21a",
+        "T-ACC-41c"
+      ],
+      "scenarioIds": [
+        "S-ACC-2-2-1",
+        "S-ACC-2-2-2",
+        "S-ACC-2-2-3"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:domain 驗證規則+定義 SignerPort/infra HmacSigner。可改:src/domain/account/ports/signer-port.ts、src/infra/account/hmac-signer.ts、src/domain/account/verify-key.ts 及測試。有效簽章通過解析 identity+role;竄改→Unauthorized;過期(假 Clock)→Unauthorized。TDD #6/7/8。⚠ 回填:本卡上板後補進 T-ACC-33a 的 dependsOn。"
+    },
+    {
+      "id": "T-ACC-22b",
+      "level": "Task",
+      "title": "防重放、一致錯誤訊息與身分接稽核",
+      "parentId": "S-ACC-2-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 4
+      },
+      "sprint": "acc-m2",
+      "dependsOn": [
+        "T-ACC-22a",
+        "T-ACC-41c",
+        "T-ACC-41a"
+      ],
+      "scenarioIds": [
+        "S-ACC-2-2-4",
+        "S-ACC-2-2-5",
+        "S-ACC-2-2-6"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app+定義 NoncePort。可改:src/app/account/authenticate-request.ts、src/domain/account/ports/nonce-port.ts、src/infra/account/sqlite-nonce-store.ts 及測試。重放→Unauthorized;不存在身分 vs 錯簽章回應一致(抗計時旁路);actor 為 Identity VO 寫稽核。TDD #9/10/11。"
+    },
+    {
+      "id": "T-ACC-23a",
+      "level": "Task",
+      "title": "金鑰撤銷與輪替",
+      "parentId": "S-ACC-2-3",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 3
+      },
+      "sprint": "acc-m2",
+      "dependsOn": [
+        "T-ACC-21a"
+      ],
+      "scenarioIds": [
+        "S-ACC-2-3-1",
+        "S-ACC-2-3-2",
+        "S-ACC-2-3-4"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app/infra。可改:src/app/account/revoke-key.ts、rotate-key.ts、src/infra/account/sqlite-key-store.ts 及測試。撤銷後驗證即 Unauthorized;輪替新有效舊失效;撤不存在金鑰安全無作用不漏底層錯不影響他鑰。TDD #12/13/15。"
+    },
+    {
+      "id": "T-ACC-23b",
+      "level": "Task",
+      "title": "撤銷／輪替授權與稽核",
+      "parentId": "S-ACC-2-3",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 2
+      },
+      "sprint": "acc-m2",
+      "dependsOn": [
+        "T-ACC-23a",
+        "T-ACC-32a",
+        "T-ACC-41a"
+      ],
+      "scenarioIds": [
+        "S-ACC-2-3-3",
+        "S-ACC-2-3-5"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app。可改:src/app/account/revoke-key.ts、rotate-key.ts 授權/稽核分支及測試。非管理者撤銷/輪替回 Forbidden 且既有金鑰仍有效;撤銷/輪替各寫稽核不含明文。TDD #14/16。"
+    },
+    {
+      "id": "T-ACC-11a",
+      "level": "Task",
+      "title": "密碼政策與 Email 值物件",
+      "parentId": "S-ACC-1-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 3
+      },
+      "sprint": "acc-m3",
+      "dependsOn": [],
+      "scenarioIds": [
+        "S-ACC-1-1-3",
+        "S-ACC-1-1-4"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:domain。可改:src/domain/account/password-policy.ts、email.ts 及測試。弱密碼回違反規則清單;不合法 email(參數化 4 例)被拒。TDD #19/20。通過 A1。"
+    },
+    {
+      "id": "T-ACC-11b",
+      "level": "Task",
+      "title": "帳號註冊 Use Case（AccountStore + Hasher）",
+      "parentId": "S-ACC-1-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 4
+      },
+      "sprint": "acc-m3",
+      "dependsOn": [
+        "T-ACC-11a"
+      ],
+      "scenarioIds": [
+        "S-ACC-1-1-1",
+        "S-ACC-1-1-2"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app+定義 AccountStorePort/PasswordHasherPort/infra Argon2idHasher、SqliteAccountStore。可改:src/app/account/register.ts、src/domain/account/ports/{account-store-port,password-hasher-port}.ts、src/infra/account/{argon2id-hasher,sqlite-account-store}.ts 及測試。註冊成功且密碼不可還原;重複 email 不建第二帳號。TDD #17/18。通過 A2/A5。"
+    },
+    {
+      "id": "T-ACC-11c",
+      "level": "Task",
+      "title": "註冊 API 與防帳號列舉",
+      "parentId": "S-ACC-1-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 2
+      },
+      "sprint": "acc-m3",
+      "dependsOn": [
+        "T-ACC-11b"
+      ],
+      "scenarioIds": [
+        "S-ACC-1-1-5"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:api。可改:src/api/account/register-route.ts 及 supertest 測試。重複註冊回中性一致訊息,與新 email 不可區分。TDD #21。通過 A3。"
+    },
+    {
+      "id": "T-ACC-12a",
+      "level": "Task",
+      "title": "登入 Use Case、工作階段與稽核",
+      "parentId": "S-ACC-1-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 5
+      },
+      "sprint": "acc-m3",
+      "dependsOn": [
+        "T-ACC-11b",
+        "T-ACC-41a"
+      ],
+      "scenarioIds": [
+        "S-ACC-1-2-1",
+        "S-ACC-1-2-2",
+        "S-ACC-1-2-6"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app+定義 SessionStorePort/ClockPort/infra SqliteSessionStore、SystemClock。可改:src/app/account/login.ts、src/domain/account/ports/{session-store-port,clock-port}.ts、src/infra/account/{sqlite-session-store,system-clock}.ts 及測試。正確帳密建綁身分+角色 session;錯密訊息與帳號不存在一致且兩路徑都實跑雜湊;成功登入寫稽核。TDD #22/23/27。"
+    },
+    {
+      "id": "T-ACC-12b",
+      "level": "Task",
+      "title": "工作階段中介與逾時",
+      "parentId": "S-ACC-1-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 3
+      },
+      "sprint": "acc-m3",
+      "dependsOn": [
+        "T-ACC-12a"
+      ],
+      "scenarioIds": [
+        "S-ACC-1-2-4",
+        "S-ACC-1-2-5"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:api/app。可改:src/api/account/session-middleware.ts、src/app/account/validate-session.ts 及測試。無有效 session 回 Unauthorized;逾時(假 Clock 推進)回 Unauthorized 要求重登。TDD #25/26。"
+    },
+    {
+      "id": "T-ACC-12c",
+      "level": "Task",
+      "title": "登入失敗鎖定／退避",
+      "parentId": "S-ACC-1-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 2
+      },
+      "sprint": "acc-m3",
+      "dependsOn": [
+        "T-ACC-12a"
+      ],
+      "scenarioIds": [
+        "S-ACC-1-2-3"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app。可改:src/app/account/login.ts 失敗計數、src/infra/account/sqlite-attempt-store.ts 及測試。連 5 次失敗後第 6 次(即使密碼對)鎖定/退避,鎖定寫稽核;假 Clock 測退避。TDD #24。"
+    },
+    {
+      "id": "T-ACC-13a",
+      "level": "Task",
+      "title": "登出與工作階段撤銷",
+      "parentId": "S-ACC-1-3",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 3
+      },
+      "sprint": "acc-m3",
+      "dependsOn": [
+        "T-ACC-12a",
+        "T-ACC-41a"
+      ],
+      "scenarioIds": [
+        "S-ACC-1-3-1",
+        "S-ACC-1-3-6"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app。可改:src/app/account/logout.ts、revoke-sessions.ts 及測試。登出後原 session 立即失效;提供撤銷某帳號其他 session 能力(供改密用);登出/改密稽核接點。TDD #28/33。"
+    },
+    {
+      "id": "T-ACC-13b",
+      "level": "Task",
+      "title": "密碼變更",
+      "parentId": "S-ACC-1-3",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 4
+      },
+      "sprint": "acc-m3",
+      "dependsOn": [
+        "T-ACC-11b",
+        "T-ACC-13a"
+      ],
+      "scenarioIds": [
+        "S-ACC-1-3-2",
+        "S-ACC-1-3-3",
+        "S-ACC-1-3-4",
+        "S-ACC-1-3-5"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app。可改:src/app/account/change-password.ts 及測試。需正確現行密碼才可改,改後僅新密碼可登入;錯誤現行密碼被拒密碼不變;改密成功其他 session 失效;未登入改密 Unauthorized。4 情境同一改密 Use Case 單一檔,一輪可完成不拆。TDD #29/30/31/32。"
     }
   ],
   "sprints": [
@@ -1401,6 +2019,20 @@
       "start": "2026-11-13",
       "end": "2026-11-27",
       "goal": "權限矩陣、授權關卡、不可否認稽核與查詢落地;guard 改綁的接縫備妥(金鑰背書待 M2)"
+    },
+    {
+      "id": "acc-m2",
+      "name": "帳號 M2：機器金鑰",
+      "start": "2026-11-27",
+      "end": "2026-12-11",
+      "goal": "派工憑證金鑰化:簽發/驗證/撤銷輪替,防重放與一致錯誤,身分接稽核"
+    },
+    {
+      "id": "acc-m3",
+      "name": "帳號 M3：Web 登入",
+      "start": "2026-12-11",
+      "end": "2026-12-25",
+      "goal": "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
     }
   ]
 }
