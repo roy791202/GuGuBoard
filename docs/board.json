@@ -1,7 +1,7 @@
 {
   "version": 1.0,
   "project": "GuGuBoard",
-  "updatedAt": "2026-11-12T23:08:03+08:00",
+  "updatedAt": "2026-11-14T10:30:00+08:00",
   "items": [
     {
       "id": "E-DL",
@@ -944,6 +944,463 @@
           "text": "政策定案：計數存專屬檔 deadletters/<ticket>.json（不寫 board 免過驗證/免搶樂觀鎖）；上限 N 預設 3（可參數化）；達標後所有 runner Select 跳過＋工單留 note 交人工；成功回報或人工刪檔歸零。MINOR：INVALID 後主動 Release-GitClaim（不再壓到過期）。"
         }
       ]
+    },
+    {
+      "id": "E-ACC",
+      "level": "Epic",
+      "title": "帳號系統（對外安全／多人協作／派工憑證強化／稽核可追溯）",
+      "parentId": null,
+      "status": "Backlog",
+      "light": "Gray",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "完整帳號系統 A+B+C。架構:六角形+洋蔥,Node+SQLite。里程碑 M1=RBAC+稽核(本批)、M2=機器金鑰、M3=Web 登入。規格見 docs/account/requirements.md、architecture.md;BDD 在 docs/bdd/S-ACC-*.feature;TDD 在 docs/account/tdd-m1.md;工單定義 docs/account/tickets-m1.md。"
+    },
+    {
+      "id": "F-ACC-3",
+      "level": "Feature",
+      "title": "角色權限控管（RBAC）",
+      "parentId": "E-ACC",
+      "status": "Backlog",
+      "light": "Gray",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "F-ACC-4",
+      "level": "Feature",
+      "title": "不可否認的稽核",
+      "parentId": "E-ACC",
+      "status": "Backlog",
+      "light": "Gray",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-3-1",
+      "level": "Story",
+      "title": "作為管理者，我想定義角色與權限矩陣，讓每個受保護動作都有明確的允許角色",
+      "parentId": "F-ACC-3",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "sprint": "acc-m1",
+      "bdd": [
+        {
+          "id": "S-ACC-3-1-1",
+          "title": "When 查詢權限矩陣 Then 回每個受保護動作的允許角色;move_done 僅 verifier 與管理者",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-1-2",
+          "title": "Given 新增角色 release-manager When 指派 approve_deployment Then 該角色擁有該權限且其他角色不受影響",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-1-3",
+          "title": "When 指派不存在的權限 Then 回 UnknownPermission",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-1-4",
+          "title": "When 新增同名角色 Then 回 DuplicateRole",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-1-5",
+          "title": "Given 呼叫者為檢視者 When 改權限矩陣 Then 回 Forbidden 且矩陣不變",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-3-2",
+      "level": "Story",
+      "title": "作為系統，我想在執行受保護動作時檢查呼叫者角色權限，未授權就擋下",
+      "parentId": "F-ACC-3",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "sprint": "acc-m1",
+      "bdd": [
+        {
+          "id": "S-ACC-3-2-1",
+          "title": "When 具權限者請求移 Done Then 放行",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-2-2",
+          "title": "When 無權限者請求移 Done Then 回 Forbidden 且動作未執行",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-2-3",
+          "title": "Given 身分無法驗證 When 請求受保護動作 Then 回 Unauthorized",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-2-4",
+          "title": "Given PM 有 edit_card 無 approve_deployment When 核准佈署→Forbidden、改卡→放行",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-2-5",
+          "title": "Given 權限儲存不可讀 When 受保護動作 Then 保守回 Forbidden 並記事件,不預設放行",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-3-3",
+      "level": "Story",
+      "title": "作為管理者，我想把現行 L5／hook 硬規則改綁角色權限，移除以 AI_AGENT 環境標記判斷身分的 hack",
+      "parentId": "F-ACC-3",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 5
+      },
+      "sprint": "acc-m1",
+      "bdd": [
+        {
+          "id": "S-ACC-3-3-1",
+          "title": "Given verifier 金鑰驗證通過 When 提交移 Done Then guard 放行",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-3-2",
+          "title": "Given dev-agent 金鑰驗證通過 When 提交移 Done Then guard 回 Forbidden 並指出所需角色",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-3-3",
+          "title": "Given AI_AGENT 被竄改或移除 When 提交受保護 board 變更 Then 只依驗證過帳號角色,env 不影響",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-3-3-4",
+          "title": "Given 無可驗證身分 When 提交受保護 board 變更 Then guard 回 Unauthorized",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-4-1",
+      "level": "Story",
+      "title": "作為稽核者，我想每個受保護動作都寫一筆不可否認的稽核紀錄（誰、何時、對哪張卡、結果）",
+      "parentId": "F-ACC-4",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 3
+      },
+      "sprint": "acc-m1",
+      "bdd": [
+        {
+          "id": "S-ACC-4-1-1",
+          "title": "Given verifier 移卡成功 Then 稽核新增 actor/action/target/result=allowed 含時間戳",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-4-1-2",
+          "title": "Given dev-agent 移卡被拒 Then 稽核新增 result=forbidden 含原因",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-4-1-3",
+          "title": "When 修改或刪除既有稽核 Then 被拒（append-only）",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-4-1-4",
+          "title": "When 寫稽核 Then actor 須對應可驗證帳號/金鑰,不收裸代號字串",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-4-1-5",
+          "title": "Given 稽核儲存不可寫 When 執行受保護動作 Then 寫入失敗可觀察,不靜默吞",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "S-ACC-4-2",
+      "level": "Story",
+      "title": "作為稽核者，我想依使用者／時間／工單查詢與篩選稽核紀錄",
+      "parentId": "F-ACC-4",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "storyPoints": 2
+      },
+      "sprint": "acc-m1",
+      "bdd": [
+        {
+          "id": "S-ACC-4-2-1",
+          "title": "When 查 actor=alice Then 只回 alice 的",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-4-2-2",
+          "title": "When 查 [T0,T1] Then 回含端點區間內的",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-4-2-3",
+          "title": "When 查 target=T-1 Then 只回與 T-1 相關的",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-4-2-4",
+          "title": "When 查不存在 actor Then 回空清單不報錯",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-4-2-5",
+          "title": "Given 無 view_audit When 查稽核 Then 回 Forbidden",
+          "status": "None"
+        },
+        {
+          "id": "S-ACC-4-2-6",
+          "title": "When 以注入字串當篩選值 Then 安全參數化,不外洩不回不符紀錄",
+          "status": "None"
+        }
+      ],
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00"
+    },
+    {
+      "id": "T-ACC-41c",
+      "level": "Task",
+      "title": "Identity 可驗證身分值物件",
+      "parentId": "S-ACC-4-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 2
+      },
+      "sprint": "acc-m1",
+      "dependsOn": [],
+      "scenarioIds": [
+        "S-ACC-4-1-4"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:domain。可改:src/domain/account/identity.ts、tests/domain/account/identity.test.ts。不可變值物件,帶可驗證來源(帳號/金鑰),拒裸代號字串。TDD #18。完成:S-ACC-4-1-4 轉綠、通過 A1(領域零框架)。詳見 docs/account/tickets-m1.md。"
+    },
+    {
+      "id": "T-ACC-31a",
+      "level": "Task",
+      "title": "權限矩陣領域模型",
+      "parentId": "S-ACC-3-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 5
+      },
+      "sprint": "acc-m1",
+      "dependsOn": [],
+      "scenarioIds": [
+        "S-ACC-3-1-1",
+        "S-ACC-3-1-2",
+        "S-ACC-3-1-3",
+        "S-ACC-3-1-4",
+        "S-ACC-3-1-5"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:domain。可改:src/domain/account/permission-matrix.ts、role.ts、errors.ts 及其測試。不可變矩陣(變更回新實例);未知權限/重複角色/非管理者改矩陣各丟對應領域例外;move_done 預設僅 verifier+管理者。TDD #1-5。5 情境同一聚合單一檔,一輪可完成不拆。完成:5 條綠、通過 A1。"
+    },
+    {
+      "id": "T-ACC-32a",
+      "level": "Task",
+      "title": "授權領域規則",
+      "parentId": "S-ACC-3-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 3
+      },
+      "sprint": "acc-m1",
+      "dependsOn": [
+        "T-ACC-31a"
+      ],
+      "scenarioIds": [
+        "S-ACC-3-2-1",
+        "S-ACC-3-2-2",
+        "S-ACC-3-2-4"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:domain。可改:src/domain/account/authorize.ts 及測試。純函式 authorize(identity,action,matrix)→allowed/Forbidden;有權放行、無權 Forbidden 無副作用、單項權限邊界正確。TDD #6/7/9。完成:測試綠、通過 A1。"
+    },
+    {
+      "id": "T-ACC-32b",
+      "level": "Task",
+      "title": "授權 Use Case 與來源失效保守拒絕",
+      "parentId": "S-ACC-3-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 4
+      },
+      "sprint": "acc-m1",
+      "dependsOn": [
+        "T-ACC-32a"
+      ],
+      "scenarioIds": [
+        "S-ACC-3-2-3",
+        "S-ACC-3-2-5"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app+定義 PermissionStorePort。可改:src/app/account/check-permission.ts、src/domain/account/ports/permission-store-port.ts 及測試。未知身分回 Unauthorized;權限儲存不可讀時 fail-closed 回 Forbidden 並記事件,絕不預設放行;假 Port 測。TDD #8/10。完成:測試綠、通過 A2。"
+    },
+    {
+      "id": "T-ACC-41a",
+      "level": "Task",
+      "title": "受保護動作寫稽核",
+      "parentId": "S-ACC-4-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 3
+      },
+      "sprint": "acc-m1",
+      "dependsOn": [
+        "T-ACC-41c",
+        "T-ACC-32b"
+      ],
+      "scenarioIds": [
+        "S-ACC-4-1-1",
+        "S-ACC-4-1-2"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app+定義 AuditPort。可改:src/app/account/audit-on-action.ts、src/domain/account/ports/audit-port.ts、src/domain/account/audit-entry.ts 及測試。成功與被拒動作都寫稽核(含時間戳/原因);AuditEntry 不可變;actor 為 Identity VO;假 AuditPort 測。TDD #15/16。"
+    },
+    {
+      "id": "T-ACC-41b",
+      "level": "Task",
+      "title": "append-only 稽核儲存與寫入失敗可觀察",
+      "parentId": "S-ACC-4-1",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 4
+      },
+      "sprint": "acc-m1",
+      "dependsOn": [
+        "T-ACC-41a"
+      ],
+      "scenarioIds": [
+        "S-ACC-4-1-3",
+        "S-ACC-4-1-5"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:infra(SQLite)。可改:src/infra/account/sqlite-audit-store.ts、schema/audit.sql 及測試。實作 AuditPort;既有紀錄不可改/刪(違反擲錯且筆數不變);儲存不可寫時失敗可觀察,不靜默吞。TDD #17/19。完成:測試綠、通過 A4/A5。"
+    },
+    {
+      "id": "T-ACC-42a",
+      "level": "Task",
+      "title": "稽核查詢 adapter 與注入防禦",
+      "parentId": "S-ACC-4-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 5
+      },
+      "sprint": "acc-m1",
+      "dependsOn": [
+        "T-ACC-41b"
+      ],
+      "scenarioIds": [
+        "S-ACC-4-2-1",
+        "S-ACC-4-2-2",
+        "S-ACC-4-2-3",
+        "S-ACC-4-2-4",
+        "S-ACC-4-2-6"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:infra(SQLite)。可改:src/infra/account/sqlite-audit-query.ts 及測試。依 actor/時間(含端點)/工單查詢;空結果回 [] 不報錯;注入字串走參數化,不回不符紀錄、不漏底層錯。TDD #20-23/25。5 情境同一 adapter 單一檔,一輪可完成不拆。"
+    },
+    {
+      "id": "T-ACC-42b",
+      "level": "Task",
+      "title": "稽核查詢權限檢查",
+      "parentId": "S-ACC-4-2",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 2
+      },
+      "sprint": "acc-m1",
+      "dependsOn": [
+        "T-ACC-32a",
+        "T-ACC-42a"
+      ],
+      "scenarioIds": [
+        "S-ACC-4-2-5"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:app。可改:src/app/account/query-audit.ts 及測試。查稽核前檢查 view_audit,無權回 Forbidden 且不回資料。TDD #24。完成:測試綠、通過 A2。"
+    },
+    {
+      "id": "T-ACC-33a",
+      "level": "Task",
+      "title": "PwshBoardGuardAdapter 改綁角色（⚠ 另需 M2 金鑰驗證）",
+      "parentId": "S-ACC-3-3",
+      "status": "Backlog",
+      "light": "Gray",
+      "estimate": {
+        "hours": 6
+      },
+      "sprint": "acc-m1",
+      "dependsOn": [
+        "T-ACC-32b"
+      ],
+      "scenarioIds": [
+        "S-ACC-3-3-1",
+        "S-ACC-3-3-2",
+        "S-ACC-3-3-3",
+        "S-ACC-3-3-4"
+      ],
+      "tdd": "None",
+      "createdAt": "2026-11-13T10:00:00+08:00",
+      "updatedAt": "2026-11-13T10:00:00+08:00",
+      "remark": "層級:腳本/infra(PowerShell adapter + hook)。可改:scripts/account-guard/Invoke-BoardGuard.ps1、validate-board.ps1 的 L5 呼叫點、hook 設定(此單即改 hook,需 guard-change 核准)、tests/account/guard-rebind.Tests.ps1。⚠ 跨里程碑:S-ACC-3-3-1「verifier 以金鑰驗證」需 M2 的 F-ACC-2 金鑰驗證(T-ACC-22a)。M1 只能交付接縫(改呼叫授權決策+脫鉤 AI_AGENT,以注入身分測 3-3-3);金鑰背書的擋/放 commit E2E 待 M2。建議排在 M2 之後,屆時把 T-ACC-22a 補入 dependsOn。TDD #11-14(Pester)。"
+    }
+  ],
+  "sprints": [
+    {
+      "id": "acc-m1",
+      "name": "帳號 M1：RBAC + 稽核",
+      "start": "2026-11-13",
+      "end": "2026-11-27",
+      "goal": "權限矩陣、授權關卡、不可否認稽核與查詢落地;guard 改綁的接縫備妥(金鑰背書待 M2)"
     }
   ]
 }
