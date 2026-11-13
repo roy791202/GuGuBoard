@@ -1,4 +1,5 @@
-﻿# 一鍵啟動看板：直接啟動伺服器並開啟瀏覽器。第一次使用時在網頁上建立管理員帳號與專案。
+﻿# SPDX-License-Identifier: Apache-2.0
+# 一鍵啟動看板：直接啟動伺服器並開啟瀏覽器。第一次使用時在網頁上建立管理員帳號與專案。
 $ErrorActionPreference = 'Stop'
 try {
   $serve = Join-Path $PSScriptRoot 'serve-board.ps1'

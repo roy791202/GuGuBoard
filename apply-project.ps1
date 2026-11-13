@@ -1,4 +1,5 @@
-﻿<#
+﻿# SPDX-License-Identifier: Apache-2.0
+<#
 .SYNOPSIS  把 GuGuBoard 的專案層檔案（AI 工具規則、AI Hooks、Git Hooks、CI Guard）套用到某個專案 repo。
 .DESCRIPTION
   檔案來源是安裝資料夾裡的 project-templates\。可重複執行：
@@ -7,9 +8,9 @@
   - 上次由本工具寫入、之後沒被改過的檔案：直接更新（不需備份）。
   - .cursor\hooks.json、.claude\settings.json：保留原本設定，把本套件的 hook 合併進去（原檔備份 .bak）。
   預設不做 git commit；加 -Commit 才會把寫入的檔案 commit（hooks 照常執行）。
-.EXAMPLE   .\apply-project.ps1 -RepoPath D:\AIAD -Plan
-.EXAMPLE   .\apply-project.ps1 -RepoPath D:\AIAD -Tools Cursor,Claude,Hooks,GitHooks
-.EXAMPLE   .\apply-project.ps1 -RepoPath D:\AIAD -Remove
+.EXAMPLE   .\apply-project.ps1 -RepoPath D:\code\myapp -Plan
+.EXAMPLE   .\apply-project.ps1 -RepoPath D:\code\myapp -Tools Cursor,Claude,Hooks,GitHooks
+.EXAMPLE   .\apply-project.ps1 -RepoPath D:\code\myapp -Remove
 #>
 [CmdletBinding()]
 param(
@@ -28,6 +29,13 @@ function ConvertTo-OsPath([string]$r) { $r -replace '\\', [IO.Path]::DirectorySe
 if (-not $Templates) { $Templates = Join-Path $PSScriptRoot 'project-templates' }
 $MergeFiles = @('.cursor\hooks.json', '.claude\settings.json')
 $ManiName = '.ai-dev-skills-manifest.txt'
+# macOS／Linux：hook 設定裡的 powershell 改成 pwsh（PowerShell 7）；Windows 維持 powershell（5.1 內建）
+function ConvertTo-OsHook([string]$t) { if ($IsWindows -eq $false) { $t = $t -replace 'powershell -NoProfile -ExecutionPolicy Bypass', 'pwsh -NoProfile' -replace '"command":\s*"powershell"', '"command": "pwsh"' }; $t }
+# .ps1 一律寫成 UTF-8 BOM + CRLF：Windows PowerShell 5.1 讀沒 BOM 的檔案會用系統碼頁（如 Big5）解碼，中文變亂碼就無法執行
+function Copy-ProjectFile([string]$src, [string]$dest) {
+  if ($dest -match '\.ps[dm]?1$') { $t = [IO.File]::ReadAllText($src, [Text.UTF8Encoding]::new($false)); $t = ($t -replace "`r`n", "`n") -replace "`n", "`r`n"; [IO.File]::WriteAllText($dest, $t, [Text.UTF8Encoding]::new($true)) }
+  else { Copy-Item -LiteralPath $src -Destination $dest -Force }
+}
 function Out-Result($o) { if ($Json) { $o | ConvertTo-Json -Depth 6 -Compress } else { $o } }
 function Get-Sha([string]$p) { (Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash }
 function Get-TextSha([string]$t) { $sha = [Security.Cryptography.SHA256]::Create(); ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($t)))).Replace('-', '') }
@@ -129,16 +137,17 @@ foreach ($it in $items) {
     New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
     if ($it.backup) { Copy-Item -LiteralPath $dest -Destination (Join-Path $target (ConvertTo-OsPath $it.backup)); if (-not $baks.ContainsKey($it.path)) { $lines.Add("B|$($it.path)|$($it.backup)"); $baks[$it.path] = $it.backup } }
     if ($MergeFiles -contains $it.path) {
-      $ours = [IO.File]::ReadAllText($it.src); $txt = $ours
+      $ours = ConvertTo-OsHook ([IO.File]::ReadAllText($it.src)); $txt = $ours
       if ($it.status -eq 'merge') { try { $txt = Merge-HookJson ([IO.File]::ReadAllText((Join-Path $target (ConvertTo-OsPath $it.backup)))) $ours } catch { Write-Warning "無法解析 $($it.path)，改用本套件設定；原檔在 $($it.backup)" } }
       elseif ($it.status -eq 'update' -and $baks.ContainsKey($it.path) -and (Test-Path -LiteralPath (Join-Path $target (ConvertTo-OsPath $baks[$it.path])))) { try { $txt = Merge-HookJson ([IO.File]::ReadAllText((Join-Path $target (ConvertTo-OsPath $baks[$it.path])))) $ours } catch {} }
       [IO.File]::WriteAllText($dest, $txt, [Text.UTF8Encoding]::new($false))
     } elseif ($null -ne $it.text) { [IO.File]::WriteAllText($dest, $it.text, [Text.UTF8Encoding]::new($false)) }
-    else { Copy-Item -LiteralPath $it.src -Destination $dest -Force }
+    else { Copy-ProjectFile $it.src $dest }
     $written += $it.path
   }
   $lines.Add("F|$($it.path)|$(Get-Sha $dest)")
 }
+if ($IsWindows -eq $false) { foreach ($x in @('.githooks/pre-commit', '.githooks/commit-msg', '.ai-hooks/ai-hook.sh')) { $fx = Join-Path $target $x; if (Test-Path -LiteralPath $fx) { & chmod +x $fx } } }   # sh shim 需要執行權限
 if ($hooksPath -eq 'set') { & git -C $target config core.hooksPath .githooks; if (-not $lines.Contains('G|hooksPath')) { $lines.Add('G|hooksPath') } }
 [IO.File]::WriteAllLines($manifestPath, $lines, [Text.UTF8Encoding]::new($false))
 $commitRes = $null

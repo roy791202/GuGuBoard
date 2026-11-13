@@ -1,4 +1,5 @@
-﻿<#
+﻿# SPDX-License-Identifier: Apache-2.0
+<#
  board.json 驗證器（與 board.html 的 validate() 規則相同，PowerShell 5.1 / 7 皆可，零相依）。
  用法：
    validate-board.ps1 -Path docs/board.json                  # 驗證格式與規則，錯誤時 exit 1

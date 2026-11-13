@@ -1,4 +1,5 @@
-﻿# GuGuBoard 伺服器擴充：.ai-pm 工具資料夾、備份／還原、搬移、經驗證的寫入、Agent API（token、領取、心跳）、AI 提示詞、
+﻿# SPDX-License-Identifier: Apache-2.0
+# GuGuBoard 伺服器擴充：.ai-pm 工具資料夾、備份／還原、搬移、經驗證的寫入、Agent API（token、領取、心跳）、AI 提示詞、
 # 使用者偏好、派工器（push）、Google Sheets 同步、外部監看（Google 登入）、通知（Gmail SMTP／Google Chat）
 # 由 serve-board.ps1 dot-source；PowerShell 5.1／7 皆可。所有密鑰只存在伺服器設定資料夾，不送到瀏覽器、不放進提示詞。
 
@@ -147,6 +148,14 @@ function Invoke-AgentTokensAdmin($req, $res, $s, $Pj, [bool]$post) {
   if ($post) {
     $in = Read-Body $req; if (-not $in) { return Send-Err $res 400 'E_BAD_REQUEST' }
     if ([string]$in.action -eq 'revoke') { $l = @(Read-AgentTokens); $hit = $false; foreach ($t in $l) { if ($t.id -eq [string]$in.id -and $t.project -eq $Pj.id) { $t.revoked = $true; $hit = $true } }; if (-not $hit) { return Send-Err $res 404 'E_NOT_FOUND' }; Save-AgentTokens $l; Write-AcctAudit $s 'agentTokenRevoke' @{ project = $Pj.id; id = [string]$in.id } }
+    elseif ([string]$in.action -eq 'create') {   # 給 MCP 用戶端的 token：只在建立時顯示一次
+      $role = [string]$in.role; if ($role -notin $AGENT_ROLES) { return Send-Err $res 400 'E_BAD_ROLE' }
+      $nm = ([string]$in.name -replace '[^A-Za-z0-9._-]', ''); if (-not $nm) { $nm = "mcp-$((Get-Date).ToString('MMddHHmm'))" }; if ($nm.Length -gt 32) { $nm = $nm.Substring(0, 32) }
+      $days = 30; if ([string]$in.days -match '^\d{1,3}$') { $days = [Math]::Min(365, [Math]::Max(1, [int]$in.days)) }
+      $t = New-AgentToken $Pj.id $role $nm ($days * 1440) $s.user $false
+      Write-AcctAudit $s 'agentTokenCreate' @{ project = $Pj.id; id = $t.rec.id; role = $role; days = $days; via = 'mcp-settings' }
+      return Send-Json $res @{ ok = $true; token = $t.token; id = $t.rec.id; expiresAt = $t.rec.expiresAt; name = $nm; role = $role }
+    }
     else { return Send-Err $res 400 'E_BAD_ACTION' }
   }
   $l = @(Read-AgentTokens | Where-Object { $_.project -eq $Pj.id } | ForEach-Object { [ordered]@{ id = $_.id; role = $_.role; name = $_.name; createdBy = $_.createdBy; createdAt = $_.createdAt; expiresAt = $_.expiresAt; revoked = [bool]$_.revoked; lastUsed = $_.lastUsed; dispatcher = [bool]$_.noApprove } })
@@ -207,6 +216,8 @@ function Invoke-AgentApi($req, $res, $ag, [string]$sub) {
     if ($m -eq 'PATCH' -or $m -eq 'POST') {
       if ($cl.ContainsKey($tid) -and $cl[$tid].token -ne $ag.id) { return Send-Json $res @{ error = 'E_CLAIMED'; message = "工單 $tid 已被 $($cl[$tid].name) 領取" } 409 }
       $in = Read-Body $req; if (-not $in) { return Send-Err $res 400 'E_BAD_REQUEST' }
+      # 時間戳只到秒：同一秒內連續修改會讓 updatedAt 看起來沒變（L7 誤擋），所以等到下一秒
+      if ([string](Get-V $it 'updatedAt') -ceq (Get-NowIso)) { Start-Sleep -Milliseconds (1005 - (Get-Date).Millisecond) }
       $from = "$($it['status']) / $($it['light'])"; $chg = $false
       foreach ($k in 'status', 'light', 'lightReason', 'pausedReason', 'tdd', 'prUrl', 'startedAt', 'completedAt') { if ($in.PSObject.Properties[$k]) { $v = $in.$k; if ($null -ne $v) { $v = [string]$v }; if ($null -eq $v) { $it.Remove($k) } else { $it[$k] = $v } } }
       if ($in.PSObject.Properties['paused']) { if ($in.paused -eq $true) { $it['paused'] = $true } else { $it.Remove('paused') } }
@@ -317,7 +328,9 @@ function Invoke-IntegAdmin($req, $res, $s, [bool]$post) {
     if ($in.test -eq 'notify') { $r = Send-Notify $null 'test' "GuGuBoard 測試通知（$($s.user)）" 'test' $null; return Send-Json $res @{ ok = $true; test = $r; settings = (ConvertTo-Masked $cur) } }
     if ($in.test -eq 'sheets') { $r = @(); foreach ($Pj in $projects.Values) { $r += Sync-Sheets $Pj $true }; return Send-Json $res @{ ok = $true; test = $r; settings = (ConvertTo-Masked $cur) } }
   }
-  Send-Json $res @{ settings = (ConvertTo-Masked $cur); dispatch = @($projects.Keys | ForEach-Object { @{ project = $_; config = (Get-DispatchCfg $_) } }) }
+  $xs = Get-Sec $cur 'external'; $pub = ''; if ($xs -and $xs.publicUrl) { $pub = ([string]$xs.publicUrl).TrimEnd('/') + '/mcp' }
+  $mcpInfo = @{ local = "http://localhost:$Port/mcp"; public = $pub; bridge = (Join-Path $PSScriptRoot 'mcp-stdio.ps1'); windows = ($env:OS -eq 'Windows_NT'); cli = $(if ($env:OS -eq 'Windows_NT') { Join-Path $PSScriptRoot 'guguboard.cmd' } else { 'guguboard' }) }   # 給設定頁產生各 AI 工具的設定範例
+  Send-Json $res @{ settings = (ConvertTo-Masked $cur); dispatch = @($projects.Keys | ForEach-Object { @{ project = $_; config = (Get-DispatchCfg $_) } }); mcp = $mcpInfo }
 }
 
 # ---------- 通知：Gmail（SMTP）與 Google Chat webhook ----------

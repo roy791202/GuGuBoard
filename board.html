@@ -156,7 +156,7 @@ button.pri{background:#1f883d;color:#fff;border-color:#1f883d}button.rej{color:v
 <div id="addp" class="ovl" hidden><form id="pform" autocomplete="off"><h2>新增專案</h2><div class="mut">選擇專案的 repo 資料夾。board.json 會放在 repo 裡（預設 &lt;repo&gt;\.ai-pm\board.json，受 hooks／pre-commit／CI 保護並自動備份），不存在時建立<b>空白看板</b>（不含範例工單）。</div>
 <label for="pid">專案 ID（小寫英數與 -）</label><input id="pid" maxlength="40" value="main" pattern="[a-z0-9][a-z0-9-]{0,39}" required>
 <label for="pnm">專案名稱</label><input id="pnm" maxlength="100">
-<label for="prepo">專案 repo 資料夾（絕對路徑，例如 D:\AIAD）</label><input id="prepo" maxlength="400" required placeholder="D:\AIAD">
+<label for="prepo">專案 repo 資料夾（絕對路徑，例如 D:\code\myapp）</label><input id="prepo" maxlength="400" required placeholder="D:\code\myapp">
 <label for="pbp">board.json 路徑（自動帶入，可修改）</label><input id="pbp" maxlength="400">
 <label for="pgh">GitHub repo（選填，owner/repo）</label><input id="pgh" maxlength="201" placeholder="owner/repo">
 <label class="small"><input type="checkbox" id="pex" style="width:auto"> 加入範例工單（只供示範；之後可用「清除範例工單」移除）</label>
@@ -1140,12 +1140,23 @@ const I18N_ROWS=[
 ["搬到 .ai-pm/","Move to .ai-pm/","移到 .ai-pm/"],["Agent token","Agent tokens","Agent token"],["撤銷","Revoke","撤销"],["已撤銷","Revoked","已撤销"],["已過期","Expired","已过期"],
 ["派工器（push，預設關閉）","Dispatcher (push, off by default)","派工器（push，默认关闭）"],["啟用派工器","Enable dispatcher","启用派工器"],["間隔（秒）","Interval (s)","间隔（秒）"],["同時執行上限","Max concurrent","同时执行上限"],["執行紀錄","Runs","执行记录"],["看 log","View log","看 log"],["停止","Kill","停止"],
 ["Google 整合（只限本機設定）","Google integration (local only)","Google 集成（仅限本机设置）"],["Google Sheets 單向同步","Google Sheets one-way sync","Google Sheets 单向同步"],["外部監看","External monitoring","外部监看"],["通知（Gmail／Google Chat）","Notifications (Gmail / Google Chat)","通知（Gmail／Google Chat）"],["測試通知","Test notification","测试通知"],["立即同步","Sync now","立即同步"],["已設定","Set","已设置"],
+["MCP（讓 AI 工具連上看板）","MCP (connect AI tools to the board)","MCP（让 AI 工具连上看板）"],["啟用 MCP","Enable MCP","启用 MCP"],["允許外部 MCP 連線（經由 tunnel 的公開網址，例如 Grok Bot）","Allow external MCP connections (through the tunnel's public URL, e.g. Grok Bot)","允许外部 MCP 连接（经由 tunnel 的公开网址，例如 Grok Bot）"],
+["儲存 MCP 設定","Save MCP settings","保存 MCP 设置"],["已儲存","Saved","已保存"],["建立 token","Create token","创建 token"],["Agent token（每個 AI 一個，可隨時撤銷）","Agent tokens (one per AI, revocable any time)","Agent token（每个 AI 一个，可随时撤销）"],
+["AI 工具設定範例","AI tool config snippets","AI 工具配置示例"],["token 只顯示這一次，請現在複製設定","The token is shown only once — copy the config now","token 只显示这一次，请现在复制配置"],["MCP 設定只能在本機調整","MCP settings can only be changed on this computer","MCP 设置只能在本机调整"],
+["直接用 HTTP（最簡單）","Use HTTP directly (simplest)","直接用 HTTP（最简单）"],["或用本機橋接（token 存在使用者資料夾）","Or use the local bridge (token kept in your user folder)","或用本机桥接（token 存在用户文件夹）"],["或執行","Or run","或执行"],
+["在專案資料夾執行（.cursor/mcp.json 不含 token，可以 commit）","Run in the project folder (.cursor/mcp.json has no token and can be committed)","在项目文件夹执行（.cursor/mcp.json 不含 token，可以 commit）"],["本機","Local","本机"],["外部","External","外部"],
+["傳輸方式：Streamable HTTP（POST，JSON 回應）。外部連線需要先設定「外部監看」的公開網址並勾選「允許外部 MCP 連線」。","Transport: Streamable HTTP (POST, JSON responses). For external access, set the public URL under External monitoring and tick Allow external MCP connections.","传输方式：Streamable HTTP（POST，JSON 响应）。外部连接需要先设置“外部监看”的公开网址并勾选“允许外部 MCP 连接”。"],
+["外部工具與外部監看通道","External tools & tunnel","外部工具与外部监看通道"],["外部工具只能在本機管理","External tools can only be managed on this computer","外部工具只能在本机管理"],["缺少外部工具時自動安裝","Install missing tools automatically","缺少外部工具时自动安装"],
+["缺少","Missing","缺少"],["自動安裝","Install automatically","自动安装"],["外部監看通道（Cloudflare Tunnel）","External access tunnel (Cloudflare Tunnel)","外部监看通道（Cloudflare Tunnel）"],["通道已啟動","Tunnel running","通道已启动"],["通道啟動中，等待網址…","Starting tunnel, waiting for URL…","通道启动中，等待网址…"],
+["通道未啟動","Tunnel not running","通道未启动"],["自動安裝並啟動通道","Install & start tunnel","自动安装并启动通道"],["安裝 cloudflared 中…","Installing cloudflared…","安装 cloudflared 中…"],["停止通道","Stop tunnel","停止通道"],["填入外部監看的公開網址","Use as external public URL","填入外部监看的公开网址"],["已填入","Filled in","已填入"],
+["外部監看（Cloudflare Tunnel）","External access (Cloudflare Tunnel)","外部监看（Cloudflare Tunnel）"],["版本歷史、Git 分頁、套用到專案","History, Git tab, apply to project","版本历史、Git 分页、套用到项目"],["GitHub PR 通知（選用；也可用 GITHUB_TOKEN）","GitHub PR notifications (optional; or GITHUB_TOKEN)","GitHub PR 通知（可选；也可用 GITHUB_TOKEN）"],
+["macOS／Linux 執行看板","Runs the board on macOS/Linux","macOS／Linux 运行看板"],["外部監看（Tailscale Funnel）","External access (Tailscale Funnel)","外部监看（Tailscale Funnel）"],["AI CLI（只回報，不自動安裝）","AI CLI (reported only, never auto-installed)","AI CLI（只报告，不自动安装）"],
 ["唯讀監看","Read-only","只读监看"],["由","by","由"],["領取","claimed","领取"],
 ["這個專案還沒有工單","This project has no tickets yet","这个项目还没有工单"],["沒有符合篩選的工單","No tickets match the filter","没有符合筛选的工单"]
 ];
 const I18N={en:{},"zh-CN":{}};I18N_ROWS.forEach(r=>{I18N.en[r[0]]=r[1];I18N["zh-CN"][r[0]]=r[2];});
 const ERRS={E_UNAUTHENTICATED:["請先登入","Please sign in","请先登录"],E_FORBIDDEN:["沒有權限","Permission denied","没有权限"],E_CSRF:["請求來源不正確","Bad request origin","请求来源不正确"],E_NOT_FOUND:["找不到","Not found","找不到"],E_BAD_REQUEST:["請求格式錯誤","Bad request","请求格式错误"],
-E_READ_ONLY:["外部監看是唯讀的","External access is read-only","外部监看是只读的"],E_NOT_LOCAL:["這項設定只能在本機操作","Only available on this computer","此设置只能在本机操作"],E_RULES:["不符看板規則，未寫入","Rejected by board rules","不符看板规则，未写入"],E_INVALID:["board.json 不符 schema","board.json fails the schema","board.json 不符 schema"],
+E_DEP_MISSING:["缺少外部工具","Missing external tool","缺少外部工具"],E_AUTO_INSTALL_OFF:["自動安裝已關閉","Auto-install is off","自动安装已关闭"],E_MCP_DISABLED:["MCP 尚未啟用","MCP is not enabled","MCP 尚未启用"],E_READ_ONLY:["外部監看是唯讀的","External access is read-only","外部监看是只读的"],E_NOT_LOCAL:["這項設定只能在本機操作","Only available on this computer","此设置只能在本机操作"],E_RULES:["不符看板規則，未寫入","Rejected by board rules","不符看板规则，未写入"],E_INVALID:["board.json 不符 schema","board.json fails the schema","board.json 不符 schema"],
 E_CLAIMED:["工單已被其他代理領取","Ticket already claimed","工单已被其他代理领取"],E_RATE_LIMIT:["請求太頻繁，請稍後","Too many requests","请求太频繁，请稍后"],E_DISABLED:["帳號已停用","Account disabled","账号已停用"],E_AGENT_TOKEN:["Agent token 無效、過期或已撤銷","Agent token invalid, expired or revoked","Agent token 无效、过期或已撤销"],
 E_PROFILE:["派工 profile 不正確","Invalid dispatcher profile","派工 profile 不正确"],E_BAD_URL:["網址格式錯誤","Invalid URL","网址格式错误"],E_ALREADY:["已經在 .ai-pm/ 裡","Already in .ai-pm/","已经在 .ai-pm/ 里"],E_EXISTS:["目標檔案已存在","Target already exists","目标文件已存在"],E_GIT:["git 操作失敗","git failed","git 操作失败"]};
 let LANG="zh-TW",THEME="light";const LI={"zh-TW":0,en:1,"zh-CN":2};
@@ -1171,7 +1182,63 @@ function settingsDialog(){const b=gModal(tr_("設定"));
   const th=el("div","setTheme");[["light","淺"],["gray","灰"],["dark","深"],["gugu","GuGu"]].forEach(([v,l])=>{const L=el("label","small");const r=el("input");r.type="radio";r.name="setTheme";r.value=v;r.checked=THEME===v;r.style.width="auto";r.onchange=()=>applyPrefs({theme:v});L.append(r," ",tr_(l));th.append(L," ");});
   lg.onchange=()=>applyPrefs({lang:lg.value});
   const msg=el("div","nh");const sv_=el("button",null,tr_("儲存"));sv_.id="setSave";sv_.onclick=async()=>{const ok=await savePrefs({lang:lg.value,theme:(b.querySelector("input[name=setTheme]:checked")||{}).value});msg.textContent=tr_(ok?"偏好已儲存":"偏好只存在這台瀏覽器（伺服器儲存失敗）");};
-  b.append(el("label",null,tr_("語言")),lg,el("label",null,tr_("主題")),th,sv_,msg);}
+  b.append(el("label",null,tr_("語言")),lg,el("label",null,tr_("主題")),th,sv_,msg);
+  if(me&&me.role==="admin"){mcpSettings(b);depsSettings(b);}}
+/* ===== 設定 → MCP：讓 Claude、Cursor、Codex、Gemini、Grok Bot 等 AI 用 MCP 連上看板（預設關閉） ===== */
+async function mcpSettings(b){const box=el("div","mcpSet");box.id="mcpSet";b.append(el("h3",null,"MCP（讓 AI 工具連上看板）"),box);
+  const r=await gj("api/admin/integrations");if(!r.ok){box.append(el("div","nh",tr_("MCP 設定只能在本機調整")));return;}
+  const cur=(r.j.settings&&r.j.settings.mcp)||{},info=r.j.mcp||{};
+  const en=chk("啟用 MCP",cur.enabled);en.cb.id="mcpOn";const ex=chk("允許外部 MCP 連線（經由 tunnel 的公開網址，例如 Grok Bot）",cur.allowExternal);ex.cb.id="mcpExt";
+  const msg=el("div","nh");msg.id="mcpMsg";const sv=el("button",null,tr_("儲存 MCP 設定"));sv.id="mcpSave";
+  sv.onclick=async()=>{const y=await pjPost("api/admin/integrations",{mcp:{enabled:en.cb.checked,allowExternal:ex.cb.checked}});msg.textContent=y.ok?tr_("已儲存"):errMsg(y.j);};
+  box.append(en,el("br"),ex,el("br"),sv,msg);
+  // 建立 token：只顯示一次，之後只看得到前綴
+  // token 屬於單一專案：首頁還沒選專案時預設第一個
+  const pl=(me&&Array.isArray(me.projects)?me.projects:[]).map(x=>[x.id,x.name||x.id]);const pj=sel_(pl,proj||(pl[0]||[])[0]);pj.id="mcpProj";const PP=()=>"api/p/"+encodeURIComponent(pj.value)+"/";
+  const role=sel_(ROLE_OPTS,"dev-agent");role.id="mcpRole";const nm=mkInp("","claude-1");nm.id="mcpName";const days=mkInp("30",null,"number");days.min=1;days.max=365;days.id="mcpDays";
+  const mk=el("button","pri",tr_("建立 token"));mk.id="mcpMake";const tmsg=el("div","nh");
+  const row=el("div","small");row.append(tr_("專案")," ",pj," ",tr_("角色")," ",role," ",tr_("代理代號")," ",nm," ",tr_("有效天數")," ",days," ",mk);
+  box.append(el("label",null,tr_("Agent token（每個 AI 一個，可隨時撤銷）")),row,tmsg);
+  const cl=sel_([["claude-code","Claude Code"],["claude-desktop","Claude Desktop"],["cursor","Cursor（.cursor/mcp.json）"],["codex","Codex（~/.codex/config.toml）"],["gemini","Gemini CLI（~/.gemini/settings.json）"],["http","HTTP（Grok Bot 等遠端）"]],"claude-code");cl.id="mcpClient";
+  const out=el("textarea","mono");out.id="mcpSnippet";out.rows=10;out.readOnly=true;out.style.width="100%";const cp=el("button",null,tr_("複製"));
+  let tok="<TOKEN>";const q=s=>JSON.stringify(s);
+  const psCmd=info.windows?"powershell.exe":"pwsh",psArgs=["-NoLogo","-NoProfile","-NonInteractive"].concat(info.windows?["-ExecutionPolicy","Bypass"]:[]).concat(["-File",info.bridge||"mcp-stdio.ps1"]);
+  const url=info.local||"http://localhost:8765/mcp",pub=info.public||"https://<你的公開網址>/mcp",cli=info.cli||"guguboard";
+  const snip=c=>{switch(c){
+    case "claude-code":return "# "+tr_("直接用 HTTP（最簡單）")+"\nclaude mcp add --transport http guguboard "+url+" --header \"Authorization: Bearer "+tok+"\"\n\n# "+tr_("或用本機橋接（token 存在使用者資料夾）")+"\n"+cli+" mcp install claude-code -Token "+tok;
+    case "claude-desktop":return JSON.stringify({mcpServers:{guguboard:{command:psCmd,args:psArgs,env:{GUGUBOARD_URL:url.replace(/\/mcp$/,""),GUGUBOARD_TOKEN:tok}}}},null,2)+"\n\n# "+tr_("或執行")+"：\n"+cli+" mcp install claude-desktop -Token "+tok;
+    case "cursor":return "# "+tr_("在專案資料夾執行（.cursor/mcp.json 不含 token，可以 commit）")+"\n"+cli+" mcp install cursor -Token "+tok+"\n\n"+JSON.stringify({mcpServers:{guguboard:{command:psCmd,args:psArgs}}},null,2);
+    case "codex":return "[mcp_servers.guguboard]\ncommand = "+q(psCmd)+"\nargs = ["+psArgs.map(q).join(", ")+"]\nenv = { GUGUBOARD_URL = "+q(url.replace(/\/mcp$/,""))+", GUGUBOARD_TOKEN = "+q(tok)+" }\n\n# "+tr_("或執行")+"：\n"+cli+" mcp install codex -Token "+tok;
+    case "gemini":return JSON.stringify({mcpServers:{guguboard:{httpUrl:url,headers:{Authorization:"Bearer "+tok}}}},null,2)+"\n\n# "+tr_("或執行")+"：\n"+cli+" mcp install gemini -Token "+tok;
+    default:return tr_("本機")+"："+url+"\n"+tr_("外部")+"："+pub+"\nAuthorization: Bearer "+tok+"\n\n"+tr_("傳輸方式：Streamable HTTP（POST，JSON 回應）。外部連線需要先設定「外部監看」的公開網址並勾選「允許外部 MCP 連線」。");}};
+  const show=()=>{out.value=snip(cl.value);};cl.onchange=show;show();
+  cp.onclick=async()=>{try{await navigator.clipboard.writeText(out.value);}catch(_){out.select();document.execCommand("copy");}tmsg.textContent=tr_("已複製");};
+  box.append(el("label",null,tr_("AI 工具設定範例")),cl," ",cp,out);
+  const tb=el("table","ut");tb.id="mcpTokens";box.append(tb);
+  const load=async()=>{const y=await gj(PP()+"agent-tokens");tb.replaceChildren();if(!y.ok)return;const now=Date.now();
+    (y.j.tokens||[]).filter(x=>!x.revoked&&new Date(x.expiresAt).getTime()>now).forEach(x=>{const tr=el("tr");tr.append(el("td","mono","aipm_"+x.id+"_…"),el("td",null,x.name),el("td",null,tr_(((ROLE_OPTS.find(o=>o[0]===x.role)||[])[1])||x.role)),el("td","nh",when(x.expiresAt)));
+      const rv=el("button",null,tr_("撤銷"));rv.onclick=async()=>{const z=await pjPost(PP()+"agent-tokens",{action:"revoke",id:x.id});if(!z.ok)alert(errMsg(z.j));load();};const td=el("td");td.append(rv);tr.append(td);tb.append(tr);});};
+  pj.onchange=()=>load();mk.onclick=async()=>{const y=await pjPost(PP()+"agent-tokens",{action:"create",role:role.value,name:nm.value.trim(),days:+days.value||30});
+    if(!y.ok){tmsg.textContent=errMsg(y.j);return;}tok=y.j.token;show();tmsg.textContent=tr_("token 只顯示這一次，請現在複製設定")+"（"+when(y.j.expiresAt)+"）";load();};
+  load();}
+/* ===== 設定 → 外部工具：缺少就按「自動安裝」，不用自己找安裝方式；外部監看通道一鍵啟動 ===== */
+async function depsSettings(b){const box=el("div","depSet");box.id="depSet";b.append(el("h3",null,"外部工具與外部監看通道"),box);
+  const r=await gj("api/admin/deps");if(!r.ok){box.append(el("div","nh",tr_("外部工具只能在本機管理")));return;}
+  const au=chk("缺少外部工具時自動安裝",r.j.autoInstall);au.cb.id="depAuto";au.cb.onchange=async()=>{await pjPost("api/admin/deps",{action:"auto",autoInstall:au.cb.checked});};box.append(au);
+  const tb=el("table","ut");tb.id="depTable";const prog=el("pre","mono runlog");prog.id="depProg";prog.hidden=true;box.append(tb,prog);
+  const wait=async tool=>{prog.hidden=false;for(let i=0;i<600;i++){await new Promise(x=>setTimeout(x,1000));const y=await gj("api/admin/deps");const j=(y.j.jobs||{})[tool];if(j){prog.textContent=(j.lines||[]).join("\n");if(j.state!=="running"){draw(y.j);return j.state==="done";}}}return false;};
+  const install=async tool=>{const y=await pjPost("api/admin/deps",{action:"install",tool});if(!y.ok){prog.hidden=false;prog.textContent=errMsg(y.j);return false;}return wait(tool);};
+  const draw=j=>{tb.replaceChildren();(j.tools||[]).forEach(t=>{const tr=el("tr");tr.append(el("td","mono",t.name),el("td",null,t.found?"✔":tr_("缺少")),el("td","nh",t.found?t.path:tr_(t.purpose)));const td=el("td");
+      if(!t.found&&t.autoInstall){const bt=el("button","pri",tr_("自動安裝"));bt.dataset.tool=t.name;bt.onclick=async()=>{bt.disabled=true;await install(t.name);};td.append(bt);}tr.append(td);tb.append(tr);});drawTun(j.tunnel||{});};
+  // 外部監看通道：缺 cloudflared 先自動安裝，再啟動並顯示 https 網址
+  const tun=el("div");tun.id="tunBox";box.append(el("h4",null,tr_("外部監看通道（Cloudflare Tunnel）")),tun);
+  const drawTun=t=>{tun.replaceChildren();const st=el("div","nh");st.id="tunState";st.textContent=t.running?(t.url?tr_("通道已啟動")+"："+t.url:tr_("通道啟動中，等待網址…")):tr_("通道未啟動");tun.append(st);
+    if(!t.running){const go=el("button","pri",tr_("自動安裝並啟動通道"));go.id="tunStart";go.onclick=async()=>{go.disabled=true;let y=await pjPost("api/admin/deps",{action:"tunnel-start"});
+        if(!y.ok&&y.j.error==="E_DEP_MISSING"){st.textContent=tr_("安裝 cloudflared 中…");if(!await install("cloudflared")){go.disabled=false;return;}y=await pjPost("api/admin/deps",{action:"tunnel-start"});}
+        if(!y.ok){st.textContent=errMsg(y.j);go.disabled=false;return;}for(let i=0;i<60;i++){const z=await gj("api/admin/deps");if(z.j.tunnel&&z.j.tunnel.url){drawTun(z.j.tunnel);return;}await new Promise(x=>setTimeout(x,1000));}drawTun((await gj("api/admin/deps")).j.tunnel||{});};tun.append(go);}
+    else{const stop=el("button",null,tr_("停止通道"));stop.onclick=async()=>{const y=await pjPost("api/admin/deps",{action:"tunnel-stop"});drawTun(y.j.tunnel||{});};tun.append(stop);
+      if(t.url){const use=el("button",null,tr_("填入外部監看的公開網址"));use.id="tunUse";use.onclick=async()=>{const y=await pjPost("api/admin/integrations",{external:{publicUrl:t.url}});st.textContent=y.ok?tr_("已填入")+"："+t.url:errMsg(y.j);};tun.append(" ",use);}}};
+  draw(r.j);}
 /* ===== 共用：POST JSON ===== */
 async function pjPost(path,body){const r=await api(path,{method:"POST",headers:HDR,body:JSON.stringify(body||{})});const j=await r.json().catch(()=>({}));return {ok:r.ok,status:r.status,j};}
 async function gj(path){const r=await api(path);const j=await r.json().catch(()=>({}));return {ok:r.ok,status:r.status,j};}

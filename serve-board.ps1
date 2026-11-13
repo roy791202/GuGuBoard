@@ -1,15 +1,16 @@
-﻿<#
+﻿# SPDX-License-Identifier: Apache-2.0
+<#
 .SYNOPSIS  本機進度看板伺服器（零相依，只聽 localhost），支援多專案。
   - 登入：PBKDF2-SHA256（60 萬次、16 byte 隨機鹽）。Argon2 不是 .NET / PowerShell 內建，為了零相依改用 PBKDF2。
     Session Cookie：32 byte 隨機值、HttpOnly、SameSite=Strict；伺服器只存它的 SHA-256。
   - 每個專案各自監看 board.json、自動 git commit 到該專案的 repo、可選 Git 遠端同步、可選 GitHub PR 通知。
   - 權限：每個帳號只看得到被授權的專案（admin 例外），所有 API 都檢查；專案只用 ID 指定，從不接受用戶端傳來的路徑。
-.EXAMPLE  .\serve-board.ps1 -AddProject sgenaxis -Name "SGenAxis" -BoardPath D:\AIAD\.ai-pm\board.json -GitHubRepo kuan/sgenaxis
-.EXAMPLE  .\serve-board.ps1 -AddUser kuan -Role admin
-.EXAMPLE  .\serve-board.ps1 -AddUser rev -Role verifier -Project sgenaxis
+.EXAMPLE  .\serve-board.ps1 -AddProject myapp -Name "MyApp" -BoardPath D:\code\myapp\.ai-pm\board.json -GitHubRepo alice/myapp
+.EXAMPLE  .\serve-board.ps1 -AddUser alice -Role admin
+.EXAMPLE  .\serve-board.ps1 -AddUser rev -Role verifier -Project myapp
 .EXAMPLE  .\serve-board.ps1 -SetGitHubClientId Iv1.xxxxxxxx   # 設定 GitHub 登入（OAuth App 的 Client ID，需啟用 Device Flow）
 .EXAMPLE  .\serve-board.ps1                       # 啟動，監看所有已登記的專案
-.EXAMPLE  .\serve-board.ps1 -Json D:\AIAD\docs\board.json -NoAuth   # 舊用法：單一專案（ID = default）
+.EXAMPLE  .\serve-board.ps1 -Json D:\code\myapp\docs\board.json -NoAuth   # 舊用法：單一專案（ID = default）
 #>
 param(
   [int]$Port = 8765,
@@ -56,7 +57,17 @@ $Users = Join-Path $ConfigDir 'users.json'; $ProjFile = Join-Path $ConfigDir 'pr
 # 共用規則（與 hooks／pre-commit／CI 同一份 validate-board.ps1）與擴充功能；保留 CLI 的 -Role 參數值
 $__role = $Role; . (Join-Path $PSScriptRoot 'validate-board.ps1') -Library; $Role = $__role
 . (Join-Path $PSScriptRoot 'serve-ext.ps1')
+. (Join-Path $PSScriptRoot 'serve-mcp.ps1')
+. (Join-Path $PSScriptRoot 'deps.ps1')
+. (Join-Path $PSScriptRoot 'serve-tools.ps1')
+$script:GgConfigDir = $ConfigDir
+# git 是版本歷史、Git 分頁的基礎：找不到就自動安裝（互動視窗會先問一次）
+if (-not $AddProject -and -not $AddUser -and -not (Find-GgTool git)) { [void](Use-GgTool git) }
 function Initialize-ConfigDir { if (-not (Test-Path $ConfigDir)) { New-Item -ItemType Directory $ConfigDir | Out-Null }; $gi = Join-Path $ConfigDir '.gitignore'; if (-not (Test-Path $gi)) { Set-Content -LiteralPath $gi -Value '*' -Encoding UTF8 } }
+# macOS／Linux：設定資料夾（帳號雜湊、OAuth、token、整合密鑰）只給目前使用者讀寫（700／600）；Windows 由使用者設定檔權限保護
+function Protect-ConfigDir { if ($IsWindows -ne $false -or -not (Test-Path -LiteralPath $ConfigDir)) { return }; try { & chmod 700 $ConfigDir 2>$null; Get-ChildItem -LiteralPath $ConfigDir -File -Force | ForEach-Object { & chmod 600 $_.FullName 2>$null } } catch {} }
+# 開啟瀏覽器：Windows Start-Process、macOS open、Linux xdg-open（沒有就只印網址）
+function Open-Browser([string]$u) { try { if ($IsWindows -ne $false) { Start-Process $u } elseif ($IsMacOS) { & open $u } elseif (Get-Command xdg-open -ErrorAction SilentlyContinue) { Start-Process xdg-open -ArgumentList $u } else { Write-Host "請用瀏覽器開啟 $u" } } catch { Write-Host "請用瀏覽器開啟 $u" } }
 
 $OAuthFile = Join-Path $ConfigDir 'github-oauth.json'; $PendFile = Join-Path $ConfigDir 'pending.json'
 $GH_SCOPE = 'read:user repo'
@@ -1268,7 +1279,8 @@ foreach ($Pj in $projects.Values) {
   if ($Pj.git -and $autoOn) { try { [void](Save-Commit $Pj) } catch { Write-Warning "[$($Pj.id)] 自動 commit 失敗" } }
 }
 if ($projects.Values | Where-Object { $_.gh }) { Write-Host "GitHub 驗證：$(if($env:GITHUB_TOKEN){'GITHUB_TOKEN'}elseif($useGhCli){'gh CLI'}else{'未驗證（每小時 60 次上限）'})" }
-if (-not $NoOpen -and $IsWindows -ne $false) { Start-Process $url }
+Protect-ConfigDir
+if (-not $NoOpen) { Open-Browser $url }
 
 $tick = 0
 try {
@@ -1288,13 +1300,14 @@ try {
       }
       try { Update-DispatchTick } catch { Write-Warning "派工器：$($_.Exception.Message)" }
       if ($tick % 4 -eq 0) { try { Update-SheetsTick } catch { Write-Warning "Google Sheets：$($_.Exception.Message)" } }
-      if ($tick % 30 -eq 0) { Push-All $null ": ping`n`n" $null }
+      if ($tick % 30 -eq 0) { Push-All $null ": ping`n`n" $null; Protect-ConfigDir }
       if ($tick % 120 -eq 0) { foreach ($k in @($sessions.Keys)) { if (((Get-Date) - $sessions[$k].last).TotalMinutes -gt $IDLE_MIN) { $sessions.Remove($k) } } }
       continue
     }
     $ctx = $pending.Result; $pending = $listener.GetContextAsync()
     $req = $ctx.Request; $res = $ctx.Response; $path = $req.Url.AbsolutePath
     try {
+      if ($path -eq '/mcp') { Invoke-McpHttp $req $res; continue }   # MCP：Agent token 認證，預設關閉
       if ($path -match '^/api/agent/v1(/[A-Za-z0-9._/-]{0,80})$') {   # Agent API：Bearer token（不用 cookie，所以不需要 CSRF）
         $sub = $Matches[1]; if (Test-External $req) { Send-Err $res 403 'E_READ_ONLY'; continue }
         $ag = Get-AgentAuth $req; if ($ag -eq 'RATE') { Send-Err $res 429 'E_RATE_LIMIT'; continue }; if (-not $ag) { Send-Err $res 401 'E_AGENT_TOKEN'; continue }
@@ -1314,6 +1327,7 @@ try {
           switch ($op) { 'restore' { Invoke-Restore $req $res $sx $PjX } 'migrate-aipm' { Invoke-MigrateAiPm $req $res $sx $PjX } 'agent-tokens' { Invoke-AgentTokensAdmin $req $res $sx $PjX $true } 'agent/prompt' { Invoke-AgentPrompt $req $res $sx $PjX } default { Invoke-DispatchApi $req $res $sx $PjX ('/' + $op) } }
           continue
         }
+        if ($path -eq '/api/admin/deps') { $sx = Get-Session $req; if (-not $sx) { Send-Err $res 401 'E_UNAUTHENTICATED'; continue }; if ($sx.external) { Send-Err $res 403 'E_READ_ONLY'; continue }; Invoke-DepsApi $req $res $sx $true; continue }
         if ($path -in '/api/me/prefs', '/api/admin/integrations') { $sx = Get-Session $req; if (-not $sx) { Send-Err $res 401 'E_UNAUTHENTICATED'; continue }; if ($sx.external -and $path -ne '/api/me/prefs') { Send-Err $res 403 'E_READ_ONLY'; continue }
           if ($path -eq '/api/me/prefs') { Invoke-Prefs $req $res $sx } else { Invoke-IntegAdmin $req $res $sx $true }; continue }
         $sx = Get-Session $req; if ($sx -and $sx.external -and $path -ne '/api/logout') { Send-Err $res 403 'E_READ_ONLY'; continue }
@@ -1341,6 +1355,7 @@ try {
       if ($path -eq '/board.json') { $first = @($s.allowed.Keys | Where-Object { $projects.Contains($_) })[0]; if (-not $first) { Send-Err $res 403 'E_FORBIDDEN'; continue }; $path = "/api/p/$first/board.json" }   # 舊網址相容
       if ($path -eq '/api/admin/users') { Invoke-AdminUsers $req $res $false; continue }
       if ($path -eq '/api/admin/integrations') { Invoke-IntegAdmin $req $res $s $false; continue }
+      if ($path -eq '/api/admin/deps') { Invoke-DepsApi $req $res $s $false; continue }
       if ($path -eq '/api/me') {
         $list = @($projects.Values | Where-Object { $s.allowed.ContainsKey($_.id) } | ForEach-Object { [ordered]@{ id = $_.id; name = $_.name; role = $s.allowed[$_.id]; git = $_.git; autoCommit = ($_.git -and $autoOn); github = [bool]$_.gh; remoteSync = $_.remote; syncError = $_.syncError } })
         Send-Json $res @{ user = $s.user; role = $s.role; noAuth = [bool]$NoAuth; prefs = (Get-Prefs $s.user); external = [bool]$s.external; local = ($req.IsLocal -and -not (Test-External $req)); projects = $list; github = $s.ghLogin; pending = $(if ($s.role -eq 'admin') { @(Read-Pending).Count } else { 0 }); defaultBoardPath = $(if ($s.role -eq 'admin') { $DefaultBoard } else { '' }) }; continue
