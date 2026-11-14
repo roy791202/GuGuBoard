@@ -1,2038 +1,2055 @@
 {
-  "version": 1.0,
-  "project": "GuGuBoard",
-  "updatedAt": "2026-11-14T11:00:00+08:00",
-  "items": [
-    {
-      "id": "E-DL",
-      "level": "Epic",
-      "title": "派工器補強（精簡版，取代 dispatch-plan 16 張工單）",
-      "parentId": null,
-      "status": "Backlog",
-      "light": "Gray",
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T01:45:00+08:00",
-      "remark": "前提：serve-ext.ps1 已有定時派工（Update-DispatchTick）、profile 啟動 CLI、逾時、紅燈停機、每次執行一次性 token（不可核准）、log 與停止 API。只補 4 個實際缺口。\n舊單對應：SCH-01/UI-01→T-DL-1；RUN-02/RUN-03→T-DL-2；CMP-01/CMP-02→T-DL-3；SCH-02/RUN-01→T-DL-4。\n延後（真的需要時再開）：Webhook 與 HMAC（同一台機器不需要）、跨主機 fencing／outbox、completion 冪等、每次執行獨立 worktree 與多並行、GOV 三方身分（現有不可核准 token 已防止自我核准）、UI-02/UI-03/INT-01。\n測試：Pester 3.4（Windows PowerShell 內建），放在 tests/dispatch/，指令 powershell -NoProfile -ExecutionPolicy Bypass -File tests\\dispatch\\Run-Tests.ps1。"
-    },
-    {
-      "id": "F-DL",
-      "level": "Feature",
-      "title": "定時派工可靠性",
-      "parentId": "E-DL",
-      "status": "Backlog",
-      "light": "Gray",
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T01:45:00+08:00"
-    },
-    {
-      "id": "S-DL-1",
-      "level": "Story",
-      "title": "作為管理者，我想要設定派工開始時間，並避免多個執行共用同一份工作目錄",
-      "parentId": "F-DL",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 1.0
-      },
-      "acceptance": [
-        "notBefore 未到不派工；到期（含等於）照現有規則派工",
-        "notBefore 沒有時區時拒絕儲存，舊設定不變",
-        "maxConcurrent 固定為 1，介面顯示原因"
-      ],
-      "bdd": [
-        {
-          "id": "S-DL-1-1",
-          "title": "Given notBefore 是未來時間 When 派工 tick 執行 Then 不啟動任何執行",
-          "status": "Green"
-        },
-        {
-          "id": "S-DL-1-2",
-          "title": "Given notBefore 等於現在 When 派工 tick 執行 Then 依現有規則領取並啟動一張 Task",
-          "status": "Green"
-        },
-        {
-          "id": "S-DL-1-3",
-          "title": "Given 送出不含時區的 notBefore When 儲存派工設定 Then 回 400 E_BAD_TIME 且設定檔不變",
-          "status": "Green"
-        },
-        {
-          "id": "S-DL-1-4",
-          "title": "Given 送出 maxConcurrent=3 When 儲存派工設定 Then 存成 1",
-          "status": "Green"
-        }
-      ],
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T01:45:00+08:00"
-    },
-    {
-      "id": "T-DL-1",
-      "level": "Task",
-      "title": "派工開始時間閘門與並行上限",
-      "parentId": "S-DL-1",
-      "status": "Done",
-      "light": "Blue",
-      "estimate": {
-        "hours": 2.0
-      },
-      "dependsOn": [],
-      "scenarioIds": [
-        "S-DL-1-1",
-        "S-DL-1-2",
-        "S-DL-1-3",
-        "S-DL-1-4"
-      ],
-      "tdd": "Green",
-      "tests": {
-        "status": "Green",
-        "passed": 6.0,
-        "failed": 0.0
-      },
-      "owner": "claude-dev-agent",
-      "startedAt": "2026-11-07T02:05:00+08:00",
-      "history": [
-        {
-          "at": "2026-11-07T02:05:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "開始實作；先寫測試確認 RED"
-        },
-        {
-          "at": "2026-11-07T02:25:00+08:00",
-          "from": "In Progress / Green",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "READY_FOR_TDD：tests/dispatch/schedule.Tests.ps1 6/6 通過（Windows PowerShell 5.1 與 PowerShell 7）；設定介面已在測試伺服器實測"
-        },
-        {
-          "at": "2026-11-07T03:40:00+08:00",
-          "from": "In Review / Green",
-          "to": "Done / Blue",
-          "by": "user（主對話授權）",
-          "note": "使用者授權標記 Done；兩輪獨立驗收 A/B＋A2/B2 皆 ACCEPT"
-        }
-      ],
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T03:40:00+08:00",
-      "remark": "可改：serve-ext.ps1 的 Get-DispatchCfg、Update-DispatchTick、Invoke-DispatchApi（/dispatch/config）；board.html 派工設定表單（搜尋 intervalSec）；新增 tests/dispatch/schedule.Tests.ps1。\n做法：設定加 notBefore（ISO 8601，必須含 offset；null 表示立即）。tick 在 Get-Date < notBefore 時跳過，到期時間相等也算到期。/dispatch/config 收到不含時區的值回 400 E_BAD_TIME，不寫檔。maxConcurrent 一律存成 1，因為所有執行共用 $Pj.dir；表單把欄位設成唯讀並顯示「目前所有執行共用同一工作目錄，暫時只能 1」。\n不要做：cron 語法、補跑錯過的 tick、其他設定欄位。\n完成：4 個情境的 Pester 測試全綠，貼出 Invoke-Pester 輸出。",
-      "notes": [
-        {
-          "at": "2026-11-07T02:55:00+08:00",
-          "by": "reviewer-AB",
-          "text": "獨立驗證 A（實測）與 B（審查）：ACCEPT；建議補強的測試斷言已採納"
-        },
-        {
-          "at": "2026-11-07T03:30:00+08:00",
-          "by": "reviewer-AB",
-          "text": "複驗 A2（實測）＋B2（審查）：ACCEPT，4 個原問題確認修正、無 regression；補 Stop-Run／Resume 例外停機測試，PS5.1 與 7 共 21 綠"
-        }
-      ],
-      "approvedBy": "user（主對話授權）"
-    },
-    {
-      "id": "S-DL-2",
-      "level": "Story",
-      "title": "作為管理者，我想要停止或逾時時整個 AI 程序樹都結束，以免殘留程序繼續改檔或耗用 token",
-      "parentId": "F-DL",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 2.0
-      },
-      "acceptance": [
-        "逾時與手動停止都會結束父程序與所有子程序",
-        "無法確認結束時不釋放 claim，避免同一張工單再被派出去"
-      ],
-      "bdd": [
-        {
-          "id": "S-DL-2-1",
-          "title": "Given 執行中的 CLI 有子程序 When 達到 timeoutMin Then 父子程序都已結束且 claim 釋放",
-          "status": "Green"
-        },
-        {
-          "id": "S-DL-2-2",
-          "title": "Given 執行中的 CLI 有子程序 When 管理者呼叫 /dispatch/kill Then 父子程序都已結束且狀態為 killed",
-          "status": "Green"
-        },
-        {
-          "id": "S-DL-2-3",
-          "title": "Given 程序樹無法在 10 秒內結束 When 逾時 Then 執行狀態為 stuck 且下一次 tick 不會再派這張工單",
-          "status": "Green"
-        }
-      ],
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T01:45:00+08:00"
-    },
-    {
-      "id": "T-DL-2",
-      "level": "Task",
-      "title": "逾時與停止時終止整個程序樹",
-      "parentId": "S-DL-2",
-      "status": "Done",
-      "light": "Blue",
-      "estimate": {
-        "hours": 2.0
-      },
-      "dependsOn": [],
-      "scenarioIds": [
-        "S-DL-2-1",
-        "S-DL-2-2",
-        "S-DL-2-3"
-      ],
-      "tdd": "Green",
-      "tests": {
-        "status": "Green",
-        "passed": 4.0,
-        "failed": 0.0
-      },
-      "owner": "claude-dev-agent",
-      "startedAt": "2026-11-07T02:05:00+08:00",
-      "history": [
-        {
-          "at": "2026-11-07T02:05:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "開始實作；先寫測試確認 RED"
-        },
-        {
-          "at": "2026-11-07T02:25:00+08:00",
-          "from": "In Progress / Green",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "READY_FOR_TDD：tests/dispatch/kill.Tests.ps1 3/3 通過；測試後確認沒有殘留程序"
-        },
-        {
-          "at": "2026-11-07T02:45:00+08:00",
-          "from": "In Review / Green",
-          "to": "In Progress / Yellow",
-          "by": "reviewer",
-          "note": "退回：MAJOR-3 非 Windows 時 Stop-RunTree 謊報終止"
-        },
-        {
-          "at": "2026-11-07T02:55:00+08:00",
-          "from": "In Progress / Yellow",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "修正：Stop-RunTree 改用 Kill($true)／列舉失敗回 false 標 stuck；重驗通過"
-        },
-        {
-          "at": "2026-11-07T03:40:00+08:00",
-          "from": "In Review / Green",
-          "to": "Done / Blue",
-          "by": "user（主對話授權）",
-          "note": "使用者授權標記 Done；兩輪獨立驗收 A/B＋A2/B2 皆 ACCEPT"
-        }
-      ],
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T03:40:00+08:00",
-      "remark": "現況：Update-DispatchTick 的逾時分支與 /dispatch/kill 都只呼叫 $r.proc.Kill()，只會結束父程序；claude/codex CLI 產生的 node、git 子程序會留下來繼續跑。\n可改：serve-ext.ps1 新增 Stop-RunTree($r)，給上述兩處使用；新增 tests/dispatch/kill.Tests.ps1。\n做法：PowerShell 7 用 $r.proc.Kill($true)，Windows PowerShell 5.1 用 taskkill /T /F /PID。之後 WaitForExit(10000)，並確認子程序也已消失。確認失敗時把狀態設成 stuck，保留 claim（until 延長到很遠的時間），Push-All 通知，由人處理。\n測試 fixture：建立一個 profile，exe 為 powershell，執行一支會啟動子程序再 sleep 600 的 ps1。\n完成：3 個情境的測試全綠，並列出測試後確認沒有殘留程序的指令與輸出。",
-      "notes": [
-        {
-          "at": "2026-11-07T03:30:00+08:00",
-          "by": "reviewer-AB",
-          "text": "複驗 A2（實測）＋B2（審查）：ACCEPT，4 個原問題確認修正、無 regression；補 Stop-Run／Resume 例外停機測試，PS5.1 與 7 共 21 綠"
-        }
-      ],
-      "approvedBy": "user（主對話授權）"
-    },
-    {
-      "id": "S-DL-3",
-      "level": "Story",
-      "title": "作為管理者，我想要執行結束但 AI 沒回報時工單自動暫停，以免同一張工單被無限重派耗盡 token",
-      "parentId": "F-DL",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 2.0
-      },
-      "acceptance": [
-        "執行結束後工單仍是 Todo 或 In Progress，就暫停並寫出原因",
-        "AI 已經移到 In Review 的工單不動",
-        "派工器永遠不會設定 Green 或 Blue"
-      ],
-      "bdd": [
-        {
-          "id": "S-DL-3-1",
-          "title": "Given 執行 exit 0 但工單仍是 In Progress When 執行結束 Then 工單變黃燈、paused，lightReason 含 exit code，並追加 history",
-          "status": "Green"
-        },
-        {
-          "id": "S-DL-3-2",
-          "title": "Given 執行逾時且工單仍是 Todo When 執行結束 Then 工單 paused 並寫 pausedReason，下一次 tick 不再派這張",
-          "status": "Green"
-        },
-        {
-          "id": "S-DL-3-3",
-          "title": "Given AI 已把工單移到 In Review When 執行結束 Then 工單內容完全不變",
-          "status": "Green"
-        }
-      ],
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T01:45:00+08:00"
-    },
-    {
-      "id": "T-DL-3",
-      "level": "Task",
-      "title": "執行結束後核對工單狀態並阻止重派",
-      "parentId": "S-DL-3",
-      "status": "Done",
-      "light": "Blue",
-      "estimate": {
-        "hours": 3.0
-      },
-      "dependsOn": [],
-      "scenarioIds": [
-        "S-DL-3-1",
-        "S-DL-3-2",
-        "S-DL-3-3"
-      ],
-      "tdd": "Green",
-      "tests": {
-        "status": "Green",
-        "passed": 7.0,
-        "failed": 0.0
-      },
-      "owner": "claude-dev-agent",
-      "startedAt": "2026-11-07T02:05:00+08:00",
-      "history": [
-        {
-          "at": "2026-11-07T02:05:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "開始實作；先寫測試確認 RED"
-        },
-        {
-          "at": "2026-11-07T02:25:00+08:00",
-          "from": "In Progress / Green",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "READY_FOR_TDD：tests/dispatch/outcome.Tests.ps1 4/4 通過；暫停寫不進看板時改為停掉派工器"
-        },
-        {
-          "at": "2026-11-07T02:45:00+08:00",
-          "from": "In Review / Green",
-          "to": "In Progress / Yellow",
-          "by": "reviewer",
-          "note": "退回：BLOCKER history/notes 巢狀、MAJOR-1 紅燈降黃、MAJOR-2 例外路徑無限重派"
-        },
-        {
-          "at": "2026-11-07T02:55:00+08:00",
-          "from": "In Progress / Yellow",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "修正：history/notes 不走 Get-V、保留紅燈交紅燈停機、例外也停派工器；新增 3 測試重驗通過"
-        },
-        {
-          "at": "2026-11-07T03:40:00+08:00",
-          "from": "In Review / Green",
-          "to": "Done / Blue",
-          "by": "user（主對話授權）",
-          "note": "使用者授權標記 Done；兩輪獨立驗收 A/B＋A2/B2 皆 ACCEPT"
-        }
-      ],
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T03:40:00+08:00",
-      "remark": "現況（會燒 token 的 bug）：Complete-Run 只看 exit code 就釋放 claim。工單如果還是 Todo 或 In Progress，Test-ClaimCandidate 仍然會選中它，下一次 tick（預設 60 秒）會再派同一張，失敗就一直重跑。\n可改：serve-ext.ps1 的 Complete-Run（或新增 Test-RunOutcome 由它呼叫）；新增 tests/dispatch/outcome.Tests.ps1。\n做法：釋放 claim 前讀工單。In Review、Done、Released 不動。In Progress：設 light=Yellow、lightReason=\"派工執行結束但工單未完成（狀態 <status>，exit=<code>，<runStatus>）\"、paused=true、pausedReason 同樣內容。Todo：維持 Gray，設 paused=true 和 pausedReason。兩種情況都要追加 history {at, from, to, by:\"dispatcher\", note} 和一筆含 log 檔名的 note。寫入一律走 Write-BoardChecked，讓 L1–L7 驗證生效。絕不設定 Green 或 Blue。\n完成：3 個情境的測試全綠；另外證明 S-DL-3-2 執行後再跑一次 Update-DispatchTick 時，不會啟動新的執行。",
-      "notes": [
-        {
-          "at": "2026-11-07T03:30:00+08:00",
-          "by": "reviewer-AB",
-          "text": "複驗 A2（實測）＋B2（審查）：ACCEPT，4 個原問題確認修正、無 regression；補 Stop-Run／Resume 例外停機測試，PS5.1 與 7 共 21 綠"
-        }
-      ],
-      "approvedBy": "user（主對話授權）"
-    },
-    {
-      "id": "S-DL-4",
-      "level": "Story",
-      "title": "作為管理者，我想要看板伺服器重啟後自動收拾中斷的執行，不留下孤兒程序或卡住的 claim",
-      "parentId": "F-DL",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 3.0
-      },
-      "acceptance": [
-        "重啟時仍在跑的派工程序會被終止，工單依 T-DL-3 的規則暫停",
-        "PID 被其他程序重用時不能誤殺",
-        "token 撤銷、claim 釋放"
-      ],
-      "bdd": [
-        {
-          "id": "S-DL-4-1",
-          "title": "Given 有執行紀錄且該程序仍在跑 When 伺服器重啟 Then 程序樹被終止、工單暫停、token 撤銷、claim 釋放",
-          "status": "Green"
-        },
-        {
-          "id": "S-DL-4-2",
-          "title": "Given 紀錄的 PID 已被其他程序重用（StartTime 不同） When 伺服器重啟 Then 不終止該程序，只把執行標為 interrupted",
-          "status": "Green"
-        },
-        {
-          "id": "S-DL-4-3",
-          "title": "Given 沒有執行紀錄 When 伺服器重啟 Then 不做任何變更",
-          "status": "Green"
-        }
-      ],
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T01:45:00+08:00"
-    },
-    {
-      "id": "T-DL-4",
-      "level": "Task",
-      "title": "執行紀錄持久化與重啟後對帳",
-      "parentId": "S-DL-4",
-      "status": "Done",
-      "light": "Blue",
-      "estimate": {
-        "hours": 4.0
-      },
-      "dependsOn": [
-        "T-DL-2",
-        "T-DL-3"
-      ],
-      "scenarioIds": [
-        "S-DL-4-1",
-        "S-DL-4-2",
-        "S-DL-4-3"
-      ],
-      "tdd": "Green",
-      "tests": {
-        "status": "Green",
-        "passed": 4.0,
-        "failed": 0.0
-      },
-      "owner": "claude-dev-agent",
-      "startedAt": "2026-11-07T02:05:00+08:00",
-      "history": [
-        {
-          "at": "2026-11-07T02:05:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "開始實作；先寫測試確認 RED"
-        },
-        {
-          "at": "2026-11-07T02:25:00+08:00",
-          "from": "In Progress / Green",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "READY_FOR_TDD：tests/dispatch/restart.Tests.ps1 3/3 通過；對帳在啟動後第一次 tick 執行"
-        },
-        {
-          "at": "2026-11-07T02:45:00+08:00",
-          "from": "In Review / Green",
-          "to": "In Progress / Yellow",
-          "by": "reviewer-A",
-          "note": "退回：依賴的 BLOCKER 使已有 history 的工單暫停失敗"
-        },
-        {
-          "at": "2026-11-07T02:55:00+08:00",
-          "from": "In Progress / Yellow",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "修正：隨 T-DL-3 修正；Resume 每筆 try、殺不掉保留 stuck；重驗通過"
-        },
-        {
-          "at": "2026-11-07T03:40:00+08:00",
-          "from": "In Review / Green",
-          "to": "Done / Blue",
-          "by": "user（主對話授權）",
-          "note": "使用者授權標記 Done；兩輪獨立驗收 A/B＋A2/B2 皆 ACCEPT"
-        }
-      ],
-      "createdAt": "2026-11-07T01:45:00+08:00",
-      "updatedAt": "2026-11-07T03:40:00+08:00",
-      "remark": "現況：$runs 只存在記憶體。伺服器重啟後，CLI 變成孤兒繼續跑，claim 會卡到 until 過期，介面上也看不到這個執行。\n可改：serve-ext.ps1 的 Start-DispatchRun、Complete-Run，再加一個啟動時呼叫的 Resume-DispatchRuns；新增 tests/dispatch/restart.Tests.ps1。\n做法：Start-DispatchRun 成功後，把 {runId, project, ticket, pid, startTime（Process.StartTime 的 ISO 值）, log, tokenId} 寫進 ConfigDir 的 runs-<project>.json；Complete-Run 時移除這筆。啟動時逐筆讀回：PID 存在且 StartTime 相同，就用 T-DL-2 的 Stop-RunTree 終止；PID 不存在或 StartTime 不同，就不碰任何程序。兩種情況都標成 interrupted，交給 T-DL-3 的核對、撤銷 token、釋放 claim，並在 log 尾端註記。\n不要做：接管仍在跑的程序繼續監看（太複雜，終止後重派比較可預期）。\n完成：3 個情境的測試全綠。",
-      "notes": [
-        {
-          "at": "2026-11-07T03:30:00+08:00",
-          "by": "reviewer-AB",
-          "text": "複驗 A2（實測）＋B2（審查）：ACCEPT，4 個原問題確認修正、無 regression；補 Stop-Run／Resume 例外停機測試，PS5.1 與 7 共 21 綠"
-        }
-      ],
-      "approvedBy": "user（主對話授權）"
-    },
-    {
-      "id": "E-GIT",
-      "level": "Epic",
-      "title": "Git-based 跨機器派工（取代 dispatch-plan 的 Webhook/fencing/outbox）",
-      "parentId": null,
-      "status": "Backlog",
-      "light": "Gray",
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-08T06:30:00+08:00",
-      "remark": "用 Git 當跨機器的協調層與傳輸層，不自建 HTTP 派工協定。領工單＝改 board.json 標 claim→commit→push，push 成功才算領到（non-fast-forward 拒絕＝天然樂觀鎖/fencing）；回報＝commit 狀態/PR→push；程式碼走 branch/PR。認證用 SSH/token、權限用 repo access、稽核用 commit 歷史。\n取代：dispatch-plan 的 Webhook、HMAC、endpoint allowlist、lease generation、outbox、completion 冪等（Git 既有機制已涵蓋）。\n沿用：現有本機 push 式派工（Process.Start）維持不變，遠端改 pull 式，兩者並存。\n真正要設計的只有三點：claim 競爭退讓、board.json 併發 rebase 合併、runner 活著判斷。",
-      "notes": [
-        {
-          "at": "2026-11-08T06:30:00+08:00",
-          "by": "claude-dev-agent",
-          "text": "獨立驗收 A（實測）＋B（審查）：T-GIT-1/3 ACCEPT；T-GIT-2/4 RETURN。已修 BLOCKER-1（report push 前驗證補 -OldPath+-Role，L5 擋開發代理設 Done/藍燈）、BLOCKER-2（history from 用舊值）、MAJOR-3（history 補 note）、同秒 updatedAt 補毫秒；runner F2（損毀 claim try/catch）、F4（executor 例外釋放 claim）、F3（回報前 heartbeat LOST 檢查）；dependsOn 查無保守不領。補 10 個測試鎖住存活 mutation，共 24 綠（PS5.1 與 7）。"
-        }
-      ]
-    },
-    {
-      "id": "F-GIT",
-      "level": "Feature",
-      "title": "用 Git 當協調層的 pull 式派工",
-      "parentId": "E-GIT",
-      "status": "Backlog",
-      "light": "Gray",
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-07T04:00:00+08:00"
-    },
-    {
-      "id": "S-GIT-1",
-      "level": "Story",
-      "title": "作為 runner，我想用 git push 搶單，確保同一張工單只被一台領到",
-      "parentId": "F-GIT",
-      "status": "In Progress",
-      "light": "Green",
-      "estimate": {
-        "storyPoints": 5.0
-      },
-      "estimateNote": "初估，待團隊校準",
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-08T04:30:00+08:00",
-      "bdd": [
-        {
-          "id": "S-GIT-1-1",
-          "title": "Given 兩台 runner 同時 claim 同一張工單 When 各自 commit 並 push Then 只有一台 push 成功，另一台被 non-fast-forward 拒絕",
-          "status": "Green"
-        },
-        {
-          "id": "S-GIT-1-2",
-          "title": "Given claim 被拒 When pull --rebase 後發現該工單已被別台領 Then 放棄這張、改挑下一張未領工單",
-          "status": "Green"
-        },
-        {
-          "id": "S-GIT-1-3",
-          "title": "Given claim 被拒但 rebase 後該工單仍未被領（別人領的是別張） When 重新套用自己的 claim 並 push Then 成功領到",
-          "status": "Green"
-        }
-      ],
-      "history": [
-        {
-          "at": "2026-11-08T04:30:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "底下 T-GIT-1 進 In Review"
-        }
-      ]
-    },
-    {
-      "id": "T-GIT-1",
-      "level": "Task",
-      "title": "claim 競爭協議（push 搶單、被拒退讓與重試）",
-      "parentId": "S-GIT-1",
-      "status": "In Review",
-      "light": "Green",
-      "estimate": {
-        "hours": 8.0
-      },
-      "dependsOn": [],
-      "scenarioIds": [
-        "S-GIT-1-1",
-        "S-GIT-1-2",
-        "S-GIT-1-3"
-      ],
-      "tdd": "Green",
-      "tests": {
-        "status": "Green",
-        "passed": 4.0,
-        "failed": 0.0
-      },
-      "owner": "claude-dev-agent",
-      "startedAt": "2026-11-08T04:00:00+08:00",
-      "history": [
-        {
-          "at": "2026-11-08T04:00:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "開始實作；先寫 RED 測試（stub 回 NOT_IMPL）"
-        },
-        {
-          "at": "2026-11-08T04:30:00+08:00",
-          "from": "In Progress / Green",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "READY_FOR_TDD：claims/<ticket>.json＋push 搶單；S-GIT-1-1~3 與真並行 1b 共 4 綠（PS5.1 與 7）"
-        }
-      ],
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-08T04:30:00+08:00",
-      "remark": "做法：claim＝在 board.json 的該 item 寫 claim{by,host,until}，commit「claim <id> by <runner>」，push。被拒→fetch+rebase→重判該 item：已被別台領（claim.by 非我且 until 未過期）就放棄挑下一張；仍未被領就重套 claim 再 push。定義最大重試次數與每次退讓（隨機抖動避免活鎖）。\n不要做：自建 lease generation／HTTP 鎖；一律靠 git push 的原子性。\n完成：三情境可用兩個本機 clone 模擬 push 競爭重現。"
-    },
-    {
-      "id": "S-GIT-2",
-      "level": "Story",
-      "title": "作為系統，我想讓多台改不同工單時能自動 rebase 合併、改同一張時安全停下",
-      "parentId": "F-GIT",
-      "status": "In Progress",
-      "light": "Green",
-      "estimate": {
-        "storyPoints": 5.0
-      },
-      "estimateNote": "初估，待團隊校準",
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-08T05:00:00+08:00",
-      "bdd": [
-        {
-          "id": "S-GIT-2-1",
-          "title": "Given A 領 T-1、B 領 T-2 When 兩台先後 push Then rebase 自動合併、兩筆 claim 都在、board.json 無衝突",
-          "status": "Green"
-        },
-        {
-          "id": "S-GIT-2-2",
-          "title": "Given 兩台改同一張工單的不同欄位 When rebase Then 偵測為衝突、停下交人工，不自動亂合",
-          "status": "Green"
-        },
-        {
-          "id": "S-GIT-2-3",
-          "title": "Given rebase 後 board.json 不符 L1–L7 When push 前驗證 Then 擋下 push 並回報原因",
-          "status": "Green"
-        }
-      ],
-      "history": [
-        {
-          "at": "2026-11-08T05:00:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "底下 T-GIT-2 進 In Review"
-        }
-      ]
-    },
-    {
-      "id": "T-GIT-2",
-      "level": "Task",
-      "title": "board.json 併發 rebase 合併與 push 前驗證",
-      "parentId": "S-GIT-2",
-      "status": "In Review",
-      "light": "Green",
-      "estimate": {
-        "hours": 8.0
-      },
-      "dependsOn": [
-        "T-GIT-1"
-      ],
-      "scenarioIds": [
-        "S-GIT-2-1",
-        "S-GIT-2-2",
-        "S-GIT-2-3"
-      ],
-      "tdd": "Green",
-      "tests": {
-        "status": "Green",
-        "passed": 4.0,
-        "failed": 0.0
-      },
-      "owner": "claude-dev-agent",
-      "startedAt": "2026-11-08T04:40:00+08:00",
-      "history": [
-        {
-          "at": "2026-11-08T04:40:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "開始實作；先寫 RED（stub NOT_IMPL）"
-        },
-        {
-          "at": "2026-11-08T05:00:00+08:00",
-          "from": "In Progress / Green",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "READY_FOR_TDD：重放式樂觀鎖＋push 前驗 L1–L7；S-GIT-2-1~3 與真並行 1b 共 4 綠（PS5.1 與 7）"
-        }
-      ],
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-08T06:30:00+08:00",
-      "remark": "做法：以 item id 為單位的合併——不同 item 各自更新時 rebase 自動過；同一 item 同欄位衝突則標衝突交人工。push 前跑 validate-board.ps1（L1–L7），不過就拒 push。\n不要做：對整檔做文字級 merge（易錯）。\n完成：三情境以兩個 clone 製造併發 commit 重現。",
-      "notes": [
-        {
-          "at": "2026-11-08T06:30:00+08:00",
-          "by": "claude-dev-agent",
-          "text": "驗收 RETURN→修正：push 前驗證帶 OldPath+Role（L5/L7/完整性）、history from 修正、補 note、updatedAt 補毫秒；補 BLOCKER/R6b 測試。"
-        }
-      ]
-    },
-    {
-      "id": "S-GIT-3",
-      "level": "Story",
-      "title": "作為管理者，我想知道領了工單的 runner 是否還活著，死掉的工單能被重領",
-      "parentId": "F-GIT",
-      "status": "In Progress",
-      "light": "Green",
-      "estimate": {
-        "storyPoints": 3.0
-      },
-      "estimateNote": "初估，待團隊校準",
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-08T05:30:00+08:00",
-      "bdd": [
-        {
-          "id": "S-GIT-3-1",
-          "title": "Given runner 領工單後定時 push heartbeat（更新 claim.until） When 伺服器檢查 Then until 未過期視為存活",
-          "status": "Green"
-        },
-        {
-          "id": "S-GIT-3-2",
-          "title": "Given runner 當機不再 push When claim.until 過期 Then 該工單視為可重新領取",
-          "status": "Green"
-        },
-        {
-          "id": "S-GIT-3-3",
-          "title": "Given 續租 push 與別台 claim 衝突 When rebase 偵測 Then 以最新有效 claim 為準、過期者作廢",
-          "status": "Green"
-        }
-      ],
-      "history": [
-        {
-          "at": "2026-11-08T05:30:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "底下 T-GIT-3 進 In Review"
-        }
-      ]
-    },
-    {
-      "id": "T-GIT-3",
-      "level": "Task",
-      "title": "heartbeat 續租與逾期重領",
-      "parentId": "S-GIT-3",
-      "status": "In Review",
-      "light": "Green",
-      "estimate": {
-        "hours": 6.0
-      },
-      "dependsOn": [
-        "T-GIT-1"
-      ],
-      "scenarioIds": [
-        "S-GIT-3-1",
-        "S-GIT-3-2",
-        "S-GIT-3-3"
-      ],
-      "tdd": "Green",
-      "tests": {
-        "status": "Green",
-        "passed": 3.0,
-        "failed": 0.0
-      },
-      "owner": "claude-dev-agent",
-      "startedAt": "2026-11-08T05:10:00+08:00",
-      "history": [
-        {
-          "at": "2026-11-08T05:10:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "開始實作；先寫 RED（3-2 直接 PASS：逾期重領本來就被 claim 支援）"
-        },
-        {
-          "at": "2026-11-08T05:30:00+08:00",
-          "from": "In Progress / Green",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "READY_FOR_TDD：heartbeat 續租 claims/<ticket>.json until；被接手回 LOST 不搶回；S-GIT-3-1~3 共 3 綠（PS5.1 與 7）"
-        }
-      ],
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-08T05:30:00+08:00",
-      "remark": "做法：claim.until 由 runner 定時 push 續租；伺服器與其他 runner 以 commit 時間與 until 判存活；until 過期即可被重領（走 T-GIT-1 的 claim 流程）。\n完成：三情境可模擬續租、逾期、續租衝突。"
-    },
-    {
-      "id": "S-GIT-4",
-      "level": "Story",
-      "title": "作為遠端機器，我想定時 pull 看板、領未執行工單、做完 push 回報",
-      "parentId": "F-GIT",
-      "status": "In Progress",
-      "light": "Green",
-      "estimate": {
-        "storyPoints": 5.0
-      },
-      "estimateNote": "初估，待團隊校準",
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-08T06:00:00+08:00",
-      "bdd": [
-        {
-          "id": "S-GIT-4-1",
-          "title": "Given 看板有未領、可領工單 When 遠端 runner pull 後執行迴圈 Then claim-push 成功並啟動 AI",
-          "status": "Green"
-        },
-        {
-          "id": "S-GIT-4-2",
-          "title": "Given AI 做完 When runner 更新 board.json 狀態與 PR 連結並 push Then 伺服器與其他 runner pull 後看到最新狀態",
-          "status": "Green"
-        },
-        {
-          "id": "S-GIT-4-3",
-          "title": "Given 沒有可領工單 When runner pull Then 進 idle、間隔後再 pull，不空轉搶單",
-          "status": "Green"
-        }
-      ],
-      "history": [
-        {
-          "at": "2026-11-08T06:00:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "底下 T-GIT-4 進 In Review"
-        }
-      ]
-    },
-    {
-      "id": "T-GIT-4",
-      "level": "Task",
-      "title": "遠端 runner pull 迴圈（pull→claim→執行→回報 push→idle）",
-      "parentId": "S-GIT-4",
-      "status": "In Review",
-      "light": "Green",
-      "estimate": {
-        "hours": 10.0
-      },
-      "dependsOn": [
-        "T-GIT-1",
-        "T-GIT-2",
-        "T-GIT-3"
-      ],
-      "scenarioIds": [
-        "S-GIT-4-1",
-        "S-GIT-4-2",
-        "S-GIT-4-3"
-      ],
-      "tdd": "Green",
-      "tests": {
-        "status": "Green",
-        "passed": 3.0,
-        "failed": 0.0
-      },
-      "owner": "claude-dev-agent",
-      "startedAt": "2026-11-08T05:40:00+08:00",
-      "history": [
-        {
-          "at": "2026-11-08T05:40:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "開始實作；先寫 RED"
-        },
-        {
-          "at": "2026-11-08T06:00:00+08:00",
-          "from": "In Progress / Green",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "READY_FOR_TDD：pull→Select-ClaimableTicket→claim→executor→report→idle；Report 通用化支援任意欄位；S-GIT-4-1~3 共 3 綠（PS5.1 與 7）"
-        }
-      ],
-      "createdAt": "2026-11-07T04:00:00+08:00",
-      "updatedAt": "2026-11-08T06:30:00+08:00",
-      "remark": "做法：遠端 runner 定時 git pull → 挑未領可領工單 → T-GIT-1 claim → 啟動 AI CLI（沿用現有 profile/一次性 token 機制，但在遠端機）→ 完成 PATCH board.json＋PR→push→release；無工單進 idle。本機 push 式派工維持不變。\n完成：三情境以本機兩 clone 當作「伺服器端 repo＋遠端 runner」模擬。",
-      "notes": [
-        {
-          "at": "2026-11-08T06:30:00+08:00",
-          "by": "claude-dev-agent",
-          "text": "驗收 RETURN→修正：Select 損毀 claim try/catch 與 dependsOn 查無保守（F2）、executor 例外釋放 claim（F4）、回報前 heartbeat LOST 檢查（F3）；補 S2/S4/S5/F2/F4 測試。"
-        }
-      ]
-    },
-    {
-      "id": "T-GIT-5",
-      "level": "Task",
-      "title": "死信：工單連續 INVALID 達上限就停止重領（避免跨機器無限重跑）",
-      "parentId": "F-GIT",
-      "status": "Done",
-      "light": "Blue",
-      "estimate": {
-        "hours": 6.0
-      },
-      "dependsOn": [],
-      "createdAt": "2026-11-08T07:30:00+08:00",
-      "updatedAt": "2026-11-12T23:08:03+08:00",
-      "remark": "來源：git-dispatch 第二輪獨立驗收 B2 MAJOR-3。\n問題：executor 若「每次」產出不合 L1–L7 的更新（例：紅燈漏 lightReason、L6 測試沒綠），Git-Report 回 INVALID、runner 不釋放 claim → lease 過期 → 別台重領 → 再 INVALID…跨 N 台無限重跑、燒算力，無死信隔離。\n待決政策（開工前先定）：(a) 計數存哪——claim 檔 / 工單欄位 failCount；(b) 上限 N；(c) 達標後動作——Select 排除該工單、標記 blocked、記 note 交人工；(d) 誰清計數（人工介入後 reset）。\n完成定義：同一工單連續 N 次 INVALID 後，所有 runner 的 Select 不再挑它；工單留 note 說明原因；有測試用『executor 固定回 INVALID 更新』重現，斷言第 N+1 輪起該工單被跳過。\n相關：MINOR——INVALID/CONFLICT 後是否主動 Release-GitClaim（目前壓到過期）可一併在此決定。",
-      "owner": "claude-dev-agent",
-      "startedAt": "2026-11-12T16:30:00+08:00",
-      "completedAt": "2026-11-12T23:08:03+08:00",
-      "approvedBy": "使用者（人工授權）+ verify-review-a7f3（opus 審查）",
-      "tdd": "Green",
-      "tests": {
-        "status": "Green",
-        "passed": 5,
-        "failed": 0
-      },
-      "scenarioIds": [
-        "S-GIT-5-1",
-        "S-GIT-5-2",
-        "S-GIT-5-3",
-        "S-GIT-5-4",
-        "S-GIT-5-5"
-      ],
-      "bdd": [
-        {
-          "id": "S-GIT-5-1",
-          "title": "executor 固定回 INVALID：連續 N 次後該工單被所有 runner 跳過（done-definition）",
-          "status": "Green",
-          "tests": [
-            "deadletter.Tests.ps1::S-GIT-5-1"
-          ]
-        },
-        {
-          "id": "S-GIT-5-2",
-          "title": "Add-GitDeadLetterFail 連續計數在 origin 持久、Test-GitDeadLettered 於門檻翻轉",
-          "status": "Green",
-          "tests": [
-            "deadletter.Tests.ps1::S-GIT-5-2"
-          ]
-        },
-        {
-          "id": "S-GIT-5-3",
-          "title": "死信後所有 runner（含另一台）的 Select 都跳過該工單",
-          "status": "Green",
-          "tests": [
-            "deadletter.Tests.ps1::S-GIT-5-3"
-          ]
-        },
-        {
-          "id": "S-GIT-5-4",
-          "title": "人工 Clear-GitDeadLetter 後連續計數歸零、工單可再被挑",
-          "status": "Green",
-          "tests": [
-            "deadletter.Tests.ps1::S-GIT-5-4"
-          ]
-        },
-        {
-          "id": "S-GIT-5-5",
-          "title": "成功回報（REPORTED）會把連續計數歸零",
-          "status": "Green",
-          "tests": [
-            "deadletter.Tests.ps1::S-GIT-5-5"
-          ]
-        }
-      ],
-      "history": [
-        {
-          "at": "2026-11-12T16:30:00+08:00",
-          "from": "Backlog / Gray",
-          "to": "In Progress / Green",
-          "by": "claude-dev-agent",
-          "note": "開始實作；先寫 RED（deadletter.Tests.ps1 五情境先全失敗）"
-        },
-        {
-          "at": "2026-11-12T18:01:38+08:00",
-          "from": "In Progress / Green",
-          "to": "In Review / Green",
-          "by": "claude-dev-agent",
-          "note": "READY_FOR_TDD：死信檔 deadletters/<ticket>.json 連續 N 次 INVALID 隔離，Select 跳過、成功回報/人工清檔歸零；S-GIT-5-1~5 共 5 綠（PS5.1 與 pwsh7）"
-        },
-        {
-          "at": "2026-11-12T23:08:03+08:00",
-          "from": "In Review / Green",
-          "to": "Done / Blue",
-          "by": "opus-reviewer（使用者授權）",
-          "reason": "PR #1 已合併 master(2d314c9)；獨立實測(verify-test-ind/sonnet)5/5+33/0 雙直譯器 PASS、mutation 三項全抓；獨立審查(verify-review-a7f3/opus)10 項全過無 blocker；開發/實測/審查三者身分互異，驗收有效。藍燈/Done 經使用者授權由高階模型設定。"
-        }
-      ],
-      "notes": [
-        {
-          "at": "2026-11-12T18:01:38+08:00",
-          "by": "claude-dev-agent",
-          "text": "政策定案：計數存專屬檔 deadletters/<ticket>.json（不寫 board 免過驗證/免搶樂觀鎖）；上限 N 預設 3（可參數化）；達標後所有 runner Select 跳過＋工單留 note 交人工；成功回報或人工刪檔歸零。MINOR：INVALID 後主動 Release-GitClaim（不再壓到過期）。"
-        }
-      ]
-    },
-    {
-      "id": "E-ACC",
-      "level": "Epic",
-      "title": "帳號系統（對外安全／多人協作／派工憑證強化／稽核可追溯）",
-      "parentId": null,
-      "status": "Backlog",
-      "light": "Gray",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "完整帳號系統 A+B+C。架構:六角形+洋蔥,Node+SQLite。里程碑 M1=RBAC+稽核(本批)、M2=機器金鑰、M3=Web 登入。規格見 docs/account/requirements.md、architecture.md;BDD 在 docs/bdd/S-ACC-*.feature;TDD 在 docs/account/tdd-m1.md;工單定義 docs/account/tickets-m1.md。"
-    },
-    {
-      "id": "F-ACC-3",
-      "level": "Feature",
-      "title": "角色權限控管（RBAC）",
-      "parentId": "E-ACC",
-      "status": "Backlog",
-      "light": "Gray",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "F-ACC-4",
-      "level": "Feature",
-      "title": "不可否認的稽核",
-      "parentId": "E-ACC",
-      "status": "Backlog",
-      "light": "Gray",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-3-1",
-      "level": "Story",
-      "title": "作為管理者，我想定義角色與權限矩陣，讓每個受保護動作都有明確的允許角色",
-      "parentId": "F-ACC-3",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 3
-      },
-      "sprint": "acc-m1",
-      "bdd": [
-        {
-          "id": "S-ACC-3-1-1",
-          "title": "When 查詢權限矩陣 Then 回每個受保護動作的允許角色;move_done 僅 verifier 與管理者",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-1-2",
-          "title": "Given 新增角色 release-manager When 指派 approve_deployment Then 該角色擁有該權限且其他角色不受影響",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-1-3",
-          "title": "When 指派不存在的權限 Then 回 UnknownPermission",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-1-4",
-          "title": "When 新增同名角色 Then 回 DuplicateRole",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-1-5",
-          "title": "Given 呼叫者為檢視者 When 改權限矩陣 Then 回 Forbidden 且矩陣不變",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-3-2",
-      "level": "Story",
-      "title": "作為系統，我想在執行受保護動作時檢查呼叫者角色權限，未授權就擋下",
-      "parentId": "F-ACC-3",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 5
-      },
-      "sprint": "acc-m1",
-      "bdd": [
-        {
-          "id": "S-ACC-3-2-1",
-          "title": "When 具權限者請求移 Done Then 放行",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-2-2",
-          "title": "When 無權限者請求移 Done Then 回 Forbidden 且動作未執行",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-2-3",
-          "title": "Given 身分無法驗證 When 請求受保護動作 Then 回 Unauthorized",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-2-4",
-          "title": "Given PM 有 edit_card 無 approve_deployment When 核准佈署→Forbidden、改卡→放行",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-2-5",
-          "title": "Given 權限儲存不可讀 When 受保護動作 Then 保守回 Forbidden 並記事件,不預設放行",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-3-3",
-      "level": "Story",
-      "title": "作為管理者，我想把現行 L5／hook 硬規則改綁角色權限，移除以 AI_AGENT 環境標記判斷身分的 hack",
-      "parentId": "F-ACC-3",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 5
-      },
-      "sprint": "acc-m1",
-      "bdd": [
-        {
-          "id": "S-ACC-3-3-1",
-          "title": "Given verifier 金鑰驗證通過 When 提交移 Done Then guard 放行",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-3-2",
-          "title": "Given dev-agent 金鑰驗證通過 When 提交移 Done Then guard 回 Forbidden 並指出所需角色",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-3-3",
-          "title": "Given AI_AGENT 被竄改或移除 When 提交受保護 board 變更 Then 只依驗證過帳號角色,env 不影響",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-3-3-4",
-          "title": "Given 無可驗證身分 When 提交受保護 board 變更 Then guard 回 Unauthorized",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-4-1",
-      "level": "Story",
-      "title": "作為稽核者，我想每個受保護動作都寫一筆不可否認的稽核紀錄（誰、何時、對哪張卡、結果）",
-      "parentId": "F-ACC-4",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 3
-      },
-      "sprint": "acc-m1",
-      "bdd": [
-        {
-          "id": "S-ACC-4-1-1",
-          "title": "Given verifier 移卡成功 Then 稽核新增 actor/action/target/result=allowed 含時間戳",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-4-1-2",
-          "title": "Given dev-agent 移卡被拒 Then 稽核新增 result=forbidden 含原因",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-4-1-3",
-          "title": "When 修改或刪除既有稽核 Then 被拒（append-only）",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-4-1-4",
-          "title": "When 寫稽核 Then actor 須對應可驗證帳號/金鑰,不收裸代號字串",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-4-1-5",
-          "title": "Given 稽核儲存不可寫 When 執行受保護動作 Then 寫入失敗可觀察,不靜默吞",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-4-2",
-      "level": "Story",
-      "title": "作為稽核者，我想依使用者／時間／工單查詢與篩選稽核紀錄",
-      "parentId": "F-ACC-4",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 2
-      },
-      "sprint": "acc-m1",
-      "bdd": [
-        {
-          "id": "S-ACC-4-2-1",
-          "title": "When 查 actor=alice Then 只回 alice 的",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-4-2-2",
-          "title": "When 查 [T0,T1] Then 回含端點區間內的",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-4-2-3",
-          "title": "When 查 target=T-1 Then 只回與 T-1 相關的",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-4-2-4",
-          "title": "When 查不存在 actor Then 回空清單不報錯",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-4-2-5",
-          "title": "Given 無 view_audit When 查稽核 Then 回 Forbidden",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-4-2-6",
-          "title": "When 以注入字串當篩選值 Then 安全參數化,不外洩不回不符紀錄",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "T-ACC-41c",
-      "level": "Task",
-      "title": "Identity 可驗證身分值物件",
-      "parentId": "S-ACC-4-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 2
-      },
-      "sprint": "acc-m1",
-      "dependsOn": [],
-      "scenarioIds": [
-        "S-ACC-4-1-4"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:domain。可改:src/domain/account/identity.ts、tests/domain/account/identity.test.ts。不可變值物件,帶可驗證來源(帳號/金鑰),拒裸代號字串。TDD #18。完成:S-ACC-4-1-4 轉綠、通過 A1(領域零框架)。詳見 docs/account/tickets-m1.md。"
-    },
-    {
-      "id": "T-ACC-31a",
-      "level": "Task",
-      "title": "權限矩陣領域模型",
-      "parentId": "S-ACC-3-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 5
-      },
-      "sprint": "acc-m1",
-      "dependsOn": [],
-      "scenarioIds": [
-        "S-ACC-3-1-1",
-        "S-ACC-3-1-2",
-        "S-ACC-3-1-3",
-        "S-ACC-3-1-4",
-        "S-ACC-3-1-5"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:domain。可改:src/domain/account/permission-matrix.ts、role.ts、errors.ts 及其測試。不可變矩陣(變更回新實例);未知權限/重複角色/非管理者改矩陣各丟對應領域例外;move_done 預設僅 verifier+管理者。TDD #1-5。5 情境同一聚合單一檔,一輪可完成不拆。完成:5 條綠、通過 A1。"
-    },
-    {
-      "id": "T-ACC-32a",
-      "level": "Task",
-      "title": "授權領域規則",
-      "parentId": "S-ACC-3-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 3
-      },
-      "sprint": "acc-m1",
-      "dependsOn": [
-        "T-ACC-31a"
-      ],
-      "scenarioIds": [
-        "S-ACC-3-2-1",
-        "S-ACC-3-2-2",
-        "S-ACC-3-2-4"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:domain。可改:src/domain/account/authorize.ts 及測試。純函式 authorize(identity,action,matrix)→allowed/Forbidden;有權放行、無權 Forbidden 無副作用、單項權限邊界正確。TDD #6/7/9。完成:測試綠、通過 A1。"
-    },
-    {
-      "id": "T-ACC-32b",
-      "level": "Task",
-      "title": "授權 Use Case 與來源失效保守拒絕",
-      "parentId": "S-ACC-3-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 4
-      },
-      "sprint": "acc-m1",
-      "dependsOn": [
-        "T-ACC-32a"
-      ],
-      "scenarioIds": [
-        "S-ACC-3-2-3",
-        "S-ACC-3-2-5"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app+定義 PermissionStorePort。可改:src/app/account/check-permission.ts、src/domain/account/ports/permission-store-port.ts 及測試。未知身分回 Unauthorized;權限儲存不可讀時 fail-closed 回 Forbidden 並記事件,絕不預設放行;假 Port 測。TDD #8/10。完成:測試綠、通過 A2。"
-    },
-    {
-      "id": "T-ACC-41a",
-      "level": "Task",
-      "title": "受保護動作寫稽核",
-      "parentId": "S-ACC-4-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 3
-      },
-      "sprint": "acc-m1",
-      "dependsOn": [
-        "T-ACC-41c",
-        "T-ACC-32b"
-      ],
-      "scenarioIds": [
-        "S-ACC-4-1-1",
-        "S-ACC-4-1-2"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app+定義 AuditPort。可改:src/app/account/audit-on-action.ts、src/domain/account/ports/audit-port.ts、src/domain/account/audit-entry.ts 及測試。成功與被拒動作都寫稽核(含時間戳/原因);AuditEntry 不可變;actor 為 Identity VO;假 AuditPort 測。TDD #15/16。"
-    },
-    {
-      "id": "T-ACC-41b",
-      "level": "Task",
-      "title": "append-only 稽核儲存與寫入失敗可觀察",
-      "parentId": "S-ACC-4-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 4
-      },
-      "sprint": "acc-m1",
-      "dependsOn": [
-        "T-ACC-41a"
-      ],
-      "scenarioIds": [
-        "S-ACC-4-1-3",
-        "S-ACC-4-1-5"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:infra(SQLite)。可改:src/infra/account/sqlite-audit-store.ts、schema/audit.sql 及測試。實作 AuditPort;既有紀錄不可改/刪(違反擲錯且筆數不變);儲存不可寫時失敗可觀察,不靜默吞。TDD #17/19。完成:測試綠、通過 A4/A5。"
-    },
-    {
-      "id": "T-ACC-42a",
-      "level": "Task",
-      "title": "稽核查詢 adapter 與注入防禦",
-      "parentId": "S-ACC-4-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 5
-      },
-      "sprint": "acc-m1",
-      "dependsOn": [
-        "T-ACC-41b"
-      ],
-      "scenarioIds": [
-        "S-ACC-4-2-1",
-        "S-ACC-4-2-2",
-        "S-ACC-4-2-3",
-        "S-ACC-4-2-4",
-        "S-ACC-4-2-6"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:infra(SQLite)。可改:src/infra/account/sqlite-audit-query.ts 及測試。依 actor/時間(含端點)/工單查詢;空結果回 [] 不報錯;注入字串走參數化,不回不符紀錄、不漏底層錯。TDD #20-23/25。5 情境同一 adapter 單一檔,一輪可完成不拆。"
-    },
-    {
-      "id": "T-ACC-42b",
-      "level": "Task",
-      "title": "稽核查詢權限檢查",
-      "parentId": "S-ACC-4-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 2
-      },
-      "sprint": "acc-m1",
-      "dependsOn": [
-        "T-ACC-32a",
-        "T-ACC-42a"
-      ],
-      "scenarioIds": [
-        "S-ACC-4-2-5"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app。可改:src/app/account/query-audit.ts 及測試。查稽核前檢查 view_audit,無權回 Forbidden 且不回資料。TDD #24。完成:測試綠、通過 A2。"
-    },
-    {
-      "id": "T-ACC-33a",
-      "level": "Task",
-      "title": "PwshBoardGuardAdapter 改綁角色（⚠ 另需 M2 金鑰驗證）",
-      "parentId": "S-ACC-3-3",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 6
-      },
-      "sprint": "acc-m1",
-      "dependsOn": [
-        "T-ACC-32b",
-        "T-ACC-22a"
-      ],
-      "scenarioIds": [
-        "S-ACC-3-3-1",
-        "S-ACC-3-3-2",
-        "S-ACC-3-3-3",
-        "S-ACC-3-3-4"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:腳本/infra(PowerShell adapter + hook)。可改:scripts/account-guard/Invoke-BoardGuard.ps1、validate-board.ps1 的 L5 呼叫點、hook 設定(此單即改 hook,需 guard-change 核准)、tests/account/guard-rebind.Tests.ps1。⚠ 跨里程碑:S-ACC-3-3-1「verifier 以金鑰驗證」需 M2 的 F-ACC-2 金鑰驗證(T-ACC-22a)。M1 只能交付接縫(改呼叫授權決策+脫鉤 AI_AGENT,以注入身分測 3-3-3);金鑰背書的擋/放 commit E2E 待 M2。建議排在 M2 之後,屆時把 T-ACC-22a 補入 dependsOn。TDD #11-14(Pester)。"
-    },
-    {
-      "id": "F-ACC-2",
-      "level": "Feature",
-      "title": "機器金鑰（派工憑證強化）",
-      "parentId": "E-ACC",
-      "status": "Backlog",
-      "light": "Gray",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "F-ACC-1",
-      "level": "Feature",
-      "title": "Web 帳號與登入",
-      "parentId": "E-ACC",
-      "status": "Backlog",
-      "light": "Gray",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-2-1",
-      "level": "Story",
-      "title": "作為管理者，我想為每個代理身分簽發機器金鑰並綁定角色，取代裸代號字串",
-      "parentId": "F-ACC-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 3
-      },
-      "sprint": "acc-m2",
-      "bdd": [
-        {
-          "id": "S-ACC-2-1-1",
-          "title": "When 為 runner-01 簽發並綁 runner Then 回金鑰且綁定身分與角色",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-1-2",
-          "title": "When 簽發 Then 明文只回一次,之後只存不可還原雜湊",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-1-3",
-          "title": "Given dev-agent When 簽發 Then Forbidden 且不產生金鑰",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-1-4",
-          "title": "When 綁不存在角色 Then UnknownRole 且不產生金鑰",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-1-5",
-          "title": "When 簽發 Then 稽核 action=issue_key 不含明文",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-2-2",
-      "level": "Story",
-      "title": "作為系統，我想驗證代理以金鑰簽章的請求，通過才認可身分與角色",
-      "parentId": "F-ACC-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 5
-      },
-      "sprint": "acc-m2",
-      "bdd": [
-        {
-          "id": "S-ACC-2-2-1",
-          "title": "When 有效簽章請求 Then 通過並解析 identity+role",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-2-2",
-          "title": "When 竄改內容或簽章 Then Unauthorized 不認可身分",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-2-3",
-          "title": "Given 金鑰過期 When 簽章請求 Then Unauthorized",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-2-4",
-          "title": "When 重放舊請求(相同 nonce/時間戳過舊) Then Unauthorized",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-2-5",
-          "title": "When 不存在身分或錯簽章 Then 一致 Unauthorized,不透露原因",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-2-6",
-          "title": "When 驗證後執行受保護動作 Then 稽核 actor 為可驗證金鑰身分非裸代號",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-2-3",
-      "level": "Story",
-      "title": "作為管理者，我想撤銷或輪替機器金鑰，讓外洩或退役的金鑰立即失效",
-      "parentId": "F-ACC-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 3
-      },
-      "sprint": "acc-m2",
-      "bdd": [
-        {
-          "id": "S-ACC-2-3-1",
-          "title": "When 撤銷 Then 之後該金鑰簽章一律 Unauthorized",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-3-2",
-          "title": "When 輪替 Then 新金鑰通過、舊金鑰失敗",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-3-3",
-          "title": "Given dev-agent When 撤銷/輪替 Then Forbidden 且既有金鑰仍有效",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-3-4",
-          "title": "When 撤銷不存在金鑰 Then NotFound/無作用,不漏底層錯,不影響他鑰",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-2-3-5",
-          "title": "When 撤銷/輪替 Then 稽核 action=revoke_key/rotate_key 不含明文",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-1-1",
-      "level": "Story",
-      "title": "作為新使用者，我想用電子郵件與密碼註冊帳號",
-      "parentId": "F-ACC-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 3
-      },
-      "sprint": "acc-m3",
-      "bdd": [
-        {
-          "id": "S-ACC-1-1-1",
-          "title": "When 以未註冊 email+合規密碼註冊 Then 成功且密碼不可還原",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-1-2",
-          "title": "Given email 已註冊 When 再註冊 Then 不建立第二帳號",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-1-3",
-          "title": "When 弱密碼註冊 Then 失敗並回不符規則,不建帳號",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-1-4",
-          "title": "When 以不合法 email 格式註冊 Then 格式錯誤被拒(參數化)",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-1-5",
-          "title": "Given email 已註冊 When 再註冊 Then 回中性一致訊息,不明示已存在",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-1-2",
-      "level": "Story",
-      "title": "作為使用者，我想用帳密登入並取得工作階段，且憑證受暴力破解防護",
-      "parentId": "F-ACC-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 5
-      },
-      "sprint": "acc-m3",
-      "bdd": [
-        {
-          "id": "S-ACC-1-2-1",
-          "title": "When 正確帳密登入 Then 建立綁身分+角色的工作階段",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-2-2",
-          "title": "When 錯密登入 Then 失敗訊息與帳號不存在一致",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-2-3",
-          "title": "Given 連 5 次失敗 When 第 6 次(即使密碼對) Then 鎖定/退避並寫稽核",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-2-4",
-          "title": "Given 無有效工作階段 When 存取受保護資源 Then Unauthorized",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-2-5",
-          "title": "Given 工作階段逾時 When 存取 Then Unauthorized 要求重登",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-2-6",
-          "title": "When 成功登入 Then 稽核 action=login result=allowed",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "S-ACC-1-3",
-      "level": "Story",
-      "title": "作為使用者，我想登出並能變更密碼，讓失效或外洩的工作階段不再有效",
-      "parentId": "F-ACC-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "storyPoints": 3
-      },
-      "sprint": "acc-m3",
-      "bdd": [
-        {
-          "id": "S-ACC-1-3-1",
-          "title": "When 登出 Then 原工作階段立即失效,再存取 Unauthorized",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-3-2",
-          "title": "When 以正確現行密碼+合規新密碼變更 Then 成功且僅新密碼可登入",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-3-3",
-          "title": "When 以錯誤現行密碼變更 Then 被拒且密碼不變",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-3-4",
-          "title": "Given 另有有效工作階段 When 改密成功 Then 另一工作階段失效",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-3-5",
-          "title": "Given 無工作階段 When 改密 Then Unauthorized 且密碼不變",
-          "status": "None"
-        },
-        {
-          "id": "S-ACC-1-3-6",
-          "title": "When 登出或改密 Then 稽核各新增 action=logout/change_password",
-          "status": "None"
-        }
-      ],
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00"
-    },
-    {
-      "id": "T-ACC-21a",
-      "level": "Task",
-      "title": "金鑰簽發 Use Case 與 KeyStore",
-      "parentId": "S-ACC-2-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 4
-      },
-      "sprint": "acc-m2",
-      "dependsOn": [
-        "T-ACC-41c",
-        "T-ACC-41a"
-      ],
-      "scenarioIds": [
-        "S-ACC-2-1-1",
-        "S-ACC-2-1-2",
-        "S-ACC-2-1-5"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app+定義 KeyStorePort/infra SqliteKeyStore。可改:src/app/account/issue-key.ts、src/domain/account/ports/key-store-port.ts、src/infra/account/sqlite-key-store.ts 及測試。簽發綁 identity+role;明文只回一次、存不可還原雜湊;簽發寫稽核不含明文。TDD #1/2/5。詳見 docs/account/tickets-m2m3.md。"
-    },
-    {
-      "id": "T-ACC-21b",
-      "level": "Task",
-      "title": "簽發授權與角色校驗",
-      "parentId": "S-ACC-2-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 3
-      },
-      "sprint": "acc-m2",
-      "dependsOn": [
-        "T-ACC-21a",
-        "T-ACC-32a",
-        "T-ACC-31a"
-      ],
-      "scenarioIds": [
-        "S-ACC-2-1-3",
-        "S-ACC-2-1-4"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app/domain。可改:src/app/account/issue-key.ts 授權分支及測試。非管理者簽發回 Forbidden 不產生金鑰;綁未知角色回 UnknownRole。TDD #3/4。"
-    },
-    {
-      "id": "T-ACC-22a",
-      "level": "Task",
-      "title": "金鑰簽章驗證",
-      "parentId": "S-ACC-2-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 5
-      },
-      "sprint": "acc-m2",
-      "dependsOn": [
-        "T-ACC-21a",
-        "T-ACC-41c"
-      ],
-      "scenarioIds": [
-        "S-ACC-2-2-1",
-        "S-ACC-2-2-2",
-        "S-ACC-2-2-3"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:domain 驗證規則+定義 SignerPort/infra HmacSigner。可改:src/domain/account/ports/signer-port.ts、src/infra/account/hmac-signer.ts、src/domain/account/verify-key.ts 及測試。有效簽章通過解析 identity+role;竄改→Unauthorized;過期(假 Clock)→Unauthorized。TDD #6/7/8。⚠ 回填:本卡上板後補進 T-ACC-33a 的 dependsOn。"
-    },
-    {
-      "id": "T-ACC-22b",
-      "level": "Task",
-      "title": "防重放、一致錯誤訊息與身分接稽核",
-      "parentId": "S-ACC-2-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 4
-      },
-      "sprint": "acc-m2",
-      "dependsOn": [
-        "T-ACC-22a",
-        "T-ACC-41c",
-        "T-ACC-41a"
-      ],
-      "scenarioIds": [
-        "S-ACC-2-2-4",
-        "S-ACC-2-2-5",
-        "S-ACC-2-2-6"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app+定義 NoncePort。可改:src/app/account/authenticate-request.ts、src/domain/account/ports/nonce-port.ts、src/infra/account/sqlite-nonce-store.ts 及測試。重放→Unauthorized;不存在身分 vs 錯簽章回應一致(抗計時旁路);actor 為 Identity VO 寫稽核。TDD #9/10/11。"
-    },
-    {
-      "id": "T-ACC-23a",
-      "level": "Task",
-      "title": "金鑰撤銷與輪替",
-      "parentId": "S-ACC-2-3",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 3
-      },
-      "sprint": "acc-m2",
-      "dependsOn": [
-        "T-ACC-21a"
-      ],
-      "scenarioIds": [
-        "S-ACC-2-3-1",
-        "S-ACC-2-3-2",
-        "S-ACC-2-3-4"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app/infra。可改:src/app/account/revoke-key.ts、rotate-key.ts、src/infra/account/sqlite-key-store.ts 及測試。撤銷後驗證即 Unauthorized;輪替新有效舊失效;撤不存在金鑰安全無作用不漏底層錯不影響他鑰。TDD #12/13/15。"
-    },
-    {
-      "id": "T-ACC-23b",
-      "level": "Task",
-      "title": "撤銷／輪替授權與稽核",
-      "parentId": "S-ACC-2-3",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 2
-      },
-      "sprint": "acc-m2",
-      "dependsOn": [
-        "T-ACC-23a",
-        "T-ACC-32a",
-        "T-ACC-41a"
-      ],
-      "scenarioIds": [
-        "S-ACC-2-3-3",
-        "S-ACC-2-3-5"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app。可改:src/app/account/revoke-key.ts、rotate-key.ts 授權/稽核分支及測試。非管理者撤銷/輪替回 Forbidden 且既有金鑰仍有效;撤銷/輪替各寫稽核不含明文。TDD #14/16。"
-    },
-    {
-      "id": "T-ACC-11a",
-      "level": "Task",
-      "title": "密碼政策與 Email 值物件",
-      "parentId": "S-ACC-1-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 3
-      },
-      "sprint": "acc-m3",
-      "dependsOn": [],
-      "scenarioIds": [
-        "S-ACC-1-1-3",
-        "S-ACC-1-1-4"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:domain。可改:src/domain/account/password-policy.ts、email.ts 及測試。弱密碼回違反規則清單;不合法 email(參數化 4 例)被拒。TDD #19/20。通過 A1。"
-    },
-    {
-      "id": "T-ACC-11b",
-      "level": "Task",
-      "title": "帳號註冊 Use Case（AccountStore + Hasher）",
-      "parentId": "S-ACC-1-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 4
-      },
-      "sprint": "acc-m3",
-      "dependsOn": [
-        "T-ACC-11a"
-      ],
-      "scenarioIds": [
-        "S-ACC-1-1-1",
-        "S-ACC-1-1-2"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app+定義 AccountStorePort/PasswordHasherPort/infra Argon2idHasher、SqliteAccountStore。可改:src/app/account/register.ts、src/domain/account/ports/{account-store-port,password-hasher-port}.ts、src/infra/account/{argon2id-hasher,sqlite-account-store}.ts 及測試。註冊成功且密碼不可還原;重複 email 不建第二帳號。TDD #17/18。通過 A2/A5。"
-    },
-    {
-      "id": "T-ACC-11c",
-      "level": "Task",
-      "title": "註冊 API 與防帳號列舉",
-      "parentId": "S-ACC-1-1",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 2
-      },
-      "sprint": "acc-m3",
-      "dependsOn": [
-        "T-ACC-11b"
-      ],
-      "scenarioIds": [
-        "S-ACC-1-1-5"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:api。可改:src/api/account/register-route.ts 及 supertest 測試。重複註冊回中性一致訊息,與新 email 不可區分。TDD #21。通過 A3。"
-    },
-    {
-      "id": "T-ACC-12a",
-      "level": "Task",
-      "title": "登入 Use Case、工作階段與稽核",
-      "parentId": "S-ACC-1-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 5
-      },
-      "sprint": "acc-m3",
-      "dependsOn": [
-        "T-ACC-11b",
-        "T-ACC-41a"
-      ],
-      "scenarioIds": [
-        "S-ACC-1-2-1",
-        "S-ACC-1-2-2",
-        "S-ACC-1-2-6"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app+定義 SessionStorePort/ClockPort/infra SqliteSessionStore、SystemClock。可改:src/app/account/login.ts、src/domain/account/ports/{session-store-port,clock-port}.ts、src/infra/account/{sqlite-session-store,system-clock}.ts 及測試。正確帳密建綁身分+角色 session;錯密訊息與帳號不存在一致且兩路徑都實跑雜湊;成功登入寫稽核。TDD #22/23/27。"
-    },
-    {
-      "id": "T-ACC-12b",
-      "level": "Task",
-      "title": "工作階段中介與逾時",
-      "parentId": "S-ACC-1-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 3
-      },
-      "sprint": "acc-m3",
-      "dependsOn": [
-        "T-ACC-12a"
-      ],
-      "scenarioIds": [
-        "S-ACC-1-2-4",
-        "S-ACC-1-2-5"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:api/app。可改:src/api/account/session-middleware.ts、src/app/account/validate-session.ts 及測試。無有效 session 回 Unauthorized;逾時(假 Clock 推進)回 Unauthorized 要求重登。TDD #25/26。"
-    },
-    {
-      "id": "T-ACC-12c",
-      "level": "Task",
-      "title": "登入失敗鎖定／退避",
-      "parentId": "S-ACC-1-2",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 2
-      },
-      "sprint": "acc-m3",
-      "dependsOn": [
-        "T-ACC-12a"
-      ],
-      "scenarioIds": [
-        "S-ACC-1-2-3"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app。可改:src/app/account/login.ts 失敗計數、src/infra/account/sqlite-attempt-store.ts 及測試。連 5 次失敗後第 6 次(即使密碼對)鎖定/退避,鎖定寫稽核;假 Clock 測退避。TDD #24。"
-    },
-    {
-      "id": "T-ACC-13a",
-      "level": "Task",
-      "title": "登出與工作階段撤銷",
-      "parentId": "S-ACC-1-3",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 3
-      },
-      "sprint": "acc-m3",
-      "dependsOn": [
-        "T-ACC-12a",
-        "T-ACC-41a"
-      ],
-      "scenarioIds": [
-        "S-ACC-1-3-1",
-        "S-ACC-1-3-6"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app。可改:src/app/account/logout.ts、revoke-sessions.ts 及測試。登出後原 session 立即失效;提供撤銷某帳號其他 session 能力(供改密用);登出/改密稽核接點。TDD #28/33。"
-    },
-    {
-      "id": "T-ACC-13b",
-      "level": "Task",
-      "title": "密碼變更",
-      "parentId": "S-ACC-1-3",
-      "status": "Backlog",
-      "light": "Gray",
-      "estimate": {
-        "hours": 4
-      },
-      "sprint": "acc-m3",
-      "dependsOn": [
-        "T-ACC-11b",
-        "T-ACC-13a"
-      ],
-      "scenarioIds": [
-        "S-ACC-1-3-2",
-        "S-ACC-1-3-3",
-        "S-ACC-1-3-4",
-        "S-ACC-1-3-5"
-      ],
-      "tdd": "None",
-      "createdAt": "2026-11-13T10:00:00+08:00",
-      "updatedAt": "2026-11-13T10:00:00+08:00",
-      "remark": "層級:app。可改:src/app/account/change-password.ts 及測試。需正確現行密碼才可改,改後僅新密碼可登入;錯誤現行密碼被拒密碼不變;改密成功其他 session 失效;未登入改密 Unauthorized。4 情境同一改密 Use Case 單一檔,一輪可完成不拆。TDD #29/30/31/32。"
-    }
-  ],
-  "sprints": [
-    {
-      "id": "acc-m1",
-      "name": "帳號 M1：RBAC + 稽核",
-      "start": "2026-11-13",
-      "end": "2026-11-27",
-      "goal": "權限矩陣、授權關卡、不可否認稽核與查詢落地;guard 改綁的接縫備妥(金鑰背書待 M2)"
-    },
-    {
-      "id": "acc-m2",
-      "name": "帳號 M2：機器金鑰",
-      "start": "2026-11-27",
-      "end": "2026-12-11",
-      "goal": "派工憑證金鑰化:簽發/驗證/撤銷輪替,防重放與一致錯誤,身分接稽核"
-    },
-    {
-      "id": "acc-m3",
-      "name": "帳號 M3：Web 登入",
-      "start": "2026-12-11",
-      "end": "2026-12-25",
-      "goal": "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
-    }
-  ]
+    "version":  1,
+    "project":  "GuGuBoard",
+    "updatedAt":  "2026-11-14T19:33:17+08:00",
+    "items":  [
+                  {
+                      "id":  "E-DL",
+                      "level":  "Epic",
+                      "title":  "派工器補強（精簡版，取代 dispatch-plan 16 張工單）",
+                      "parentId":  null,
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T01:45:00+08:00",
+                      "remark":  "前提：serve-ext.ps1 已有定時派工（Update-DispatchTick）、profile 啟動 CLI、逾時、紅燈停機、每次執行一次性 token（不可核准）、log 與停止 API。只補 4 個實際缺口。\n舊單對應：SCH-01/UI-01→T-DL-1；RUN-02/RUN-03→T-DL-2；CMP-01/CMP-02→T-DL-3；SCH-02/RUN-01→T-DL-4。\n延後（真的需要時再開）：Webhook 與 HMAC（同一台機器不需要）、跨主機 fencing／outbox、completion 冪等、每次執行獨立 worktree 與多並行、GOV 三方身分（現有不可核准 token 已防止自我核准）、UI-02/UI-03/INT-01。\n測試：Pester 3.4（Windows PowerShell 內建），放在 tests/dispatch/，指令 powershell -NoProfile -ExecutionPolicy Bypass -File tests\\dispatch\\Run-Tests.ps1。"
+                  },
+                  {
+                      "id":  "F-DL",
+                      "level":  "Feature",
+                      "title":  "定時派工可靠性",
+                      "parentId":  "E-DL",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T01:45:00+08:00"
+                  },
+                  {
+                      "id":  "S-DL-1",
+                      "level":  "Story",
+                      "title":  "作為管理者，我想要設定派工開始時間，並避免多個執行共用同一份工作目錄",
+                      "parentId":  "F-DL",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  1
+                                   },
+                      "acceptance":  [
+                                         "notBefore 未到不派工；到期（含等於）照現有規則派工",
+                                         "notBefore 沒有時區時拒絕儲存，舊設定不變",
+                                         "maxConcurrent 固定為 1，介面顯示原因"
+                                     ],
+                      "bdd":  [
+                                  {
+                                      "id":  "S-DL-1-1",
+                                      "title":  "Given notBefore 是未來時間 When 派工 tick 執行 Then 不啟動任何執行",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-DL-1-2",
+                                      "title":  "Given notBefore 等於現在 When 派工 tick 執行 Then 依現有規則領取並啟動一張 Task",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-DL-1-3",
+                                      "title":  "Given 送出不含時區的 notBefore When 儲存派工設定 Then 回 400 E_BAD_TIME 且設定檔不變",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-DL-1-4",
+                                      "title":  "Given 送出 maxConcurrent=3 When 儲存派工設定 Then 存成 1",
+                                      "status":  "Green"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T01:45:00+08:00"
+                  },
+                  {
+                      "id":  "T-DL-1",
+                      "level":  "Task",
+                      "title":  "派工開始時間閘門與並行上限",
+                      "parentId":  "S-DL-1",
+                      "status":  "Done",
+                      "light":  "Blue",
+                      "estimate":  {
+                                       "hours":  2
+                                   },
+                      "dependsOn":  [
+
+                                    ],
+                      "scenarioIds":  [
+                                          "S-DL-1-1",
+                                          "S-DL-1-2",
+                                          "S-DL-1-3",
+                                          "S-DL-1-4"
+                                      ],
+                      "tdd":  "Green",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "passed":  6,
+                                    "failed":  0
+                                },
+                      "owner":  "claude-dev-agent",
+                      "startedAt":  "2026-11-07T02:05:00+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-07T02:05:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "開始實作；先寫測試確認 RED"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:25:00+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "READY_FOR_TDD：tests/dispatch/schedule.Tests.ps1 6/6 通過（Windows PowerShell 5.1 與 PowerShell 7）；設定介面已在測試伺服器實測"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T03:40:00+08:00",
+                                          "from":  "In Review / Green",
+                                          "to":  "Done / Blue",
+                                          "by":  "user（主對話授權）",
+                                          "note":  "使用者授權標記 Done；兩輪獨立驗收 A/B＋A2/B2 皆 ACCEPT"
+                                      }
+                                  ],
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T03:40:00+08:00",
+                      "remark":  "可改：serve-ext.ps1 的 Get-DispatchCfg、Update-DispatchTick、Invoke-DispatchApi（/dispatch/config）；board.html 派工設定表單（搜尋 intervalSec）；新增 tests/dispatch/schedule.Tests.ps1。\n做法：設定加 notBefore（ISO 8601，必須含 offset；null 表示立即）。tick 在 Get-Date \u003c notBefore 時跳過，到期時間相等也算到期。/dispatch/config 收到不含時區的值回 400 E_BAD_TIME，不寫檔。maxConcurrent 一律存成 1，因為所有執行共用 $Pj.dir；表單把欄位設成唯讀並顯示「目前所有執行共用同一工作目錄，暫時只能 1」。\n不要做：cron 語法、補跑錯過的 tick、其他設定欄位。\n完成：4 個情境的 Pester 測試全綠，貼出 Invoke-Pester 輸出。",
+                      "notes":  [
+                                    {
+                                        "at":  "2026-11-07T02:55:00+08:00",
+                                        "by":  "reviewer-AB",
+                                        "text":  "獨立驗證 A（實測）與 B（審查）：ACCEPT；建議補強的測試斷言已採納"
+                                    },
+                                    {
+                                        "at":  "2026-11-07T03:30:00+08:00",
+                                        "by":  "reviewer-AB",
+                                        "text":  "複驗 A2（實測）＋B2（審查）：ACCEPT，4 個原問題確認修正、無 regression；補 Stop-Run／Resume 例外停機測試，PS5.1 與 7 共 21 綠"
+                                    }
+                                ],
+                      "approvedBy":  "user（主對話授權）"
+                  },
+                  {
+                      "id":  "S-DL-2",
+                      "level":  "Story",
+                      "title":  "作為管理者，我想要停止或逾時時整個 AI 程序樹都結束，以免殘留程序繼續改檔或耗用 token",
+                      "parentId":  "F-DL",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  2
+                                   },
+                      "acceptance":  [
+                                         "逾時與手動停止都會結束父程序與所有子程序",
+                                         "無法確認結束時不釋放 claim，避免同一張工單再被派出去"
+                                     ],
+                      "bdd":  [
+                                  {
+                                      "id":  "S-DL-2-1",
+                                      "title":  "Given 執行中的 CLI 有子程序 When 達到 timeoutMin Then 父子程序都已結束且 claim 釋放",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-DL-2-2",
+                                      "title":  "Given 執行中的 CLI 有子程序 When 管理者呼叫 /dispatch/kill Then 父子程序都已結束且狀態為 killed",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-DL-2-3",
+                                      "title":  "Given 程序樹無法在 10 秒內結束 When 逾時 Then 執行狀態為 stuck 且下一次 tick 不會再派這張工單",
+                                      "status":  "Green"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T01:45:00+08:00"
+                  },
+                  {
+                      "id":  "T-DL-2",
+                      "level":  "Task",
+                      "title":  "逾時與停止時終止整個程序樹",
+                      "parentId":  "S-DL-2",
+                      "status":  "Done",
+                      "light":  "Blue",
+                      "estimate":  {
+                                       "hours":  2
+                                   },
+                      "dependsOn":  [
+
+                                    ],
+                      "scenarioIds":  [
+                                          "S-DL-2-1",
+                                          "S-DL-2-2",
+                                          "S-DL-2-3"
+                                      ],
+                      "tdd":  "Green",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "passed":  4,
+                                    "failed":  0
+                                },
+                      "owner":  "claude-dev-agent",
+                      "startedAt":  "2026-11-07T02:05:00+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-07T02:05:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "開始實作；先寫測試確認 RED"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:25:00+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "READY_FOR_TDD：tests/dispatch/kill.Tests.ps1 3/3 通過；測試後確認沒有殘留程序"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:45:00+08:00",
+                                          "from":  "In Review / Green",
+                                          "to":  "In Progress / Yellow",
+                                          "by":  "reviewer",
+                                          "note":  "退回：MAJOR-3 非 Windows 時 Stop-RunTree 謊報終止"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:55:00+08:00",
+                                          "from":  "In Progress / Yellow",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "修正：Stop-RunTree 改用 Kill($true)／列舉失敗回 false 標 stuck；重驗通過"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T03:40:00+08:00",
+                                          "from":  "In Review / Green",
+                                          "to":  "Done / Blue",
+                                          "by":  "user（主對話授權）",
+                                          "note":  "使用者授權標記 Done；兩輪獨立驗收 A/B＋A2/B2 皆 ACCEPT"
+                                      }
+                                  ],
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T03:40:00+08:00",
+                      "remark":  "現況：Update-DispatchTick 的逾時分支與 /dispatch/kill 都只呼叫 $r.proc.Kill()，只會結束父程序；claude/codex CLI 產生的 node、git 子程序會留下來繼續跑。\n可改：serve-ext.ps1 新增 Stop-RunTree($r)，給上述兩處使用；新增 tests/dispatch/kill.Tests.ps1。\n做法：PowerShell 7 用 $r.proc.Kill($true)，Windows PowerShell 5.1 用 taskkill /T /F /PID。之後 WaitForExit(10000)，並確認子程序也已消失。確認失敗時把狀態設成 stuck，保留 claim（until 延長到很遠的時間），Push-All 通知，由人處理。\n測試 fixture：建立一個 profile，exe 為 powershell，執行一支會啟動子程序再 sleep 600 的 ps1。\n完成：3 個情境的測試全綠，並列出測試後確認沒有殘留程序的指令與輸出。",
+                      "notes":  [
+                                    {
+                                        "at":  "2026-11-07T03:30:00+08:00",
+                                        "by":  "reviewer-AB",
+                                        "text":  "複驗 A2（實測）＋B2（審查）：ACCEPT，4 個原問題確認修正、無 regression；補 Stop-Run／Resume 例外停機測試，PS5.1 與 7 共 21 綠"
+                                    }
+                                ],
+                      "approvedBy":  "user（主對話授權）"
+                  },
+                  {
+                      "id":  "S-DL-3",
+                      "level":  "Story",
+                      "title":  "作為管理者，我想要執行結束但 AI 沒回報時工單自動暫停，以免同一張工單被無限重派耗盡 token",
+                      "parentId":  "F-DL",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  2
+                                   },
+                      "acceptance":  [
+                                         "執行結束後工單仍是 Todo 或 In Progress，就暫停並寫出原因",
+                                         "AI 已經移到 In Review 的工單不動",
+                                         "派工器永遠不會設定 Green 或 Blue"
+                                     ],
+                      "bdd":  [
+                                  {
+                                      "id":  "S-DL-3-1",
+                                      "title":  "Given 執行 exit 0 但工單仍是 In Progress When 執行結束 Then 工單變黃燈、paused，lightReason 含 exit code，並追加 history",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-DL-3-2",
+                                      "title":  "Given 執行逾時且工單仍是 Todo When 執行結束 Then 工單 paused 並寫 pausedReason，下一次 tick 不再派這張",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-DL-3-3",
+                                      "title":  "Given AI 已把工單移到 In Review When 執行結束 Then 工單內容完全不變",
+                                      "status":  "Green"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T01:45:00+08:00"
+                  },
+                  {
+                      "id":  "T-DL-3",
+                      "level":  "Task",
+                      "title":  "執行結束後核對工單狀態並阻止重派",
+                      "parentId":  "S-DL-3",
+                      "status":  "Done",
+                      "light":  "Blue",
+                      "estimate":  {
+                                       "hours":  3
+                                   },
+                      "dependsOn":  [
+
+                                    ],
+                      "scenarioIds":  [
+                                          "S-DL-3-1",
+                                          "S-DL-3-2",
+                                          "S-DL-3-3"
+                                      ],
+                      "tdd":  "Green",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "passed":  7,
+                                    "failed":  0
+                                },
+                      "owner":  "claude-dev-agent",
+                      "startedAt":  "2026-11-07T02:05:00+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-07T02:05:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "開始實作；先寫測試確認 RED"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:25:00+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "READY_FOR_TDD：tests/dispatch/outcome.Tests.ps1 4/4 通過；暫停寫不進看板時改為停掉派工器"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:45:00+08:00",
+                                          "from":  "In Review / Green",
+                                          "to":  "In Progress / Yellow",
+                                          "by":  "reviewer",
+                                          "note":  "退回：BLOCKER history/notes 巢狀、MAJOR-1 紅燈降黃、MAJOR-2 例外路徑無限重派"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:55:00+08:00",
+                                          "from":  "In Progress / Yellow",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "修正：history/notes 不走 Get-V、保留紅燈交紅燈停機、例外也停派工器；新增 3 測試重驗通過"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T03:40:00+08:00",
+                                          "from":  "In Review / Green",
+                                          "to":  "Done / Blue",
+                                          "by":  "user（主對話授權）",
+                                          "note":  "使用者授權標記 Done；兩輪獨立驗收 A/B＋A2/B2 皆 ACCEPT"
+                                      }
+                                  ],
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T03:40:00+08:00",
+                      "remark":  "現況（會燒 token 的 bug）：Complete-Run 只看 exit code 就釋放 claim。工單如果還是 Todo 或 In Progress，Test-ClaimCandidate 仍然會選中它，下一次 tick（預設 60 秒）會再派同一張，失敗就一直重跑。\n可改：serve-ext.ps1 的 Complete-Run（或新增 Test-RunOutcome 由它呼叫）；新增 tests/dispatch/outcome.Tests.ps1。\n做法：釋放 claim 前讀工單。In Review、Done、Released 不動。In Progress：設 light=Yellow、lightReason=\"派工執行結束但工單未完成（狀態 \u003cstatus\u003e，exit=\u003ccode\u003e，\u003crunStatus\u003e）\"、paused=true、pausedReason 同樣內容。Todo：維持 Gray，設 paused=true 和 pausedReason。兩種情況都要追加 history {at, from, to, by:\"dispatcher\", note} 和一筆含 log 檔名的 note。寫入一律走 Write-BoardChecked，讓 L1–L7 驗證生效。絕不設定 Green 或 Blue。\n完成：3 個情境的測試全綠；另外證明 S-DL-3-2 執行後再跑一次 Update-DispatchTick 時，不會啟動新的執行。",
+                      "notes":  [
+                                    {
+                                        "at":  "2026-11-07T03:30:00+08:00",
+                                        "by":  "reviewer-AB",
+                                        "text":  "複驗 A2（實測）＋B2（審查）：ACCEPT，4 個原問題確認修正、無 regression；補 Stop-Run／Resume 例外停機測試，PS5.1 與 7 共 21 綠"
+                                    }
+                                ],
+                      "approvedBy":  "user（主對話授權）"
+                  },
+                  {
+                      "id":  "S-DL-4",
+                      "level":  "Story",
+                      "title":  "作為管理者，我想要看板伺服器重啟後自動收拾中斷的執行，不留下孤兒程序或卡住的 claim",
+                      "parentId":  "F-DL",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  3
+                                   },
+                      "acceptance":  [
+                                         "重啟時仍在跑的派工程序會被終止，工單依 T-DL-3 的規則暫停",
+                                         "PID 被其他程序重用時不能誤殺",
+                                         "token 撤銷、claim 釋放"
+                                     ],
+                      "bdd":  [
+                                  {
+                                      "id":  "S-DL-4-1",
+                                      "title":  "Given 有執行紀錄且該程序仍在跑 When 伺服器重啟 Then 程序樹被終止、工單暫停、token 撤銷、claim 釋放",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-DL-4-2",
+                                      "title":  "Given 紀錄的 PID 已被其他程序重用（StartTime 不同） When 伺服器重啟 Then 不終止該程序，只把執行標為 interrupted",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-DL-4-3",
+                                      "title":  "Given 沒有執行紀錄 When 伺服器重啟 Then 不做任何變更",
+                                      "status":  "Green"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T01:45:00+08:00"
+                  },
+                  {
+                      "id":  "T-DL-4",
+                      "level":  "Task",
+                      "title":  "執行紀錄持久化與重啟後對帳",
+                      "parentId":  "S-DL-4",
+                      "status":  "Done",
+                      "light":  "Blue",
+                      "estimate":  {
+                                       "hours":  4
+                                   },
+                      "dependsOn":  [
+                                        "T-DL-2",
+                                        "T-DL-3"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-DL-4-1",
+                                          "S-DL-4-2",
+                                          "S-DL-4-3"
+                                      ],
+                      "tdd":  "Green",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "passed":  4,
+                                    "failed":  0
+                                },
+                      "owner":  "claude-dev-agent",
+                      "startedAt":  "2026-11-07T02:05:00+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-07T02:05:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "開始實作；先寫測試確認 RED"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:25:00+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "READY_FOR_TDD：tests/dispatch/restart.Tests.ps1 3/3 通過；對帳在啟動後第一次 tick 執行"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:45:00+08:00",
+                                          "from":  "In Review / Green",
+                                          "to":  "In Progress / Yellow",
+                                          "by":  "reviewer-A",
+                                          "note":  "退回：依賴的 BLOCKER 使已有 history 的工單暫停失敗"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T02:55:00+08:00",
+                                          "from":  "In Progress / Yellow",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "修正：隨 T-DL-3 修正；Resume 每筆 try、殺不掉保留 stuck；重驗通過"
+                                      },
+                                      {
+                                          "at":  "2026-11-07T03:40:00+08:00",
+                                          "from":  "In Review / Green",
+                                          "to":  "Done / Blue",
+                                          "by":  "user（主對話授權）",
+                                          "note":  "使用者授權標記 Done；兩輪獨立驗收 A/B＋A2/B2 皆 ACCEPT"
+                                      }
+                                  ],
+                      "createdAt":  "2026-11-07T01:45:00+08:00",
+                      "updatedAt":  "2026-11-07T03:40:00+08:00",
+                      "remark":  "現況：$runs 只存在記憶體。伺服器重啟後，CLI 變成孤兒繼續跑，claim 會卡到 until 過期，介面上也看不到這個執行。\n可改：serve-ext.ps1 的 Start-DispatchRun、Complete-Run，再加一個啟動時呼叫的 Resume-DispatchRuns；新增 tests/dispatch/restart.Tests.ps1。\n做法：Start-DispatchRun 成功後，把 {runId, project, ticket, pid, startTime（Process.StartTime 的 ISO 值）, log, tokenId} 寫進 ConfigDir 的 runs-\u003cproject\u003e.json；Complete-Run 時移除這筆。啟動時逐筆讀回：PID 存在且 StartTime 相同，就用 T-DL-2 的 Stop-RunTree 終止；PID 不存在或 StartTime 不同，就不碰任何程序。兩種情況都標成 interrupted，交給 T-DL-3 的核對、撤銷 token、釋放 claim，並在 log 尾端註記。\n不要做：接管仍在跑的程序繼續監看（太複雜，終止後重派比較可預期）。\n完成：3 個情境的測試全綠。",
+                      "notes":  [
+                                    {
+                                        "at":  "2026-11-07T03:30:00+08:00",
+                                        "by":  "reviewer-AB",
+                                        "text":  "複驗 A2（實測）＋B2（審查）：ACCEPT，4 個原問題確認修正、無 regression；補 Stop-Run／Resume 例外停機測試，PS5.1 與 7 共 21 綠"
+                                    }
+                                ],
+                      "approvedBy":  "user（主對話授權）"
+                  },
+                  {
+                      "id":  "E-GIT",
+                      "level":  "Epic",
+                      "title":  "Git-based 跨機器派工（取代 dispatch-plan 的 Webhook/fencing/outbox）",
+                      "parentId":  null,
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-08T06:30:00+08:00",
+                      "remark":  "用 Git 當跨機器的協調層與傳輸層，不自建 HTTP 派工協定。領工單＝改 board.json 標 claim→commit→push，push 成功才算領到（non-fast-forward 拒絕＝天然樂觀鎖/fencing）；回報＝commit 狀態/PR→push；程式碼走 branch/PR。認證用 SSH/token、權限用 repo access、稽核用 commit 歷史。\n取代：dispatch-plan 的 Webhook、HMAC、endpoint allowlist、lease generation、outbox、completion 冪等（Git 既有機制已涵蓋）。\n沿用：現有本機 push 式派工（Process.Start）維持不變，遠端改 pull 式，兩者並存。\n真正要設計的只有三點：claim 競爭退讓、board.json 併發 rebase 合併、runner 活著判斷。",
+                      "notes":  [
+                                    {
+                                        "at":  "2026-11-08T06:30:00+08:00",
+                                        "by":  "claude-dev-agent",
+                                        "text":  "獨立驗收 A（實測）＋B（審查）：T-GIT-1/3 ACCEPT；T-GIT-2/4 RETURN。已修 BLOCKER-1（report push 前驗證補 -OldPath+-Role，L5 擋開發代理設 Done/藍燈）、BLOCKER-2（history from 用舊值）、MAJOR-3（history 補 note）、同秒 updatedAt 補毫秒；runner F2（損毀 claim try/catch）、F4（executor 例外釋放 claim）、F3（回報前 heartbeat LOST 檢查）；dependsOn 查無保守不領。補 10 個測試鎖住存活 mutation，共 24 綠（PS5.1 與 7）。"
+                                    }
+                                ]
+                  },
+                  {
+                      "id":  "F-GIT",
+                      "level":  "Feature",
+                      "title":  "用 Git 當協調層的 pull 式派工",
+                      "parentId":  "E-GIT",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-07T04:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-GIT-1",
+                      "level":  "Story",
+                      "title":  "作為 runner，我想用 git push 搶單，確保同一張工單只被一台領到",
+                      "parentId":  "F-GIT",
+                      "status":  "In Progress",
+                      "light":  "Green",
+                      "estimate":  {
+                                       "storyPoints":  5
+                                   },
+                      "estimateNote":  "初估，待團隊校準",
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-08T04:30:00+08:00",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-GIT-1-1",
+                                      "title":  "Given 兩台 runner 同時 claim 同一張工單 When 各自 commit 並 push Then 只有一台 push 成功，另一台被 non-fast-forward 拒絕",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-GIT-1-2",
+                                      "title":  "Given claim 被拒 When pull --rebase 後發現該工單已被別台領 Then 放棄這張、改挑下一張未領工單",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-GIT-1-3",
+                                      "title":  "Given claim 被拒但 rebase 後該工單仍未被領（別人領的是別張） When 重新套用自己的 claim 並 push Then 成功領到",
+                                      "status":  "Green"
+                                  }
+                              ],
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-08T04:30:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "底下 T-GIT-1 進 In Review"
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "T-GIT-1",
+                      "level":  "Task",
+                      "title":  "claim 競爭協議（push 搶單、被拒退讓與重試）",
+                      "parentId":  "S-GIT-1",
+                      "status":  "In Review",
+                      "light":  "Green",
+                      "estimate":  {
+                                       "hours":  8
+                                   },
+                      "dependsOn":  [
+
+                                    ],
+                      "scenarioIds":  [
+                                          "S-GIT-1-1",
+                                          "S-GIT-1-2",
+                                          "S-GIT-1-3"
+                                      ],
+                      "tdd":  "Green",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "passed":  4,
+                                    "failed":  0
+                                },
+                      "owner":  "claude-dev-agent",
+                      "startedAt":  "2026-11-08T04:00:00+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-08T04:00:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "開始實作；先寫 RED 測試（stub 回 NOT_IMPL）"
+                                      },
+                                      {
+                                          "at":  "2026-11-08T04:30:00+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "READY_FOR_TDD：claims/\u003cticket\u003e.json＋push 搶單；S-GIT-1-1~3 與真並行 1b 共 4 綠（PS5.1 與 7）"
+                                      }
+                                  ],
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-08T04:30:00+08:00",
+                      "remark":  "做法：claim＝在 board.json 的該 item 寫 claim{by,host,until}，commit「claim \u003cid\u003e by \u003crunner\u003e」，push。被拒→fetch+rebase→重判該 item：已被別台領（claim.by 非我且 until 未過期）就放棄挑下一張；仍未被領就重套 claim 再 push。定義最大重試次數與每次退讓（隨機抖動避免活鎖）。\n不要做：自建 lease generation／HTTP 鎖；一律靠 git push 的原子性。\n完成：三情境可用兩個本機 clone 模擬 push 競爭重現。"
+                  },
+                  {
+                      "id":  "S-GIT-2",
+                      "level":  "Story",
+                      "title":  "作為系統，我想讓多台改不同工單時能自動 rebase 合併、改同一張時安全停下",
+                      "parentId":  "F-GIT",
+                      "status":  "In Progress",
+                      "light":  "Green",
+                      "estimate":  {
+                                       "storyPoints":  5
+                                   },
+                      "estimateNote":  "初估，待團隊校準",
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-08T05:00:00+08:00",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-GIT-2-1",
+                                      "title":  "Given A 領 T-1、B 領 T-2 When 兩台先後 push Then rebase 自動合併、兩筆 claim 都在、board.json 無衝突",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-GIT-2-2",
+                                      "title":  "Given 兩台改同一張工單的不同欄位 When rebase Then 偵測為衝突、停下交人工，不自動亂合",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-GIT-2-3",
+                                      "title":  "Given rebase 後 board.json 不符 L1–L7 When push 前驗證 Then 擋下 push 並回報原因",
+                                      "status":  "Green"
+                                  }
+                              ],
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-08T05:00:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "底下 T-GIT-2 進 In Review"
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "T-GIT-2",
+                      "level":  "Task",
+                      "title":  "board.json 併發 rebase 合併與 push 前驗證",
+                      "parentId":  "S-GIT-2",
+                      "status":  "In Review",
+                      "light":  "Green",
+                      "estimate":  {
+                                       "hours":  8
+                                   },
+                      "dependsOn":  [
+                                        "T-GIT-1"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-GIT-2-1",
+                                          "S-GIT-2-2",
+                                          "S-GIT-2-3"
+                                      ],
+                      "tdd":  "Green",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "passed":  4,
+                                    "failed":  0
+                                },
+                      "owner":  "claude-dev-agent",
+                      "startedAt":  "2026-11-08T04:40:00+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-08T04:40:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "開始實作；先寫 RED（stub NOT_IMPL）"
+                                      },
+                                      {
+                                          "at":  "2026-11-08T05:00:00+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "READY_FOR_TDD：重放式樂觀鎖＋push 前驗 L1–L7；S-GIT-2-1~3 與真並行 1b 共 4 綠（PS5.1 與 7）"
+                                      }
+                                  ],
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-08T06:30:00+08:00",
+                      "remark":  "做法：以 item id 為單位的合併——不同 item 各自更新時 rebase 自動過；同一 item 同欄位衝突則標衝突交人工。push 前跑 validate-board.ps1（L1–L7），不過就拒 push。\n不要做：對整檔做文字級 merge（易錯）。\n完成：三情境以兩個 clone 製造併發 commit 重現。",
+                      "notes":  [
+                                    {
+                                        "at":  "2026-11-08T06:30:00+08:00",
+                                        "by":  "claude-dev-agent",
+                                        "text":  "驗收 RETURN→修正：push 前驗證帶 OldPath+Role（L5/L7/完整性）、history from 修正、補 note、updatedAt 補毫秒；補 BLOCKER/R6b 測試。"
+                                    }
+                                ]
+                  },
+                  {
+                      "id":  "S-GIT-3",
+                      "level":  "Story",
+                      "title":  "作為管理者，我想知道領了工單的 runner 是否還活著，死掉的工單能被重領",
+                      "parentId":  "F-GIT",
+                      "status":  "In Progress",
+                      "light":  "Green",
+                      "estimate":  {
+                                       "storyPoints":  3
+                                   },
+                      "estimateNote":  "初估，待團隊校準",
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-08T05:30:00+08:00",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-GIT-3-1",
+                                      "title":  "Given runner 領工單後定時 push heartbeat（更新 claim.until） When 伺服器檢查 Then until 未過期視為存活",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-GIT-3-2",
+                                      "title":  "Given runner 當機不再 push When claim.until 過期 Then 該工單視為可重新領取",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-GIT-3-3",
+                                      "title":  "Given 續租 push 與別台 claim 衝突 When rebase 偵測 Then 以最新有效 claim 為準、過期者作廢",
+                                      "status":  "Green"
+                                  }
+                              ],
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-08T05:30:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "底下 T-GIT-3 進 In Review"
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "T-GIT-3",
+                      "level":  "Task",
+                      "title":  "heartbeat 續租與逾期重領",
+                      "parentId":  "S-GIT-3",
+                      "status":  "In Review",
+                      "light":  "Green",
+                      "estimate":  {
+                                       "hours":  6
+                                   },
+                      "dependsOn":  [
+                                        "T-GIT-1"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-GIT-3-1",
+                                          "S-GIT-3-2",
+                                          "S-GIT-3-3"
+                                      ],
+                      "tdd":  "Green",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "passed":  3,
+                                    "failed":  0
+                                },
+                      "owner":  "claude-dev-agent",
+                      "startedAt":  "2026-11-08T05:10:00+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-08T05:10:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "開始實作；先寫 RED（3-2 直接 PASS：逾期重領本來就被 claim 支援）"
+                                      },
+                                      {
+                                          "at":  "2026-11-08T05:30:00+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "READY_FOR_TDD：heartbeat 續租 claims/\u003cticket\u003e.json until；被接手回 LOST 不搶回；S-GIT-3-1~3 共 3 綠（PS5.1 與 7）"
+                                      }
+                                  ],
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-08T05:30:00+08:00",
+                      "remark":  "做法：claim.until 由 runner 定時 push 續租；伺服器與其他 runner 以 commit 時間與 until 判存活；until 過期即可被重領（走 T-GIT-1 的 claim 流程）。\n完成：三情境可模擬續租、逾期、續租衝突。"
+                  },
+                  {
+                      "id":  "S-GIT-4",
+                      "level":  "Story",
+                      "title":  "作為遠端機器，我想定時 pull 看板、領未執行工單、做完 push 回報",
+                      "parentId":  "F-GIT",
+                      "status":  "In Progress",
+                      "light":  "Green",
+                      "estimate":  {
+                                       "storyPoints":  5
+                                   },
+                      "estimateNote":  "初估，待團隊校準",
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-08T06:00:00+08:00",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-GIT-4-1",
+                                      "title":  "Given 看板有未領、可領工單 When 遠端 runner pull 後執行迴圈 Then claim-push 成功並啟動 AI",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-GIT-4-2",
+                                      "title":  "Given AI 做完 When runner 更新 board.json 狀態與 PR 連結並 push Then 伺服器與其他 runner pull 後看到最新狀態",
+                                      "status":  "Green"
+                                  },
+                                  {
+                                      "id":  "S-GIT-4-3",
+                                      "title":  "Given 沒有可領工單 When runner pull Then 進 idle、間隔後再 pull，不空轉搶單",
+                                      "status":  "Green"
+                                  }
+                              ],
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-08T06:00:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "底下 T-GIT-4 進 In Review"
+                                      }
+                                  ]
+                  },
+                  {
+                      "id":  "T-GIT-4",
+                      "level":  "Task",
+                      "title":  "遠端 runner pull 迴圈（pull→claim→執行→回報 push→idle）",
+                      "parentId":  "S-GIT-4",
+                      "status":  "In Review",
+                      "light":  "Green",
+                      "estimate":  {
+                                       "hours":  10
+                                   },
+                      "dependsOn":  [
+                                        "T-GIT-1",
+                                        "T-GIT-2",
+                                        "T-GIT-3"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-GIT-4-1",
+                                          "S-GIT-4-2",
+                                          "S-GIT-4-3"
+                                      ],
+                      "tdd":  "Green",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "passed":  3,
+                                    "failed":  0
+                                },
+                      "owner":  "claude-dev-agent",
+                      "startedAt":  "2026-11-08T05:40:00+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-08T05:40:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "開始實作；先寫 RED"
+                                      },
+                                      {
+                                          "at":  "2026-11-08T06:00:00+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "READY_FOR_TDD：pull→Select-ClaimableTicket→claim→executor→report→idle；Report 通用化支援任意欄位；S-GIT-4-1~3 共 3 綠（PS5.1 與 7）"
+                                      }
+                                  ],
+                      "createdAt":  "2026-11-07T04:00:00+08:00",
+                      "updatedAt":  "2026-11-08T06:30:00+08:00",
+                      "remark":  "做法：遠端 runner 定時 git pull → 挑未領可領工單 → T-GIT-1 claim → 啟動 AI CLI（沿用現有 profile/一次性 token 機制，但在遠端機）→ 完成 PATCH board.json＋PR→push→release；無工單進 idle。本機 push 式派工維持不變。\n完成：三情境以本機兩 clone 當作「伺服器端 repo＋遠端 runner」模擬。",
+                      "notes":  [
+                                    {
+                                        "at":  "2026-11-08T06:30:00+08:00",
+                                        "by":  "claude-dev-agent",
+                                        "text":  "驗收 RETURN→修正：Select 損毀 claim try/catch 與 dependsOn 查無保守（F2）、executor 例外釋放 claim（F4）、回報前 heartbeat LOST 檢查（F3）；補 S2/S4/S5/F2/F4 測試。"
+                                    }
+                                ]
+                  },
+                  {
+                      "id":  "T-GIT-5",
+                      "level":  "Task",
+                      "title":  "死信：工單連續 INVALID 達上限就停止重領（避免跨機器無限重跑）",
+                      "parentId":  "F-GIT",
+                      "status":  "Done",
+                      "light":  "Blue",
+                      "estimate":  {
+                                       "hours":  6
+                                   },
+                      "dependsOn":  [
+
+                                    ],
+                      "createdAt":  "2026-11-08T07:30:00+08:00",
+                      "updatedAt":  "2026-11-12T23:08:03+08:00",
+                      "remark":  "來源：git-dispatch 第二輪獨立驗收 B2 MAJOR-3。\n問題：executor 若「每次」產出不合 L1–L7 的更新（例：紅燈漏 lightReason、L6 測試沒綠），Git-Report 回 INVALID、runner 不釋放 claim → lease 過期 → 別台重領 → 再 INVALID…跨 N 台無限重跑、燒算力，無死信隔離。\n待決政策（開工前先定）：(a) 計數存哪——claim 檔 / 工單欄位 failCount；(b) 上限 N；(c) 達標後動作——Select 排除該工單、標記 blocked、記 note 交人工；(d) 誰清計數（人工介入後 reset）。\n完成定義：同一工單連續 N 次 INVALID 後，所有 runner 的 Select 不再挑它；工單留 note 說明原因；有測試用『executor 固定回 INVALID 更新』重現，斷言第 N+1 輪起該工單被跳過。\n相關：MINOR——INVALID/CONFLICT 後是否主動 Release-GitClaim（目前壓到過期）可一併在此決定。",
+                      "owner":  "claude-dev-agent",
+                      "startedAt":  "2026-11-12T16:30:00+08:00",
+                      "completedAt":  "2026-11-12T23:08:03+08:00",
+                      "approvedBy":  "使用者（人工授權）+ verify-review-a7f3（opus 審查）",
+                      "tdd":  "Green",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "passed":  5,
+                                    "failed":  0
+                                },
+                      "scenarioIds":  [
+                                          "S-GIT-5-1",
+                                          "S-GIT-5-2",
+                                          "S-GIT-5-3",
+                                          "S-GIT-5-4",
+                                          "S-GIT-5-5"
+                                      ],
+                      "bdd":  [
+                                  {
+                                      "id":  "S-GIT-5-1",
+                                      "title":  "executor 固定回 INVALID：連續 N 次後該工單被所有 runner 跳過（done-definition）",
+                                      "status":  "Green",
+                                      "tests":  [
+                                                    "deadletter.Tests.ps1::S-GIT-5-1"
+                                                ]
+                                  },
+                                  {
+                                      "id":  "S-GIT-5-2",
+                                      "title":  "Add-GitDeadLetterFail 連續計數在 origin 持久、Test-GitDeadLettered 於門檻翻轉",
+                                      "status":  "Green",
+                                      "tests":  [
+                                                    "deadletter.Tests.ps1::S-GIT-5-2"
+                                                ]
+                                  },
+                                  {
+                                      "id":  "S-GIT-5-3",
+                                      "title":  "死信後所有 runner（含另一台）的 Select 都跳過該工單",
+                                      "status":  "Green",
+                                      "tests":  [
+                                                    "deadletter.Tests.ps1::S-GIT-5-3"
+                                                ]
+                                  },
+                                  {
+                                      "id":  "S-GIT-5-4",
+                                      "title":  "人工 Clear-GitDeadLetter 後連續計數歸零、工單可再被挑",
+                                      "status":  "Green",
+                                      "tests":  [
+                                                    "deadletter.Tests.ps1::S-GIT-5-4"
+                                                ]
+                                  },
+                                  {
+                                      "id":  "S-GIT-5-5",
+                                      "title":  "成功回報（REPORTED）會把連續計數歸零",
+                                      "status":  "Green",
+                                      "tests":  [
+                                                    "deadletter.Tests.ps1::S-GIT-5-5"
+                                                ]
+                                  }
+                              ],
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-12T16:30:00+08:00",
+                                          "from":  "Backlog / Gray",
+                                          "to":  "In Progress / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "開始實作；先寫 RED（deadletter.Tests.ps1 五情境先全失敗）"
+                                      },
+                                      {
+                                          "at":  "2026-11-12T18:01:38+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "claude-dev-agent",
+                                          "note":  "READY_FOR_TDD：死信檔 deadletters/\u003cticket\u003e.json 連續 N 次 INVALID 隔離，Select 跳過、成功回報/人工清檔歸零；S-GIT-5-1~5 共 5 綠（PS5.1 與 pwsh7）"
+                                      },
+                                      {
+                                          "at":  "2026-11-12T23:08:03+08:00",
+                                          "from":  "In Review / Green",
+                                          "to":  "Done / Blue",
+                                          "by":  "opus-reviewer（使用者授權）",
+                                          "reason":  "PR #1 已合併 master(2d314c9)；獨立實測(verify-test-ind/sonnet)5/5+33/0 雙直譯器 PASS、mutation 三項全抓；獨立審查(verify-review-a7f3/opus)10 項全過無 blocker；開發/實測/審查三者身分互異，驗收有效。藍燈/Done 經使用者授權由高階模型設定。"
+                                      }
+                                  ],
+                      "notes":  [
+                                    {
+                                        "at":  "2026-11-12T18:01:38+08:00",
+                                        "by":  "claude-dev-agent",
+                                        "text":  "政策定案：計數存專屬檔 deadletters/\u003cticket\u003e.json（不寫 board 免過驗證/免搶樂觀鎖）；上限 N 預設 3（可參數化）；達標後所有 runner Select 跳過＋工單留 note 交人工；成功回報或人工刪檔歸零。MINOR：INVALID 後主動 Release-GitClaim（不再壓到過期）。"
+                                    }
+                                ]
+                  },
+                  {
+                      "id":  "E-ACC",
+                      "level":  "Epic",
+                      "title":  "帳號系統（對外安全／多人協作／派工憑證強化／稽核可追溯）",
+                      "parentId":  null,
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "完整帳號系統 A+B+C。架構:六角形+洋蔥,Node+SQLite。里程碑 M1=RBAC+稽核(本批)、M2=機器金鑰、M3=Web 登入。規格見 docs/account/requirements.md、architecture.md;BDD 在 docs/bdd/S-ACC-*.feature;TDD 在 docs/account/tdd-m1.md;工單定義 docs/account/tickets-m1.md。"
+                  },
+                  {
+                      "id":  "F-ACC-3",
+                      "level":  "Feature",
+                      "title":  "角色權限控管（RBAC）",
+                      "parentId":  "E-ACC",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "F-ACC-4",
+                      "level":  "Feature",
+                      "title":  "不可否認的稽核",
+                      "parentId":  "E-ACC",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-3-1",
+                      "level":  "Story",
+                      "title":  "作為管理者，我想定義角色與權限矩陣，讓每個受保護動作都有明確的允許角色",
+                      "parentId":  "F-ACC-3",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  3
+                                   },
+                      "sprint":  "acc-m1",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-3-1-1",
+                                      "title":  "When 查詢權限矩陣 Then 回每個受保護動作的允許角色;move_done 僅 verifier 與管理者",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-1-2",
+                                      "title":  "Given 新增角色 release-manager When 指派 approve_deployment Then 該角色擁有該權限且其他角色不受影響",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-1-3",
+                                      "title":  "When 指派不存在的權限 Then 回 UnknownPermission",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-1-4",
+                                      "title":  "When 新增同名角色 Then 回 DuplicateRole",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-1-5",
+                                      "title":  "Given 呼叫者為檢視者 When 改權限矩陣 Then 回 Forbidden 且矩陣不變",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-3-2",
+                      "level":  "Story",
+                      "title":  "作為系統，我想在執行受保護動作時檢查呼叫者角色權限，未授權就擋下",
+                      "parentId":  "F-ACC-3",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  5
+                                   },
+                      "sprint":  "acc-m1",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-3-2-1",
+                                      "title":  "When 具權限者請求移 Done Then 放行",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-2-2",
+                                      "title":  "When 無權限者請求移 Done Then 回 Forbidden 且動作未執行",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-2-3",
+                                      "title":  "Given 身分無法驗證 When 請求受保護動作 Then 回 Unauthorized",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-2-4",
+                                      "title":  "Given PM 有 edit_card 無 approve_deployment When 核准佈署→Forbidden、改卡→放行",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-2-5",
+                                      "title":  "Given 權限儲存不可讀 When 受保護動作 Then 保守回 Forbidden 並記事件,不預設放行",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-3-3",
+                      "level":  "Story",
+                      "title":  "作為管理者，我想把現行 L5／hook 硬規則改綁角色權限，移除以 AI_AGENT 環境標記判斷身分的 hack",
+                      "parentId":  "F-ACC-3",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  5
+                                   },
+                      "sprint":  "acc-m1",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-3-3-1",
+                                      "title":  "Given verifier 金鑰驗證通過 When 提交移 Done Then guard 放行",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-3-2",
+                                      "title":  "Given dev-agent 金鑰驗證通過 When 提交移 Done Then guard 回 Forbidden 並指出所需角色",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-3-3",
+                                      "title":  "Given AI_AGENT 被竄改或移除 When 提交受保護 board 變更 Then 只依驗證過帳號角色,env 不影響",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-3-3-4",
+                                      "title":  "Given 無可驗證身分 When 提交受保護 board 變更 Then guard 回 Unauthorized",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-4-1",
+                      "level":  "Story",
+                      "title":  "作為稽核者，我想每個受保護動作都寫一筆不可否認的稽核紀錄（誰、何時、對哪張卡、結果）",
+                      "parentId":  "F-ACC-4",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  3
+                                   },
+                      "sprint":  "acc-m1",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-4-1-1",
+                                      "title":  "Given verifier 移卡成功 Then 稽核新增 actor/action/target/result=allowed 含時間戳",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-4-1-2",
+                                      "title":  "Given dev-agent 移卡被拒 Then 稽核新增 result=forbidden 含原因",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-4-1-3",
+                                      "title":  "When 修改或刪除既有稽核 Then 被拒（append-only）",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-4-1-4",
+                                      "title":  "When 寫稽核 Then actor 須對應可驗證帳號/金鑰,不收裸代號字串",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-4-1-5",
+                                      "title":  "Given 稽核儲存不可寫 When 執行受保護動作 Then 寫入失敗可觀察,不靜默吞",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-4-2",
+                      "level":  "Story",
+                      "title":  "作為稽核者，我想依使用者／時間／工單查詢與篩選稽核紀錄",
+                      "parentId":  "F-ACC-4",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  2
+                                   },
+                      "sprint":  "acc-m1",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-4-2-1",
+                                      "title":  "When 查 actor=alice Then 只回 alice 的",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-4-2-2",
+                                      "title":  "When 查 [T0,T1] Then 回含端點區間內的",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-4-2-3",
+                                      "title":  "When 查 target=T-1 Then 只回與 T-1 相關的",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-4-2-4",
+                                      "title":  "When 查不存在 actor Then 回空清單不報錯",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-4-2-5",
+                                      "title":  "Given 無 view_audit When 查稽核 Then 回 Forbidden",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-4-2-6",
+                                      "title":  "When 以注入字串當篩選值 Then 安全參數化,不外洩不回不符紀錄",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "T-ACC-41c",
+                      "level":  "Task",
+                      "title":  "Identity 可驗證身分值物件",
+                      "parentId":  "S-ACC-4-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  2
+                                   },
+                      "sprint":  "acc-m1",
+                      "dependsOn":  [
+
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-4-1-4"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:domain。可改:src/domain/account/identity.ts、tests/domain/account/identity.test.ts。不可變值物件,帶可驗證來源(帳號/金鑰),拒裸代號字串。TDD #18。完成:S-ACC-4-1-4 轉綠、通過 A1(領域零框架)。詳見 docs/account/tickets-m1.md。"
+                  },
+                  {
+                      "id":  "T-ACC-31a",
+                      "level":  "Task",
+                      "title":  "權限矩陣領域模型",
+                      "parentId":  "S-ACC-3-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  5
+                                   },
+                      "sprint":  "acc-m1",
+                      "dependsOn":  [
+
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-3-1-1",
+                                          "S-ACC-3-1-2",
+                                          "S-ACC-3-1-3",
+                                          "S-ACC-3-1-4",
+                                          "S-ACC-3-1-5"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-14T19:33:17+08:00",
+                      "remark":  "層級:domain。可改:src/domain/account/permission-matrix.ts、role.ts、errors.ts 及其測試。不可變矩陣(變更回新實例);未知權限/重複角色/非管理者改矩陣各丟對應領域例外;move_done 預設僅 verifier+管理者。TDD #1-5。5 情境同一聚合單一檔,一輪可完成不拆。完成:5 條綠、通過 A1。"
+                  },
+                  {
+                      "id":  "T-ACC-32a",
+                      "level":  "Task",
+                      "title":  "授權領域規則",
+                      "parentId":  "S-ACC-3-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  3
+                                   },
+                      "sprint":  "acc-m1",
+                      "dependsOn":  [
+                                        "T-ACC-31a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-3-2-1",
+                                          "S-ACC-3-2-2",
+                                          "S-ACC-3-2-4"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:domain。可改:src/domain/account/authorize.ts 及測試。純函式 authorize(identity,action,matrix)→allowed/Forbidden;有權放行、無權 Forbidden 無副作用、單項權限邊界正確。TDD #6/7/9。完成:測試綠、通過 A1。"
+                  },
+                  {
+                      "id":  "T-ACC-32b",
+                      "level":  "Task",
+                      "title":  "授權 Use Case 與來源失效保守拒絕",
+                      "parentId":  "S-ACC-3-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  4
+                                   },
+                      "sprint":  "acc-m1",
+                      "dependsOn":  [
+                                        "T-ACC-32a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-3-2-3",
+                                          "S-ACC-3-2-5"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app+定義 PermissionStorePort。可改:src/app/account/check-permission.ts、src/domain/account/ports/permission-store-port.ts 及測試。未知身分回 Unauthorized;權限儲存不可讀時 fail-closed 回 Forbidden 並記事件,絕不預設放行;假 Port 測。TDD #8/10。完成:測試綠、通過 A2。"
+                  },
+                  {
+                      "id":  "T-ACC-41a",
+                      "level":  "Task",
+                      "title":  "受保護動作寫稽核",
+                      "parentId":  "S-ACC-4-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  3
+                                   },
+                      "sprint":  "acc-m1",
+                      "dependsOn":  [
+                                        "T-ACC-41c",
+                                        "T-ACC-32b"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-4-1-1",
+                                          "S-ACC-4-1-2"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app+定義 AuditPort。可改:src/app/account/audit-on-action.ts、src/domain/account/ports/audit-port.ts、src/domain/account/audit-entry.ts 及測試。成功與被拒動作都寫稽核(含時間戳/原因);AuditEntry 不可變;actor 為 Identity VO;假 AuditPort 測。TDD #15/16。"
+                  },
+                  {
+                      "id":  "T-ACC-41b",
+                      "level":  "Task",
+                      "title":  "append-only 稽核儲存與寫入失敗可觀察",
+                      "parentId":  "S-ACC-4-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  4
+                                   },
+                      "sprint":  "acc-m1",
+                      "dependsOn":  [
+                                        "T-ACC-41a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-4-1-3",
+                                          "S-ACC-4-1-5"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:infra(SQLite)。可改:src/infra/account/sqlite-audit-store.ts、schema/audit.sql 及測試。實作 AuditPort;既有紀錄不可改/刪(違反擲錯且筆數不變);儲存不可寫時失敗可觀察,不靜默吞。TDD #17/19。完成:測試綠、通過 A4/A5。"
+                  },
+                  {
+                      "id":  "T-ACC-42a",
+                      "level":  "Task",
+                      "title":  "稽核查詢 adapter 與注入防禦",
+                      "parentId":  "S-ACC-4-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  5
+                                   },
+                      "sprint":  "acc-m1",
+                      "dependsOn":  [
+                                        "T-ACC-41b"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-4-2-1",
+                                          "S-ACC-4-2-2",
+                                          "S-ACC-4-2-3",
+                                          "S-ACC-4-2-4",
+                                          "S-ACC-4-2-6"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:infra(SQLite)。可改:src/infra/account/sqlite-audit-query.ts 及測試。依 actor/時間(含端點)/工單查詢;空結果回 [] 不報錯;注入字串走參數化,不回不符紀錄、不漏底層錯。TDD #20-23/25。5 情境同一 adapter 單一檔,一輪可完成不拆。"
+                  },
+                  {
+                      "id":  "T-ACC-42b",
+                      "level":  "Task",
+                      "title":  "稽核查詢權限檢查",
+                      "parentId":  "S-ACC-4-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  2
+                                   },
+                      "sprint":  "acc-m1",
+                      "dependsOn":  [
+                                        "T-ACC-32a",
+                                        "T-ACC-42a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-4-2-5"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app。可改:src/app/account/query-audit.ts 及測試。查稽核前檢查 view_audit,無權回 Forbidden 且不回資料。TDD #24。完成:測試綠、通過 A2。"
+                  },
+                  {
+                      "id":  "T-ACC-33a",
+                      "level":  "Task",
+                      "title":  "PwshBoardGuardAdapter 改綁角色（⚠ 另需 M2 金鑰驗證）",
+                      "parentId":  "S-ACC-3-3",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  6
+                                   },
+                      "sprint":  "acc-m1",
+                      "dependsOn":  [
+                                        "T-ACC-32b",
+                                        "T-ACC-22a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-3-3-1",
+                                          "S-ACC-3-3-2",
+                                          "S-ACC-3-3-3",
+                                          "S-ACC-3-3-4"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:腳本/infra(PowerShell adapter + hook)。可改:scripts/account-guard/Invoke-BoardGuard.ps1、validate-board.ps1 的 L5 呼叫點、hook 設定(此單即改 hook,需 guard-change 核准)、tests/account/guard-rebind.Tests.ps1。⚠ 跨里程碑:S-ACC-3-3-1「verifier 以金鑰驗證」需 M2 的 F-ACC-2 金鑰驗證(T-ACC-22a)。M1 只能交付接縫(改呼叫授權決策+脫鉤 AI_AGENT,以注入身分測 3-3-3);金鑰背書的擋/放 commit E2E 待 M2。建議排在 M2 之後,屆時把 T-ACC-22a 補入 dependsOn。TDD #11-14(Pester)。"
+                  },
+                  {
+                      "id":  "F-ACC-2",
+                      "level":  "Feature",
+                      "title":  "機器金鑰（派工憑證強化）",
+                      "parentId":  "E-ACC",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "F-ACC-1",
+                      "level":  "Feature",
+                      "title":  "Web 帳號與登入",
+                      "parentId":  "E-ACC",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-2-1",
+                      "level":  "Story",
+                      "title":  "作為管理者，我想為每個代理身分簽發機器金鑰並綁定角色，取代裸代號字串",
+                      "parentId":  "F-ACC-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  3
+                                   },
+                      "sprint":  "acc-m2",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-2-1-1",
+                                      "title":  "When 為 runner-01 簽發並綁 runner Then 回金鑰且綁定身分與角色",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-1-2",
+                                      "title":  "When 簽發 Then 明文只回一次,之後只存不可還原雜湊",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-1-3",
+                                      "title":  "Given dev-agent When 簽發 Then Forbidden 且不產生金鑰",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-1-4",
+                                      "title":  "When 綁不存在角色 Then UnknownRole 且不產生金鑰",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-1-5",
+                                      "title":  "When 簽發 Then 稽核 action=issue_key 不含明文",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-2-2",
+                      "level":  "Story",
+                      "title":  "作為系統，我想驗證代理以金鑰簽章的請求，通過才認可身分與角色",
+                      "parentId":  "F-ACC-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  5
+                                   },
+                      "sprint":  "acc-m2",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-2-2-1",
+                                      "title":  "When 有效簽章請求 Then 通過並解析 identity+role",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-2-2",
+                                      "title":  "When 竄改內容或簽章 Then Unauthorized 不認可身分",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-2-3",
+                                      "title":  "Given 金鑰過期 When 簽章請求 Then Unauthorized",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-2-4",
+                                      "title":  "When 重放舊請求(相同 nonce/時間戳過舊) Then Unauthorized",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-2-5",
+                                      "title":  "When 不存在身分或錯簽章 Then 一致 Unauthorized,不透露原因",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-2-6",
+                                      "title":  "When 驗證後執行受保護動作 Then 稽核 actor 為可驗證金鑰身分非裸代號",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-2-3",
+                      "level":  "Story",
+                      "title":  "作為管理者，我想撤銷或輪替機器金鑰，讓外洩或退役的金鑰立即失效",
+                      "parentId":  "F-ACC-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  3
+                                   },
+                      "sprint":  "acc-m2",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-2-3-1",
+                                      "title":  "When 撤銷 Then 之後該金鑰簽章一律 Unauthorized",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-3-2",
+                                      "title":  "When 輪替 Then 新金鑰通過、舊金鑰失敗",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-3-3",
+                                      "title":  "Given dev-agent When 撤銷/輪替 Then Forbidden 且既有金鑰仍有效",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-3-4",
+                                      "title":  "When 撤銷不存在金鑰 Then NotFound/無作用,不漏底層錯,不影響他鑰",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-2-3-5",
+                                      "title":  "When 撤銷/輪替 Then 稽核 action=revoke_key/rotate_key 不含明文",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-1-1",
+                      "level":  "Story",
+                      "title":  "作為新使用者，我想用電子郵件與密碼註冊帳號",
+                      "parentId":  "F-ACC-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  3
+                                   },
+                      "sprint":  "acc-m3",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-1-1-1",
+                                      "title":  "When 以未註冊 email+合規密碼註冊 Then 成功且密碼不可還原",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-1-2",
+                                      "title":  "Given email 已註冊 When 再註冊 Then 不建立第二帳號",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-1-3",
+                                      "title":  "When 弱密碼註冊 Then 失敗並回不符規則,不建帳號",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-1-4",
+                                      "title":  "When 以不合法 email 格式註冊 Then 格式錯誤被拒(參數化)",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-1-5",
+                                      "title":  "Given email 已註冊 When 再註冊 Then 回中性一致訊息,不明示已存在",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-1-2",
+                      "level":  "Story",
+                      "title":  "作為使用者，我想用帳密登入並取得工作階段，且憑證受暴力破解防護",
+                      "parentId":  "F-ACC-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  5
+                                   },
+                      "sprint":  "acc-m3",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-1-2-1",
+                                      "title":  "When 正確帳密登入 Then 建立綁身分+角色的工作階段",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-2-2",
+                                      "title":  "When 錯密登入 Then 失敗訊息與帳號不存在一致",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-2-3",
+                                      "title":  "Given 連 5 次失敗 When 第 6 次(即使密碼對) Then 鎖定/退避並寫稽核",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-2-4",
+                                      "title":  "Given 無有效工作階段 When 存取受保護資源 Then Unauthorized",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-2-5",
+                                      "title":  "Given 工作階段逾時 When 存取 Then Unauthorized 要求重登",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-2-6",
+                                      "title":  "When 成功登入 Then 稽核 action=login result=allowed",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-ACC-1-3",
+                      "level":  "Story",
+                      "title":  "作為使用者，我想登出並能變更密碼，讓失效或外洩的工作階段不再有效",
+                      "parentId":  "F-ACC-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  3
+                                   },
+                      "sprint":  "acc-m3",
+                      "bdd":  [
+                                  {
+                                      "id":  "S-ACC-1-3-1",
+                                      "title":  "When 登出 Then 原工作階段立即失效,再存取 Unauthorized",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-3-2",
+                                      "title":  "When 以正確現行密碼+合規新密碼變更 Then 成功且僅新密碼可登入",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-3-3",
+                                      "title":  "When 以錯誤現行密碼變更 Then 被拒且密碼不變",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-3-4",
+                                      "title":  "Given 另有有效工作階段 When 改密成功 Then 另一工作階段失效",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-3-5",
+                                      "title":  "Given 無工作階段 When 改密 Then Unauthorized 且密碼不變",
+                                      "status":  "None"
+                                  },
+                                  {
+                                      "id":  "S-ACC-1-3-6",
+                                      "title":  "When 登出或改密 Then 稽核各新增 action=logout/change_password",
+                                      "status":  "None"
+                                  }
+                              ],
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                  },
+                  {
+                      "id":  "T-ACC-21a",
+                      "level":  "Task",
+                      "title":  "金鑰簽發 Use Case 與 KeyStore",
+                      "parentId":  "S-ACC-2-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  4
+                                   },
+                      "sprint":  "acc-m2",
+                      "dependsOn":  [
+                                        "T-ACC-41c",
+                                        "T-ACC-41a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-2-1-1",
+                                          "S-ACC-2-1-2",
+                                          "S-ACC-2-1-5"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app+定義 KeyStorePort/infra SqliteKeyStore。可改:src/app/account/issue-key.ts、src/domain/account/ports/key-store-port.ts、src/infra/account/sqlite-key-store.ts 及測試。簽發綁 identity+role;明文只回一次、存不可還原雜湊;簽發寫稽核不含明文。TDD #1/2/5。詳見 docs/account/tickets-m2m3.md。"
+                  },
+                  {
+                      "id":  "T-ACC-21b",
+                      "level":  "Task",
+                      "title":  "簽發授權與角色校驗",
+                      "parentId":  "S-ACC-2-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  3
+                                   },
+                      "sprint":  "acc-m2",
+                      "dependsOn":  [
+                                        "T-ACC-21a",
+                                        "T-ACC-32a",
+                                        "T-ACC-31a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-2-1-3",
+                                          "S-ACC-2-1-4"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app/domain。可改:src/app/account/issue-key.ts 授權分支及測試。非管理者簽發回 Forbidden 不產生金鑰;綁未知角色回 UnknownRole。TDD #3/4。"
+                  },
+                  {
+                      "id":  "T-ACC-22a",
+                      "level":  "Task",
+                      "title":  "金鑰簽章驗證",
+                      "parentId":  "S-ACC-2-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  5
+                                   },
+                      "sprint":  "acc-m2",
+                      "dependsOn":  [
+                                        "T-ACC-21a",
+                                        "T-ACC-41c"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-2-2-1",
+                                          "S-ACC-2-2-2",
+                                          "S-ACC-2-2-3"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:domain 驗證規則+定義 SignerPort/infra HmacSigner。可改:src/domain/account/ports/signer-port.ts、src/infra/account/hmac-signer.ts、src/domain/account/verify-key.ts 及測試。有效簽章通過解析 identity+role;竄改→Unauthorized;過期(假 Clock)→Unauthorized。TDD #6/7/8。⚠ 回填:本卡上板後補進 T-ACC-33a 的 dependsOn。"
+                  },
+                  {
+                      "id":  "T-ACC-22b",
+                      "level":  "Task",
+                      "title":  "防重放、一致錯誤訊息與身分接稽核",
+                      "parentId":  "S-ACC-2-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  4
+                                   },
+                      "sprint":  "acc-m2",
+                      "dependsOn":  [
+                                        "T-ACC-22a",
+                                        "T-ACC-41c",
+                                        "T-ACC-41a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-2-2-4",
+                                          "S-ACC-2-2-5",
+                                          "S-ACC-2-2-6"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app+定義 NoncePort。可改:src/app/account/authenticate-request.ts、src/domain/account/ports/nonce-port.ts、src/infra/account/sqlite-nonce-store.ts 及測試。重放→Unauthorized;不存在身分 vs 錯簽章回應一致(抗計時旁路);actor 為 Identity VO 寫稽核。TDD #9/10/11。"
+                  },
+                  {
+                      "id":  "T-ACC-23a",
+                      "level":  "Task",
+                      "title":  "金鑰撤銷與輪替",
+                      "parentId":  "S-ACC-2-3",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  3
+                                   },
+                      "sprint":  "acc-m2",
+                      "dependsOn":  [
+                                        "T-ACC-21a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-2-3-1",
+                                          "S-ACC-2-3-2",
+                                          "S-ACC-2-3-4"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app/infra。可改:src/app/account/revoke-key.ts、rotate-key.ts、src/infra/account/sqlite-key-store.ts 及測試。撤銷後驗證即 Unauthorized;輪替新有效舊失效;撤不存在金鑰安全無作用不漏底層錯不影響他鑰。TDD #12/13/15。"
+                  },
+                  {
+                      "id":  "T-ACC-23b",
+                      "level":  "Task",
+                      "title":  "撤銷／輪替授權與稽核",
+                      "parentId":  "S-ACC-2-3",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  2
+                                   },
+                      "sprint":  "acc-m2",
+                      "dependsOn":  [
+                                        "T-ACC-23a",
+                                        "T-ACC-32a",
+                                        "T-ACC-41a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-2-3-3",
+                                          "S-ACC-2-3-5"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app。可改:src/app/account/revoke-key.ts、rotate-key.ts 授權/稽核分支及測試。非管理者撤銷/輪替回 Forbidden 且既有金鑰仍有效;撤銷/輪替各寫稽核不含明文。TDD #14/16。"
+                  },
+                  {
+                      "id":  "T-ACC-11a",
+                      "level":  "Task",
+                      "title":  "密碼政策與 Email 值物件",
+                      "parentId":  "S-ACC-1-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  3
+                                   },
+                      "sprint":  "acc-m3",
+                      "dependsOn":  [
+
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-1-1-3",
+                                          "S-ACC-1-1-4"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:domain。可改:src/domain/account/password-policy.ts、email.ts 及測試。弱密碼回違反規則清單;不合法 email(參數化 4 例)被拒。TDD #19/20。通過 A1。"
+                  },
+                  {
+                      "id":  "T-ACC-11b",
+                      "level":  "Task",
+                      "title":  "帳號註冊 Use Case（AccountStore + Hasher）",
+                      "parentId":  "S-ACC-1-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  4
+                                   },
+                      "sprint":  "acc-m3",
+                      "dependsOn":  [
+                                        "T-ACC-11a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-1-1-1",
+                                          "S-ACC-1-1-2"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app+定義 AccountStorePort/PasswordHasherPort/infra Argon2idHasher、SqliteAccountStore。可改:src/app/account/register.ts、src/domain/account/ports/{account-store-port,password-hasher-port}.ts、src/infra/account/{argon2id-hasher,sqlite-account-store}.ts 及測試。註冊成功且密碼不可還原;重複 email 不建第二帳號。TDD #17/18。通過 A2/A5。"
+                  },
+                  {
+                      "id":  "T-ACC-11c",
+                      "level":  "Task",
+                      "title":  "註冊 API 與防帳號列舉",
+                      "parentId":  "S-ACC-1-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  2
+                                   },
+                      "sprint":  "acc-m3",
+                      "dependsOn":  [
+                                        "T-ACC-11b"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-1-1-5"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:api。可改:src/api/account/register-route.ts 及 supertest 測試。重複註冊回中性一致訊息,與新 email 不可區分。TDD #21。通過 A3。"
+                  },
+                  {
+                      "id":  "T-ACC-12a",
+                      "level":  "Task",
+                      "title":  "登入 Use Case、工作階段與稽核",
+                      "parentId":  "S-ACC-1-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  5
+                                   },
+                      "sprint":  "acc-m3",
+                      "dependsOn":  [
+                                        "T-ACC-11b",
+                                        "T-ACC-41a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-1-2-1",
+                                          "S-ACC-1-2-2",
+                                          "S-ACC-1-2-6"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app+定義 SessionStorePort/ClockPort/infra SqliteSessionStore、SystemClock。可改:src/app/account/login.ts、src/domain/account/ports/{session-store-port,clock-port}.ts、src/infra/account/{sqlite-session-store,system-clock}.ts 及測試。正確帳密建綁身分+角色 session;錯密訊息與帳號不存在一致且兩路徑都實跑雜湊;成功登入寫稽核。TDD #22/23/27。"
+                  },
+                  {
+                      "id":  "T-ACC-12b",
+                      "level":  "Task",
+                      "title":  "工作階段中介與逾時",
+                      "parentId":  "S-ACC-1-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  3
+                                   },
+                      "sprint":  "acc-m3",
+                      "dependsOn":  [
+                                        "T-ACC-12a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-1-2-4",
+                                          "S-ACC-1-2-5"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:api/app。可改:src/api/account/session-middleware.ts、src/app/account/validate-session.ts 及測試。無有效 session 回 Unauthorized;逾時(假 Clock 推進)回 Unauthorized 要求重登。TDD #25/26。"
+                  },
+                  {
+                      "id":  "T-ACC-12c",
+                      "level":  "Task",
+                      "title":  "登入失敗鎖定／退避",
+                      "parentId":  "S-ACC-1-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  2
+                                   },
+                      "sprint":  "acc-m3",
+                      "dependsOn":  [
+                                        "T-ACC-12a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-1-2-3"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app。可改:src/app/account/login.ts 失敗計數、src/infra/account/sqlite-attempt-store.ts 及測試。連 5 次失敗後第 6 次(即使密碼對)鎖定/退避,鎖定寫稽核;假 Clock 測退避。TDD #24。"
+                  },
+                  {
+                      "id":  "T-ACC-13a",
+                      "level":  "Task",
+                      "title":  "登出與工作階段撤銷",
+                      "parentId":  "S-ACC-1-3",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  3
+                                   },
+                      "sprint":  "acc-m3",
+                      "dependsOn":  [
+                                        "T-ACC-12a",
+                                        "T-ACC-41a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-1-3-1",
+                                          "S-ACC-1-3-6"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app。可改:src/app/account/logout.ts、revoke-sessions.ts 及測試。登出後原 session 立即失效;提供撤銷某帳號其他 session 能力(供改密用);登出/改密稽核接點。TDD #28/33。"
+                  },
+                  {
+                      "id":  "T-ACC-13b",
+                      "level":  "Task",
+                      "title":  "密碼變更",
+                      "parentId":  "S-ACC-1-3",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  4
+                                   },
+                      "sprint":  "acc-m3",
+                      "dependsOn":  [
+                                        "T-ACC-11b",
+                                        "T-ACC-13a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-ACC-1-3-2",
+                                          "S-ACC-1-3-3",
+                                          "S-ACC-1-3-4",
+                                          "S-ACC-1-3-5"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-13T10:00:00+08:00",
+                      "updatedAt":  "2026-11-13T10:00:00+08:00",
+                      "remark":  "層級:app。可改:src/app/account/change-password.ts 及測試。需正確現行密碼才可改,改後僅新密碼可登入;錯誤現行密碼被拒密碼不變;改密成功其他 session 失效;未登入改密 Unauthorized。4 情境同一改密 Use Case 單一檔,一輪可完成不拆。TDD #29/30/31/32。"
+                  }
+              ],
+    "sprints":  [
+                    {
+                        "id":  "acc-m1",
+                        "name":  "帳號 M1：RBAC + 稽核",
+                        "start":  "2026-11-13",
+                        "end":  "2026-11-27",
+                        "goal":  "權限矩陣、授權關卡、不可否認稽核與查詢落地;guard 改綁的接縫備妥(金鑰背書待 M2)"
+                    },
+                    {
+                        "id":  "acc-m2",
+                        "name":  "帳號 M2：機器金鑰",
+                        "start":  "2026-11-27",
+                        "end":  "2026-12-11",
+                        "goal":  "派工憑證金鑰化:簽發/驗證/撤銷輪替,防重放與一致錯誤,身分接稽核"
+                    },
+                    {
+                        "id":  "acc-m3",
+                        "name":  "帳號 M3：Web 登入",
+                        "start":  "2026-12-11",
+                        "end":  "2026-12-25",
+                        "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
+                    }
+                ],
+    "revision":  1
 }
