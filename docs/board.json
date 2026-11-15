@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-15T23:26:09+08:00",
+    "updatedAt":  "2026-11-15T23:26:19+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -1021,11 +1021,11 @@
                                   {
                                       "id":  "S-ACC-3-1-5",
                                       "title":  "Given 呼叫者為檢視者 When 改權限矩陣 Then 回 Forbidden 且矩陣不變",
-                                      "status":  "None"
+                                      "status":  "Green"
                                   }
                               ],
                       "createdAt":  "2026-11-13T10:00:00+08:00",
-                      "updatedAt":  "2026-11-15T23:26:09+08:00",
+                      "updatedAt":  "2026-11-15T23:26:19+08:00",
                       "history":  [
                                       {
                                           "at":  "2026-11-15T23:25:39+08:00",
@@ -1052,6 +1052,13 @@
                                           "at":  "2026-11-15T23:26:09+08:00",
                                           "from":  "bdd:S-ACC-3-1-4:None",
                                           "to":  "bdd:S-ACC-3-1-4:Green",
+                                          "by":  "admin（admin）",
+                                          "reason":  "Independent verification PASS (human bootstrap)"
+                                      },
+                                      {
+                                          "at":  "2026-11-15T23:26:19+08:00",
+                                          "from":  "bdd:S-ACC-3-1-5:None",
+                                          "to":  "bdd:S-ACC-3-1-5:Green",
                                           "by":  "admin（admin）",
                                           "reason":  "Independent verification PASS (human bootstrap)"
                                       }
@@ -2288,5 +2295,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  21
+    "revision":  22
 }
