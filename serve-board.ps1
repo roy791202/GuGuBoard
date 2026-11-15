@@ -812,6 +812,75 @@ function Invoke-ClearExamples($req, $res, [string]$id) {
   Write-Host "$(Get-Date -f HH:mm:ss) [$id] $($s.user) 清除範例工單 $($gone.Count) 筆$(if ($committed) { '（已 commit）' })"
   Send-Json $res @{ ok = $true; count = $gone.Count; ids = @($gone); done = $true; committed = $committed }
 }
+# 回傳「某情境所屬 Task（scenarioIds 含此情境者）的開發者身分清單」：含該 Task 目前 claim 名稱與 history 的 by 名稱（去掉「（角色）」）。
+# 用於身分門禁：設情境 Green 的人若在此清單中，代表他既是開發者又來標自己的驗收 → 擋下，守住 dev≠verify。
+function Get-ScenarioDevelopers($b, $Pj, [string]$scenarioId) {
+  $out = [Collections.Generic.List[string]]::new()
+  $claims = @{}; try { $claims = Get-Claims $Pj.id } catch {}
+  foreach ($it in $b['items']) {
+    if (-not (IsObj $it) -or [string]$it['level'] -cne 'Task') { continue }
+    $sids = Get-V $it 'scenarioIds'; if (-not (IsArr $sids)) { continue }
+    $has = $false; foreach ($x in $sids) { if ([string]$x -ceq $scenarioId) { $has = $true; break } }
+    if (-not $has) { continue }
+    $tid = [string]$it['id']
+    if ($claims.ContainsKey($tid) -and $claims[$tid].name) { [void]$out.Add([string]$claims[$tid].name) }
+    if (IsArr (Get-V $it 'history')) { foreach ($h in $it['history']) { $by = [string](Get-V $h 'by'); if ($by) { $nm = (($by -replace '（.*', '') -replace '\(.*', '').Trim(); if ($nm) { [void]$out.Add($nm) } } } }
+  }
+  @($out)
+}
+# 設定 Story 的 BDD 情境狀態（None/Red/Green）。只限登入使用者：dev-agent 硬擋（先於 rank，縱深防禦），其餘須角色 ≥ verifier。
+# 身分門禁：設 Green 者不得為該情境所屬 Task 的 claim／開發者（標 Green＝宣告驗收通過，屬驗證者職責）；設 Red/None 不受此限。
+# 經 Write-BoardChecked 走同一套共用規則驗證後寫入並 commit，只動 Story 的 bdd[].status 與 history，嚴禁碰 Task.tdd。
+function Invoke-SetScenario($req, $res, [string]$id) {
+  $s = Get-Session $req; if (-not $s) { return Send-Err $res 401 'E_UNAUTHENTICATED' }
+  if ($s.external) { return Send-Err $res 403 'E_READ_ONLY' }
+  if (-not $projects.Contains($id) -or -not $s.allowed.ContainsKey($id)) { return Send-Err $res 403 'E_FORBIDDEN' }
+  $Pj = $projects[$id]; if (-not $Pj) { return Send-Err $res 404 'E_NOT_FOUND' }
+  $role = Get-Role $s $Pj
+  if ($role -eq 'dev-agent') { return Send-Err $res 403 'E_FORBIDDEN' }                        # 硬擋 dev-agent，先於 rank 判斷
+  if ((Get-RoleRank $role) -lt (Get-RoleRank 'verifier')) { return Send-Err $res 403 'E_FORBIDDEN' }
+  # 讀 body：區分「空 body → 400」與「非合法 JSON → 409 E_BAD_JSON」（依 S-GOV-1-1-4 驗收）
+  if ($req.ContentLength64 -gt $MAX_BODY) { return Send-Err $res 400 'E_BAD_REQUEST' }
+  $raw = ''; try { $sr = [IO.StreamReader]::new($req.InputStream, [Text.Encoding]::UTF8); $raw = $sr.ReadToEnd(); $sr.Dispose() } catch {}
+  if ($raw.Length -gt $MAX_BODY) { return Send-Err $res 400 'E_BAD_REQUEST' }
+  if (-not $raw.Trim()) { return Send-Err $res 400 'E_BAD_REQUEST' }
+  $in = $null; try { $in = $raw | ConvertFrom-Json } catch { return Send-Json $res @{ error = 'E_BAD_JSON'; message = '請求本體不是合法 JSON' } 409 }
+  $storyId = [string]$in.storyId; $scenarioId = [string]$in.scenarioId; $status = [string]$in.status; $reason = [string]$in.reason
+  $idre = '^[A-Za-z0-9._-]{1,40}$'
+  if ($storyId -notmatch $idre -or $scenarioId -notmatch $idre) { return Send-Err $res 400 'E_BAD_REQUEST' }
+  if ($status -cnotin @('Green', 'Red', 'None')) { return Send-Err $res 400 'E_BAD_REQUEST' }
+  if (-not $reason -or $reason.Length -gt 500) { return Send-Err $res 400 'E_BAD_REQUEST' }
+  try { $d = Read-BoardObj $Pj } catch { return Send-Json $res @{ error = 'E_BAD_JSON'; message = 'board.json 不是合法 JSON' } 409 }
+  $story = Find-Item $d $storyId
+  if (-not $story -or [string]$story['level'] -cne 'Story') { return Send-Err $res 404 'E_NOT_FOUND' }
+  $bdd = Get-V $story 'bdd'; if (-not (IsArr $bdd)) { return Send-Err $res 404 'E_NOT_FOUND' }
+  $sc = $null; foreach ($x in $bdd) { if ((IsObj $x) -and [string]$x['id'] -ceq $scenarioId) { $sc = $x; break } }
+  if (-not $sc) { return Send-Err $res 404 'E_NOT_FOUND' }                                       # 情境不在此 story → 視為不存在
+  if ($status -ceq 'Green') {                                                                     # 身分門禁只對「設 Green」
+    $me = [string](Get-GitIdentity $s).name; $devs = @(Get-ScenarioDevelopers $d $Pj $scenarioId)
+    if (($devs -contains $me) -or ($devs -contains ([string]$s.user))) { return Send-Err $res 403 'E_FORBIDDEN' }
+  }
+  $old = [string]$sc['status']
+  $sc['status'] = $status
+  $oh = @(); if (IsArr (Get-V $story 'history')) { $oh = @($story['history']) }
+  $story['history'] = @($oh + [ordered]@{ at = (Get-NowIso); from = "bdd:${scenarioId}:$old"; to = "bdd:${scenarioId}:$status"; by = "$($s.user)（$role）"; reason = $reason })
+  $story['updatedAt'] = Get-NowIso
+  $errs = @(Write-BoardChecked $Pj $d $role 'set-scenario')                                       # 同一套共用規則；不過則不寫入
+  if ($errs.Count) { return Send-Json $res @{ error = 'E_RULES'; message = '設定情境後不符規則，未寫入'; errors = $errs } 422 }
+  $committed = $false
+  if ($Pj.git) {
+    $an = ($s.user -replace '[<>\r\n]', ''); $ae = "$($s.user)@ai-board.local"
+    if ($s.ghLogin) { $an = ($s.ghName -replace '[<>\r\n]', ''); $ae = "$($s.ghId)+$($s.ghLogin)@users.noreply.github.com" }
+    $msg = "chore(board): 情境 $scenarioId = $status（$role 驗收）"
+    [void](Invoke-Git $Pj @('add', '--', $Pj.rel))
+    $c = Invoke-Git $Pj @('-c', "user.name=$an", '-c', "user.email=$ae", 'commit', '-q', '-m', $msg, '--', $Pj.rel)
+    $committed = ($c.Code -eq 0)
+    if ($committed -and $Pj.remote) { $r = Invoke-Git $Pj @('push', '--quiet'); if ($r.Code -ne 0) { Set-SyncError $Pj 'E_PUSH_REJECTED' } }   # 不 force push
+  }
+  if ($committed) { $Pj.dirtyAt = $null; Push-All 'history' @{ p = $id } $id }
+  Write-Host "$(Get-Date -f HH:mm:ss) [$id] $($s.user)（$role）設定情境 $scenarioId = $status$(if ($committed) { '（已 commit）' })"
+  Send-Json $res @{ ok = $true; storyId = $storyId; scenarioId = $scenarioId; status = $status; committed = $committed }
+}
 function Test-InInstall([string]$p) { $f = [IO.Path]::GetFullPath($p); $r = [IO.Path]::GetFullPath($InstallRoot).TrimEnd('\', '/'); $f -eq $r -or $f.StartsWith($r + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase) }
 # 套用到專案：寫入 AI 工具規則、hooks、CI guard（只限管理者、本機；先 plan 再寫入；既有檔案先備份 .bak）
 function Invoke-ApplyProject($req, $res) {
@@ -1333,6 +1402,7 @@ try {
         $sx = Get-Session $req; if ($sx -and $sx.external -and $path -ne '/api/logout') { Send-Err $res 403 'E_READ_ONLY'; continue }
         if ($path -match '^/api/p/([^/]{1,64})/git/op$') { Invoke-GitOpReq $req $res $Matches[1]; continue }
         if ($path -match '^/api/p/([^/]{1,64})/clear-examples$') { Invoke-ClearExamples $req $res $Matches[1]; continue }
+        if ($path -match '^/api/p/([^/]{1,64})/scenario$') { Invoke-SetScenario $req $res $Matches[1]; continue }
         switch ($path) {
           '/api/login' { if ($NoAuth) { Send-Json $res @{ user = 'local'; role = 'admin' } } else { Invoke-Login $req $res } }
           '/api/setup' { Invoke-Setup $req $res }
