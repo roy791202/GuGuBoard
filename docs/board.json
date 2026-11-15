@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-15T13:03:33+08:00",
+    "updatedAt":  "2026-11-15T15:04:49+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -2146,7 +2146,7 @@
                                       ],
                       "tdd":  "None",
                       "createdAt":  "2026-11-15T12:00:00+08:00",
-                      "updatedAt":  "2026-11-15T13:03:32+08:00",
+                      "updatedAt":  "2026-11-15T15:04:48+08:00",
                       "remark":  "層級：伺服器層（PowerShell）。可改：serve-board.ps1、tests/governance/*.Tests.ps1。不可改：validate-board.ps1、board.html、.ai-hooks、.githooks、.github/workflows。新增 Invoke-SetScenario（置於 Invoke-ClearExamples 旁，約 785 行，照其骨架：Get-Session 則 401 E_UNAUTHENTICATED；s.external 則 403 E_READ_ONLY；Read-Body 空則 400；Read-BoardObj catch 則 409 E_BAD_JSON；Write-BoardChecked 驗證不過則 422 E_RULES；成功後 commit 並 Push-All『history』）。路由註冊於 POST 區約 1335 行、緊接 clear-examples 那行：if (path -match \u0027^/api/p/([^/]{1,64})/scenario$\u0027) then Invoke-SetScenario req res Matches1 continue（CSRF 由 1320 Test-Csrf、external 由 1333 先擋）。body：storyId、scenarioId、status 屬 Green/Red/None、reason 必填≤500，回 200 含 ok/storyId/scenarioId/status/committed。授權：role=Get-Role s Pj（902 行）；role==\u0027dev-agent\u0027 則 403 硬擋；Get-RoleRank(role) \u003c Get-RoleRank(\u0027verifier\u0027) 則 403 E_FORBIDDEN。身分門禁：標 Green 者不得為該情境所屬 Task（scenarioIds 含此 scenarioId 者）的 claim 或開發者，比對該 Task 的 claim/history by；作法參考既有 E_ROLE_NOT_OWNER（1168 行以 commit author email 比對身分）。副作用：定位 items[story].bdd[scenarioId].status 改值，Story 追加 history（at、from=bdd:id:old、to=bdd:id:new、by=user（role）、reason）並更新 updatedAt，Write-BoardChecked 驗證（不過 422 不寫入），再 commit 與 Push-All。嚴禁改 Task.tdd。TDD 見 docs/governance/tdd-gov.md 的 A1-A12。完成：Pester 全綠、涵蓋情境 S-GOV-1-1-1 至 6。",
                       "history":  [
                                       {
@@ -2214,5 +2214,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  9
+    "revision":  10
 }
