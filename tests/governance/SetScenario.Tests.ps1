@@ -65,6 +65,14 @@ Describe 'T-GOV-1a Invoke-SetScenario' {
     $r = Call (Body 'S-GOV-1-1' 'S-GOV-1-1-1' 'Green' 'ok')
     $r.code | Should Be 403
     (Get-Scenario (Get-BoardObj $script:Pj) 'S-GOV-1-1-1').status | Should Be 'None'
+    # 縱深防禦：即使把 dev-agent 當成最高 rank（若只有 rank 判斷會放行），硬擋仍先生效 → 403
+    $saved = $ROLES
+    try {
+      $script:ROLES = 'viewer', 'verifier', 'high-tier', 'admin', 'dev-agent'
+      (Get-RoleRank 'dev-agent') | Should Be 4
+      ((Get-RoleRank 'dev-agent') -ge (Get-RoleRank 'verifier')) | Should Be $true
+      (Call (Body 'S-GOV-1-1' 'S-GOV-1-1-1' 'Green' 'ok')).code | Should Be 403
+    } finally { $script:ROLES = $saved }
   }
   It 'A6 (S-GOV-1-1-3) viewer（rank<verifier）回 403 E_FORBIDDEN 且不變' {
     $script:sess = New-Session 'vic' 'viewer'
@@ -90,6 +98,25 @@ Describe 'T-GOV-1a Invoke-SetScenario' {
   # ---- 身分門禁（dev≠verify，主驗收點 S-GOV-1-1-6）----
   It 'A9 (S-GOV-1-1-6) 開發者本人標自己 Task 情境 Green 被 403 且不變' {
     $script:sess = New-Session 'alice' 'verifier'
+    $script:claims = @{ 'T-GOV-1a' = @{ name = 'alice' } }
+    $r = Call (Body 'S-GOV-1-1' 'S-GOV-1-1-1' 'Green' 'ok')
+    $r.code | Should Be 403
+    (Get-Scenario (Get-BoardObj $script:Pj) 'S-GOV-1-1-1').status | Should Be 'None'
+  }
+  It 'A9b (S-GOV-1-1-6) 身分門禁比對 history by：以該 Task 歷史開發者身分標 Green 被 403' {
+    # 真實 board 的 T-GOV-1a history by = mcp-11092318（dev-agent）；同一人以 verifier 角色登入（claims 空）
+    # 標自己 Task 的情境 Green 仍被身分門禁擋 → 證明「history by」這個來源獨立生效（非靠 claim）
+    $script:sess = New-Session 'mcp-11092318' 'verifier'
+    $script:claims = @{}
+    $r = Call (Body 'S-GOV-1-1' 'S-GOV-1-1-1' 'Green' 'ok')
+    $r.code | Should Be 403
+    (Get-Scenario (Get-BoardObj $script:Pj) 'S-GOV-1-1-1').status | Should Be 'None'
+  }
+  It 'A9c (S-GOV-1-1-6) 身分門禁比對 git 身分名（ghName≠session user）標 Green 被 403' {
+    # session user=bob（不在開發者清單），但 git 身分名（ghName）=alice=該 Task 的 claim 開發者
+    # → 經 Get-GitIdentity.name 命中被 403，證明「git 身分名」來源獨立於 session user 生效
+    $s9 = New-Session 'bob' 'verifier'; $s9.ghLogin = 'gh'; $s9.ghName = 'alice'; $s9.ghId = '1'
+    $script:sess = $s9
     $script:claims = @{ 'T-GOV-1a' = @{ name = 'alice' } }
     $r = Call (Body 'S-GOV-1-1' 'S-GOV-1-1-1' 'Green' 'ok')
     $r.code | Should Be 403
