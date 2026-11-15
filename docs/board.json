@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-15T23:26:19+08:00",
+    "updatedAt":  "2026-11-15T23:27:26+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -1255,7 +1255,7 @@
                       "level":  "Task",
                       "title":  "權限矩陣領域模型",
                       "parentId":  "S-ACC-3-1",
-                      "status":  "In Progress",
+                      "status":  "In Review",
                       "light":  "Green",
                       "estimate":  {
                                        "hours":  5
@@ -1271,9 +1271,9 @@
                                           "S-ACC-3-1-4",
                                           "S-ACC-3-1-5"
                                       ],
-                      "tdd":  "None",
+                      "tdd":  "Green",
                       "createdAt":  "2026-11-13T10:00:00+08:00",
-                      "updatedAt":  "2026-11-14T19:42:47+08:00",
+                      "updatedAt":  "2026-11-15T23:27:26+08:00",
                       "remark":  "層級:domain。可改:src/domain/account/permission-matrix.ts、role.ts、errors.ts 及其測試。不可變矩陣(變更回新實例);未知權限/重複角色/非管理者改矩陣各丟對應領域例外;move_done 預設僅 verifier+管理者。TDD #1-5。5 情境同一聚合單一檔,一輪可完成不拆。完成:5 條綠、通過 A1。",
                       "history":  [
                                       {
@@ -1289,6 +1289,13 @@
                                           "to":  "In Progress / Green",
                                           "by":  "mcp-11092318（dev-agent）",
                                           "reason":  "開始實作：建立 domain 層權限矩陣（PermissionMatrix 不可變值物件）+ vitest 骨架"
+                                      },
+                                      {
+                                          "at":  "2026-11-15T23:27:26+08:00",
+                                          "from":  "In Progress / Green",
+                                          "to":  "In Review / Green",
+                                          "by":  "mcp-11092318（dev-agent）",
+                                          "reason":  "開發完成，測試全綠，送交 TDD 驗證"
                                       }
                                   ],
                       "startedAt":  "2026-11-14T19:40:18+08:00",
@@ -1297,8 +1304,19 @@
                                         "at":  "2026-11-14T19:42:47+08:00",
                                         "by":  "mcp-11092318（dev-agent）",
                                         "text":  "開發完成並通過獨立驗收（PR #2；npm test 6 綠含 A1、tsc strict 0 錯、變異+對抗探針複驗）。submit_for_tdd 被擋：需先把 S-ACC-3-1-1~5 在 Story S-ACC-3-1 的 bdd 陣列標 Green，但 dev-agent MCP 無設定 BDD 情境狀態的工具（update_ticket_progress 無 bdd 欄位），守則禁止直接編輯 board.json。需由看板網頁 UI 標記這 5 條情境為 Green（或補一個設定 bdd 的 API/MCP 工具），之後才能 submit → In Review / TDD Green，CI「AI Dev Guard」才會轉綠。"
+                                    },
+                                    {
+                                        "at":  "2026-11-15T23:27:26+08:00",
+                                        "by":  "mcp-11092318（dev-agent）",
+                                        "text":  "READY_FOR_TDD：PermissionMatrix 不可變值物件;vitest 6 綠(S-ACC-3-1-1~5 + A1 架構測試),獨立驗收 PASS。情境已由 admin 經新端點標 Green。"
                                     }
-                                ]
+                                ],
+                      "prUrl":  "https://github.com/roy791202/GuGuBoard/pull/2",
+                      "tests":  {
+                                    "status":  "Green",
+                                    "failed":  0,
+                                    "passed":  6
+                                }
                   },
                   {
                       "id":  "T-ACC-32a",
@@ -2295,5 +2313,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  22
+    "revision":  23
 }
