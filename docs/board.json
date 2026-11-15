@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-14T19:42:47+08:00",
+    "updatedAt":  "2026-11-15T12:00:00+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -2050,6 +2050,103 @@
                       "createdAt":  "2026-11-13T10:00:00+08:00",
                       "updatedAt":  "2026-11-13T10:00:00+08:00",
                       "remark":  "層級:app。可改:src/app/account/change-password.ts 及測試。需正確現行密碼才可改,改後僅新密碼可登入;錯誤現行密碼被拒密碼不變;改密成功其他 session 失效;未登入改密 Unauthorized。4 情境同一改密 Use Case 單一檔,一輪可完成不拆。TDD #29/30/31/32。"
+                  },
+                  {
+                      "id":  "E-GOV",
+                      "level":  "Epic",
+                      "title":  "看板治理（BDD 情境驗收：驗證者在看板設定情境狀態，取代手改 board.json）",
+                      "parentId":  null,
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-15T12:00:00+08:00",
+                      "updatedAt":  "2026-11-15T12:00:00+08:00",
+                      "remark":  "讓 verifier/high-tier/admin（不含 dev-agent）在看板設定 Story 的 BDD 情境狀態（None/Red/Green），比照 L7 留 history，取代手改 docs/board.json。緣起：T-ACC-31a（PR #2，已獨立驗收 PASS）卡在 In Review，因 submit_for_tdd 前置要求其 Story 的 bdd 情境全 Green（board.html:326、validate-board.ps1、guard.ps1:37 共同檢查『Task tdd=Green 則其 scenarioIds 涵蓋的情境須 Green』），但前端僅唯讀顯示情境、後端無設定情境狀態的入口、dev-agent 又被 .ai-hooks 與 L 規則禁止直接編 board.json 或 .feature。標情境 Green 本質是『驗證』結論，刻意不給 dev-agent，故補看板功能而非手改檔。範圍外：不改情境文字或 .feature（屬 spec-change，走高階＋CODEOWNERS）、不碰帳號系統 RBAC、不做情境新增或刪除。規格見 docs/governance/。"
+                  },
+                  {
+                      "id":  "F-GOV-1",
+                      "level":  "Feature",
+                      "title":  "BDD 情境驗收（驗證者設定情境狀態）",
+                      "parentId":  "E-GOV",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-15T12:00:00+08:00",
+                      "updatedAt":  "2026-11-15T12:00:00+08:00"
+                  },
+                  {
+                      "id":  "S-GOV-1-1",
+                      "level":  "Story",
+                      "title":  "作為驗證者，我想在看板直接設定情境狀態，讓驗收被記錄而不需手改 board.json",
+                      "parentId":  "F-GOV-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  5
+                                   },
+                      "bdd":  [
+                                  { "id":  "S-GOV-1-1-1", "title":  "Given 驗證者已登入看板 When POST /api/p/<pid>/scenario 設某情境為 Green 並附 reason Then 回 200；該 Story 的 bdd[scenarioId].status 變 Green、Story 追加 history 並更新 updatedAt、SSE board/history 事件即時重繪", "status":  "None" },
+                                  { "id":  "S-GOV-1-1-2", "title":  "Given dev-agent（agent token 或任何已登入路徑） When 嘗試設定情境狀態 Then 回 403 硬擋（縱深防禦），board 的情境狀態完全不變", "status":  "None" },
+                                  { "id":  "S-GOV-1-1-3", "title":  "Given 角色低於 verifier（如 viewer）已登入 When 設定情境狀態 Then 回 403 E_FORBIDDEN，情境狀態不變", "status":  "None" },
+                                  { "id":  "S-GOV-1-1-4", "title":  "When scenarioId 不存在回 404 E_NOT_FOUND、body 非法 JSON 回 409 E_BAD_JSON、缺欄位或 status 非 Green/Red/None 回 400、reason 空或超過 500 字回 400，且一律不寫入", "status":  "None" },
+                                  { "id":  "S-GOV-1-1-5", "title":  "Given 情境目前為 Green When 驗證者改為 Red 再改為 None Then 逐次成功、狀態正確退回，且每次都追加一筆 history 含 at/from/to/by/reason", "status":  "None" },
+                                  { "id":  "S-GOV-1-1-6", "title":  "Given 設 Green 的驗證者本人即為該情境所屬 Task 的 claim 或開發者（對照 Task 的 claim/history by） When 標該情境 Green Then 被擋（dev≠verify 身分門禁），情境狀態不變", "status":  "None" }
+                              ],
+                      "acceptance":  [
+                                         "只有登入且專案角色 rank≥verifier 且≠dev-agent 的人能設定情境狀態；dev-agent 經任何路徑都 403",
+                                         "設定成功會改 bdd[].status、Story 追加 history（at/from/to/by/reason）並更新 updatedAt，且經共用 validate 後才寫回並 commit 與 Push-All",
+                                         "身分門禁：標 Green 者不得為該情境所屬 Task 的 claim 或開發者",
+                                         "錯誤輸入（不存在情境／壞 body／reason 空或超長）對應 404/409/400，且不寫入；端點不碰 Task.tdd"
+                                     ],
+                      "createdAt":  "2026-11-15T12:00:00+08:00",
+                      "updatedAt":  "2026-11-15T12:00:00+08:00"
+                  },
+                  {
+                      "id":  "T-GOV-1a",
+                      "level":  "Task",
+                      "title":  "後端：情境狀態 endpoint ＋ 角色門禁 ＋ 身分門禁 ＋ history/validate/commit",
+                      "parentId":  "S-GOV-1-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  6
+                                   },
+                      "dependsOn":  [
+
+                                    ],
+                      "scenarioIds":  [
+                                          "S-GOV-1-1-1",
+                                          "S-GOV-1-1-2",
+                                          "S-GOV-1-1-3",
+                                          "S-GOV-1-1-4",
+                                          "S-GOV-1-1-5",
+                                          "S-GOV-1-1-6"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-15T12:00:00+08:00",
+                      "updatedAt":  "2026-11-15T12:00:00+08:00",
+                      "remark":  "層級：伺服器層（PowerShell）。可改：serve-board.ps1、tests/governance/*.Tests.ps1。不可改：validate-board.ps1、board.html、.ai-hooks、.githooks、.github/workflows。新增 Invoke-SetScenario（置於 Invoke-ClearExamples 旁，約 785 行，照其骨架：Get-Session 則 401 E_UNAUTHENTICATED；s.external 則 403 E_READ_ONLY；Read-Body 空則 400；Read-BoardObj catch 則 409 E_BAD_JSON；Write-BoardChecked 驗證不過則 422 E_RULES；成功後 commit 並 Push-All『history』）。路由註冊於 POST 區約 1335 行、緊接 clear-examples 那行：if (path -match '^/api/p/([^/]{1,64})/scenario$') then Invoke-SetScenario req res Matches1 continue（CSRF 由 1320 Test-Csrf、external 由 1333 先擋）。body：storyId、scenarioId、status 屬 Green/Red/None、reason 必填≤500，回 200 含 ok/storyId/scenarioId/status/committed。授權：role=Get-Role s Pj（902 行）；role=='dev-agent' 則 403 硬擋；Get-RoleRank(role) < Get-RoleRank('verifier') 則 403 E_FORBIDDEN。身分門禁：標 Green 者不得為該情境所屬 Task（scenarioIds 含此 scenarioId 者）的 claim 或開發者，比對該 Task 的 claim/history by；作法參考既有 E_ROLE_NOT_OWNER（1168 行以 commit author email 比對身分）。副作用：定位 items[story].bdd[scenarioId].status 改值，Story 追加 history（at、from=bdd:id:old、to=bdd:id:new、by=user（role）、reason）並更新 updatedAt，Write-BoardChecked 驗證（不過 422 不寫入），再 commit 與 Push-All。嚴禁改 Task.tdd。TDD 見 docs/governance/tdd-gov.md 的 A1-A12。完成：Pester 全綠、涵蓋情境 S-GOV-1-1-1 至 6。"
+                  },
+                  {
+                      "id":  "T-GOV-1b",
+                      "level":  "Task",
+                      "title":  "前端：情境狀態控制項（role-gated）＋ CSRF 送出",
+                      "parentId":  "S-GOV-1-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  3
+                                   },
+                      "dependsOn":  [
+                                        "T-GOV-1a"
+                                    ],
+                      "scenarioIds":  [
+                                          "S-GOV-1-1-1",
+                                          "S-GOV-1-1-2",
+                                          "S-GOV-1-1-3"
+                                      ],
+                      "tdd":  "None",
+                      "createdAt":  "2026-11-15T12:00:00+08:00",
+                      "updatedAt":  "2026-11-15T12:00:00+08:00",
+                      "remark":  "層級：看板前端。可改：board.html（情境 li 渲染處約 474-477）。不可改：serve-board.ps1 的授權邏輯、validate-board.ps1、.ai-hooks、.githooks、.github/workflows。當該專案 role（取自 /api/me 的 projects[].role）之 Get-RoleRank≥verifier 且≠dev-agent 時，於情境列渲染 Green/Red/None 鈕與 reason 輸入框；送出以 fetch POST /api/p/<pid>/scenario 並帶 X-CSRF（沿用現有 CSRF header 機制）；成功後不自行改 DOM，靠 SSE board/history 事件重繪。viewer 與 dev-agent 不顯示控制項（純 UX，真正門禁在後端 T-GOV-1a）。依賴 T-GOV-1a 的 endpoint。TDD 與驗收見 docs/governance/tdd-gov.md 的 B1-B6。完成：情境 S-GOV-1-1-1/2/3 由 PR 驗收期實測截圖驗證。"
                   }
               ],
     "sprints":  [
@@ -2075,5 +2172,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  5
+    "revision":  6
 }
