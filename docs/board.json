@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-15T18:11:22+08:00",
+    "updatedAt":  "2026-11-15T23:24:39+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -2086,7 +2086,7 @@
                                   {
                                       "id":  "S-GOV-1-1-1",
                                       "title":  "Given 驗證者已登入看板 When POST /api/p/\u003cpid\u003e/scenario 設某情境為 Green 並附 reason Then 回 200；該 Story 的 bdd[scenarioId].status 變 Green、Story 追加 history 並更新 updatedAt、SSE board/history 事件即時重繪",
-                                      "status":  "None"
+                                      "status":  "Green"
                                   },
                                   {
                                       "id":  "S-GOV-1-1-2",
@@ -2121,7 +2121,16 @@
                                          "錯誤輸入（不存在情境／壞 body／reason 空或超長）對應 404/409/400，且不寫入；端點不碰 Task.tdd"
                                      ],
                       "createdAt":  "2026-11-15T12:00:00+08:00",
-                      "updatedAt":  "2026-11-15T12:00:00+08:00"
+                      "updatedAt":  "2026-11-15T23:24:39+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-15T23:24:39+08:00",
+                                          "from":  "bdd:S-GOV-1-1-1:None",
+                                          "to":  "bdd:S-GOV-1-1-1:Green",
+                                          "by":  "admin（admin）",
+                                          "reason":  "Independent verification PASS (human bootstrap)"
+                                      }
+                                  ]
                   },
                   {
                       "id":  "T-GOV-1a",
@@ -2214,5 +2223,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  11
+    "revision":  12
 }
