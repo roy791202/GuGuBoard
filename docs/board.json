@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-15T23:24:50+08:00",
+    "updatedAt":  "2026-11-15T23:24:59+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -2096,7 +2096,7 @@
                                   {
                                       "id":  "S-GOV-1-1-3",
                                       "title":  "Given 角色低於 verifier（如 viewer）已登入 When 設定情境狀態 Then 回 403 E_FORBIDDEN，情境狀態不變",
-                                      "status":  "None"
+                                      "status":  "Green"
                                   },
                                   {
                                       "id":  "S-GOV-1-1-4",
@@ -2121,7 +2121,7 @@
                                          "錯誤輸入（不存在情境／壞 body／reason 空或超長）對應 404/409/400，且不寫入；端點不碰 Task.tdd"
                                      ],
                       "createdAt":  "2026-11-15T12:00:00+08:00",
-                      "updatedAt":  "2026-11-15T23:24:49+08:00",
+                      "updatedAt":  "2026-11-15T23:24:59+08:00",
                       "history":  [
                                       {
                                           "at":  "2026-11-15T23:24:39+08:00",
@@ -2134,6 +2134,13 @@
                                           "at":  "2026-11-15T23:24:49+08:00",
                                           "from":  "bdd:S-GOV-1-1-2:None",
                                           "to":  "bdd:S-GOV-1-1-2:Green",
+                                          "by":  "admin（admin）",
+                                          "reason":  "Independent verification PASS (human bootstrap)"
+                                      },
+                                      {
+                                          "at":  "2026-11-15T23:24:59+08:00",
+                                          "from":  "bdd:S-GOV-1-1-3:None",
+                                          "to":  "bdd:S-GOV-1-1-3:Green",
                                           "by":  "admin（admin）",
                                           "reason":  "Independent verification PASS (human bootstrap)"
                                       }
@@ -2230,5 +2237,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  13
+    "revision":  14
 }
