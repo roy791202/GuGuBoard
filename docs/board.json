@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-15T23:25:50+08:00",
+    "updatedAt":  "2026-11-15T23:25:59+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -1011,7 +1011,7 @@
                                   {
                                       "id":  "S-ACC-3-1-3",
                                       "title":  "When 指派不存在的權限 Then 回 UnknownPermission",
-                                      "status":  "None"
+                                      "status":  "Green"
                                   },
                                   {
                                       "id":  "S-ACC-3-1-4",
@@ -1025,7 +1025,7 @@
                                   }
                               ],
                       "createdAt":  "2026-11-13T10:00:00+08:00",
-                      "updatedAt":  "2026-11-15T23:25:49+08:00",
+                      "updatedAt":  "2026-11-15T23:25:59+08:00",
                       "history":  [
                                       {
                                           "at":  "2026-11-15T23:25:39+08:00",
@@ -1038,6 +1038,13 @@
                                           "at":  "2026-11-15T23:25:49+08:00",
                                           "from":  "bdd:S-ACC-3-1-2:None",
                                           "to":  "bdd:S-ACC-3-1-2:Green",
+                                          "by":  "admin（admin）",
+                                          "reason":  "Independent verification PASS (human bootstrap)"
+                                      },
+                                      {
+                                          "at":  "2026-11-15T23:25:59+08:00",
+                                          "from":  "bdd:S-ACC-3-1-3:None",
+                                          "to":  "bdd:S-ACC-3-1-3:Green",
                                           "by":  "admin（admin）",
                                           "reason":  "Independent verification PASS (human bootstrap)"
                                       }
@@ -2274,5 +2281,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  19
+    "revision":  20
 }
