@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-15T23:25:29+08:00",
+    "updatedAt":  "2026-11-15T23:25:40+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -1001,7 +1001,7 @@
                                   {
                                       "id":  "S-ACC-3-1-1",
                                       "title":  "When 查詢權限矩陣 Then 回每個受保護動作的允許角色;move_done 僅 verifier 與管理者",
-                                      "status":  "None"
+                                      "status":  "Green"
                                   },
                                   {
                                       "id":  "S-ACC-3-1-2",
@@ -1025,7 +1025,16 @@
                                   }
                               ],
                       "createdAt":  "2026-11-13T10:00:00+08:00",
-                      "updatedAt":  "2026-11-13T10:00:00+08:00"
+                      "updatedAt":  "2026-11-15T23:25:39+08:00",
+                      "history":  [
+                                      {
+                                          "at":  "2026-11-15T23:25:39+08:00",
+                                          "from":  "bdd:S-ACC-3-1-1:None",
+                                          "to":  "bdd:S-ACC-3-1-1:Green",
+                                          "by":  "admin（admin）",
+                                          "reason":  "Independent verification PASS (human bootstrap)"
+                                      }
+                                  ]
                   },
                   {
                       "id":  "S-ACC-3-2",
@@ -2258,5 +2267,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  17
+    "revision":  18
 }
