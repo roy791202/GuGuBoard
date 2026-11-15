@@ -1,0 +1,16 @@
+{
+  "name": "guguboard-account",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "GuGuBoard 帳號系統（hexagonal + onion；本工單 T-ACC-31a 只含 domain 層）",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}
