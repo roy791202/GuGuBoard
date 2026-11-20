@@ -88,7 +88,7 @@ if ($BoardPath) {
   if ($fb.StartsWith($target + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { $relBoard = $fb.Substring($target.Length + 1) -replace '\\', '/' }
 }
 $items = @()
-foreach ($t in $Tools) {
+foreach ($t in (@($Tools) + @('Common'))) {   # Common = .ai-dev/（技能全文與細則），每個工具的索引都指向它
   $root = Join-Path $Templates $t.ToLower()
   if (-not (Test-Path -LiteralPath $root)) { continue }
   foreach ($f in Get-ChildItem -LiteralPath $root -Recurse -File -Force) {
