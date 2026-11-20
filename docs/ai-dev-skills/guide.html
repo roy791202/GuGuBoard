@@ -78,13 +78,14 @@ footer{text-align:center;color:var(--mut);padding:24px;font-size:.85rem}
 <section id="tools"><h2>支援的 AI 工具</h2>
 <p><b>GuGuBoard 是獨立工具</b>：預設安裝到 <code>D:\AI_PM</code>，裡面只有看板、本指南、母版技能和各工具的專案範本（<code>project-templates\</code>），<b>不需要也不要裝在專案裡</b>。要讓某個專案 repo（例如 <code>D:\AIAD</code>）使用下表的檔案，用「套用到專案」把它們寫進 repo（見下一段）。</p>
 <table><tr><th>AI 工具</th><th>套用後寫入專案 repo 的檔案（相對於 repo 根目錄）</th><th>工具如何讀取</th></tr>
-<tr><td>（共用）母版技能</td><td><code>D:\AI_PM\skills\&lt;id&gt;\SKILL.md</code>（留在 GuGuBoard，不寫進專案）</td><td>原始 SKILL.md，供手動參考或給其他工具</td></tr>
+<tr><td>（共用）母版技能</td><td><code>D:\AI_PM\skills\&lt;id&gt;\SKILL.md</code>、<code>skillseferences\*.md</code>（留在 GuGuBoard）</td><td>唯一來源；改完執行 <code>scripts\sync-skills.ps1</code> 產生下面所有檔案</td></tr>
+<tr><td>（共用，一律寫入）技能全文與細則</td><td><code>.ai-dev\skills\&lt;id&gt;\SKILL.md</code><br><code>.ai-deveferences\*.md</code></td><td>不自動載入；各工具的索引指向這裡，代理需要時才讀</td></tr>
 <tr><td>Cursor</td><td><code>.cursor\skills\&lt;id&gt;\SKILL.md</code><br><code>.cursor\rules\&lt;id&gt;.mdc</code></td><td>Agent Skills 自動依描述載入；Rules 為 <code>alwaysApply: false</code>，依描述觸發或用 <code>@ai-dev-...</code> 引用</td></tr>
-<tr><td>Codex / OpenAI 及通用代理</td><td><code>AGENTS.md</code></td><td>專案根目錄的 AGENTS.md 會自動讀入（含全部技能）</td></tr>
+<tr><td>Codex / OpenAI 及通用代理</td><td><code>AGENTS.md</code></td><td>專案根目錄的 AGENTS.md 會自動讀入（只有索引，技能全文在 <code>.ai-dev\</code>）</td></tr>
 <tr><td>Claude Code</td><td><code>CLAUDE.md</code><br><code>.claude\skills\&lt;id&gt;\SKILL.md</code></td><td>CLAUDE.md 為索引；Skills 依描述自動載入</td></tr>
 <tr><td>GitHub Copilot</td><td><code>.github\copilot-instructions.md</code></td><td>Copilot Chat / Agent 自動套用</td></tr>
 <tr><td>Windsurf</td><td><code>.windsurf\rules\&lt;id&gt;.md</code></td><td><code>trigger: model_decision</code>，依描述觸發</td></tr>
-<tr><td>Gemini CLI</td><td><code>GEMINI.md</code></td><td>專案根目錄自動讀入（含全部技能）</td></tr>
+<tr><td>Gemini CLI</td><td><code>GEMINI.md</code></td><td>專案根目錄自動讀入（只有索引，技能全文在 <code>.ai-dev\</code>）</td></tr>
 <tr><td>Cline / Roo Code</td><td><code>.clinerules\&lt;id&gt;.md</code></td><td>資料夾內所有規則自動套用</td></tr>
 <tr><td>AI Hooks（Cursor + Claude Code）</td><td><code>.ai-hooks\ai-hook.ps1</code>、<code>.ai-hooks\config.json</code><br><code>.cursor\hooks.json</code>、<code>.claude\settings.json</code></td><td>AI 動作前後自動執行檢查，見 <a href="#hooks">AI Hooks</a></td></tr>
 </table>
@@ -103,8 +104,9 @@ D:\AI_PM\serve-board.ps1 -ApplyToProject D:\AIAD [-Tools …] [-ApplyPlan] [-App
 <pre>D:\AI_PM\                       ← GuGuBoard 安裝資料夾（獨立工具，不是專案）
 ├─ start-board.cmd、serve-board.ps1、board.html、board.example.json、board.schema.json、validate-board.ps1 ← 看板執行層
 ├─ apply-project.ps1             ← 套用到專案
-├─ skills\&lt;id&gt;\SKILL.md          ← 母版（原始 SKILL.md）
+├─ skills\&lt;id&gt;\SKILL.md、skillseferences\ ← 母版（唯一來源，scripts\sync-skills.ps1 產生其他檔）
 ├─ project-templates\            ← 套用到專案時的來源
+│  ├─ common\                   ← .ai-dev\（技能全文與細則，每次套用都寫入）
 │  ├─ cursor\ codex\ claude\ copilot\ windsurf\ gemini\ cline\   ← AI 工具規則
 │  └─ hooks\ githooks\ ciguard\  ← AI Hooks、Git Hooks、CI Guard
 ├─ docs\ai-dev-skills\guide.html ← 本指南（另有 BOARD-TEMPLATE.md、BRANCH-PROTECTION.md、templates\）
