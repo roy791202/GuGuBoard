@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-15T23:27:41+08:00",
+    "updatedAt":  "2026-11-21T00:54:38+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -2307,6 +2307,58 @@
                       "createdAt":  "2026-11-15T12:00:00+08:00",
                       "updatedAt":  "2026-11-15T12:00:00+08:00",
                       "remark":  "層級：看板前端。可改：board.html（情境 li 渲染處約 474-477）。不可改：serve-board.ps1 的授權邏輯、validate-board.ps1、.ai-hooks、.githooks、.github/workflows。當該專案 role（取自 /api/me 的 projects[].role）之 Get-RoleRank≥verifier 且≠dev-agent 時，於情境列渲染 Green/Red/None 鈕與 reason 輸入框；送出以 fetch POST /api/p/\u003cpid\u003e/scenario 並帶 X-CSRF（沿用現有 CSRF header 機制）；成功後不自行改 DOM，靠 SSE board/history 事件重繪。viewer 與 dev-agent 不顯示控制項（純 UX，真正門禁在後端 T-GOV-1a）。依賴 T-GOV-1a 的 endpoint。TDD 與驗收見 docs/governance/tdd-gov.md 的 B1-B6。完成：情境 S-GOV-1-1-1/2/3 由 PR 驗收期實測截圖驗證。"
+                  },
+                  {
+                      "id":  "F-GOV-2",
+                      "level":  "Feature",
+                      "title":  "AI 開發流程規則治理（skills 索引化與矛盾裁決）",
+                      "parentId":  "E-GOV",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "createdAt":  "2026-11-21T00:54:38+08:00",
+                      "updatedAt":  "2026-11-21T00:54:38+08:00"
+                  },
+                  {
+                      "id":  "S-GOV-2-1",
+                      "level":  "Story",
+                      "title":  "作為使用 AI 代理的開發者，我想讓代理只讀一份精簡索引、需要時才查細則，且規則沒有前後矛盾，以便代理不被整份規則塞滿也不會照到互相衝突的指示",
+                      "parentId":  "F-GOV-2",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "storyPoints":  3
+                                   },
+                      "acceptance":  [
+                                         "每次自動載入的規則檔（AGENTS.md／CLAUDE.md／GEMINI.md／copilot-instructions.md）只放索引，細則放在 .ai-dev/ 由代理按需讀取",
+                                         "skills/ 為唯一來源，scripts/sync-skills.ps1 產生各 AI 工具檔案，-Check 可檢出漂移",
+                                         "舊規則間的矛盾有書面裁決（skills/references/decisions.md D1–D18），其他文件與之一致",
+                                         "apply-project.ps1 套用與移除後，目標 repo 檔案完整寫入且可完整移除"
+                                     ],
+                      "createdAt":  "2026-11-21T00:54:38+08:00",
+                      "updatedAt":  "2026-11-21T00:54:38+08:00"
+                  },
+                  {
+                      "id":  "T-GOV-2a",
+                      "level":  "Task",
+                      "title":  "skills 改為主索引＋按需細則、裁決 18 條矛盾、新增 sync-skills.ps1",
+                      "parentId":  "S-GOV-2-1",
+                      "status":  "Backlog",
+                      "light":  "Gray",
+                      "estimate":  {
+                                       "hours":  4
+                                   },
+                      "tdd":  "None",
+                      "prUrl":  "https://github.com/roy791202/GuGuBoard/pull/5",
+                      "remark":  "事後補卡：工作已於 2026-11-21 由 PR #5（squash af0c871）合併進 master，並同步到安裝版 D:\\AI_PM（備份在 backup-before-skills-sync-20261121）。屬規劃類流程變更，無對應 BDD 情境，AI Dev Guard 因無 Task 卡而紅（D13），由使用者決定合併。已驗證：sync-skills.ps1 -Check UP TO DATE；細則連結全部存在；apply-project.ps1 對暫存 repo 套用 26／48 檔並可完整移除；npm test 6/6。未測：Cursor／Windsurf／Cline 實際載入、看板『套用到專案』UI。開發代理不可移到 Done，請由人判斷是否標完成。",
+                      "createdAt":  "2026-11-21T00:54:38+08:00",
+                      "updatedAt":  "2026-11-21T00:54:38+08:00",
+                      "notes":  [
+                                    {
+                                        "at":  "2026-11-21T00:54:38+08:00",
+                                        "by":  "claude-code (dev-agent)",
+                                        "text":  "Backfilled card for work merged in PR #5; user asked to add it."
+                                    }
+                                ]
                   }
               ],
     "sprints":  [
@@ -2332,5 +2384,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  24
+    "revision":  25
 }
