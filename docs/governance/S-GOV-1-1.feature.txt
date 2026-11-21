@@ -1,0 +1,73 @@
+# 審閱用 BDD 情境檔（dev-agent 不可寫入 .feature，故以 .txt 交付）
+# 落地位置：docs/bdd/S-GOV-1-1.feature（由高階模型／使用者放入；PR 需 spec-change 標籤＋核准者審查）
+# 看板上的 operative 情境已寫入 docs/board.json 的 S-GOV-1-1.bdd[]（guard.ps1 / validate-board.ps1 讀那一份）。
+# 此檔是人類可讀的 Gherkin 規格，與 board.json 的 6 條 bdd 情境一一對應（S-GOV-1-1-1 ~ S-GOV-1-1-6）。
+
+Feature: 看板治理 — 驗證者設定 BDD 情境狀態
+  作為驗證者（verifier／high-tier／admin，不含 dev-agent）
+  我想在看板直接設定 Story 的 BDD 情境狀態（None／Red／Green）
+  以便驗收被記錄在 board.json 而不需手改檔案，且開發者不能自標自己的 Green
+
+  Background:
+    Given 看板伺服器（serve-board.ps1）執行中，專案為 GuGuBoard
+    And 存在 Story S-GOV-1-1，其下有情境 S-GOV-1-1-1（初始 status 為 None）
+    And 共用驗證規則來自 validate-board.ps1（L1–L7，以及 bdd status、Story history、updatedAt 規則）
+
+  # S-GOV-1-1-1 — verifier 設 Green 成功、記錄並即時更新
+  Scenario: 驗證者把情境標成 Green 會被記錄並即時更新
+    Given 我以 verifier 身分登入（cookie aib_sid 對映的 session，專案角色為 verifier）
+    And 我不是情境所屬 Task 的 claim 者或開發者
+    When 我 POST /api/p/<pid>/scenario，body 為 {storyId: "S-GOV-1-1", scenarioId: "S-GOV-1-1-1", status: "Green", reason: "獨立驗收通過"}
+    Then 回應為 200，且 body 含 {ok: true, storyId, scenarioId, status: "Green", committed}
+    And board.json 中 S-GOV-1-1 的 bdd[S-GOV-1-1-1].status 變為 Green
+    And S-GOV-1-1 追加一筆 history {at, from: "bdd:S-GOV-1-1-1:None", to: "bdd:S-GOV-1-1-1:Green", by, reason} 並更新 updatedAt
+    And 伺服器推送 SSE board／history 事件，看板即時重繪
+    And 該 Task 的 tdd 欄位不被更動
+
+  # S-GOV-1-1-2 — dev-agent 任何路徑設情境都 403 硬擋
+  Scenario: 開發代理設定情境狀態被硬擋（縱深防禦）
+    Given 我的專案角色為 dev-agent（不論經由 cookie session 或任何已登入路徑）
+    When 我 POST /api/p/<pid>/scenario 嘗試把任一情境設為 Green／Red／None
+    Then 回應為 403，且此硬擋先於角色 rank 判斷
+    And board.json 的情境狀態與 history 完全不變
+
+  # S-GOV-1-1-3 — 低於 verifier（viewer）→ 403
+  Scenario: 角色低於驗證者被拒
+    Given 我以 viewer 身分登入（專案角色 rank 低於 verifier）
+    When 我 POST /api/p/<pid>/scenario 設定情境狀態
+    Then 回應為 403 E_FORBIDDEN
+    And 情境狀態不變
+
+  # S-GOV-1-1-4 — 錯誤輸入對應錯誤碼且不寫入
+  Scenario Outline: 錯誤輸入回對應錯誤碼且不寫入
+    Given 我以 verifier 身分登入
+    When 我 POST /api/p/<pid>/scenario，輸入為 <輸入情形>
+    Then 回應為 <狀態碼> <錯誤碼>
+    And board.json 不被寫入
+
+    Examples:
+      | 輸入情形                                     | 狀態碼 | 錯誤碼        |
+      | scenarioId 不存在                            | 404    | E_NOT_FOUND   |
+      | 請求本體非合法 JSON                          | 409    | E_BAD_JSON    |
+      | 缺 storyId 或 scenarioId，或 status 非三值之一 | 400    | E_BAD_REQUEST |
+      | reason 為空字串                              | 400    | E_BAD_REQUEST |
+      | reason 超過 500 字                           | 400    | E_BAD_REQUEST |
+
+  # S-GOV-1-1-5 — 退回流轉 Green → Red → None，history 完整
+  Scenario: 情境可退回流轉且每次都留 history
+    Given 情境 S-GOV-1-1-1 目前為 Green
+    And 我以 verifier 身分登入且非該情境所屬 Task 的開發者
+    When 我把它改為 Red（附 reason）
+    And 再把它改為 None（附 reason）
+    Then 每次都回 200 且狀態正確退回（Green → Red → None）
+    And S-GOV-1-1 的 history 依序各追加一筆含 at／from／to／by／reason
+
+  # S-GOV-1-1-6 — 身分門禁：開發者本人不得標自己 Task 的情境 Green（驗證者指定的主驗收點）
+  Scenario: 開發者本人標自己 Task 所屬情境 Green 被擋
+    Given 情境 S-GOV-1-1-1 屬於 Task T-GOV-1a（其 scenarioIds 含該情境）
+    And T-GOV-1a 由使用者 alice claim／開發（Task 的 claim 或 history by 為 alice）
+    And alice 同時具有 verifier 以上角色並已登入
+    When alice POST /api/p/<pid>/scenario 把 S-GOV-1-1-1 設為 Green
+    Then 回應為 403（dev≠verify 身分門禁：設 Green 者 ≠ 該情境所屬 Task 的 claim 者／開發者）
+    And 情境狀態不變
+    And 改由非開發者的 verifier bob 執行同一請求則成功（200，情境變 Green）

@@ -1,0 +1,30 @@
+---
+name: ai-dev-implementation
+description: 實作期（中低階 AI 模型，開發代理）：依已核准的工單、Story 與 BDD 實作一張工單時使用；Red→Green→Refactor，最後送 READY_FOR_TDD。
+---
+# 實作期（開發代理）
+
+你是開發角色：可以自己跑測試，但結果不算驗收，也不能驗收自己的工單。先讀 `ai-dev-pipeline` 的硬性規則。細則在 `.ai-dev/references/`，用到才讀。
+
+## 步驟
+1. **領單**：一個代理只領一張。用 GuGuBoard MCP `claim_ticket` → `get_ticket`，每 5 分鐘 `renew_lease`（`board-agent-api.md`）。卡片移 In Progress、綠燈、設 `startedAt`、負責角色填你的身分。
+2. **只讀需要的**：這張工單、它的 Story/Epic 與 `bdd[]`、允許的路徑、失敗經驗文件。不掃整個專案。
+3. **開分支**：`feature/<task-id>-<slug>`（`release-deploy.md`）。
+4. **Red**：依測試規格寫測試程式碼，跑出因「功能還沒做」而失敗的輸出，存 evidence，先 commit（`bdd-tdd.md`）。
+5. **Green**：寫讓測試通過的最少**正確**程式，不寫死回傳值（D6）。程式寫在工單指定的層，依賴只由外往內，平台相關一律經 Port（`architecture.md`）。
+6. **Refactor**：測試保持 Green 下整理（`clean-code.md`）；涉及熱點、外部輸入、資源、安全時讀 `performance-memory.md`、`security.md`、`testing-data-observability.md`。
+7. **自我審查**：跑 `clean-code.md` 的清單與 linter；全部測試再跑一次。
+8. **送審**：開 PR（D3），把看板變更 commit 進功能分支（guard 讀分支上的看板），Task `tdd=Green`、`prUrl`、`ci` 填好，用 `submit_for_tdd` 標 `READY_FOR_TDD`（In Review）。**不可**設 Done／藍燈。
+9. **回報**：你的身分、BDD ID、變更摘要、阻擋事項、範圍外的問題、證據路徑。
+
+## 不可以
+- 修改或刪除情境、削弱斷言、改預期值、加 skip／ignore（覺得情境錯 → `SPEC_CONFLICT`）。
+- 改允許範圍以外的檔案；要新增介面、跨層或改架構 → `REPLAN_REQUIRED`。
+- 一輪做不完還硬做 → 立刻停，回報 `RESLICE_REQUIRED`（卡在哪、建議怎麼切），還原或留在 `WIP-RESLICE` 未合併分支，卡片退回 Backlog 灰燈（D11）。
+- 停用、修改、繞過 hook；被擋就照訊息修正（`enforcement-and-pitfalls.md`）。hook 通過不等於驗收。
+
+## 燈號
+順利綠；超過估算、Red 過久、被退回一次、等你回答驗證者時黃；卡住、CI 失敗、退回兩次以上紅。黃紅都寫 `lightReason`，每次變更都追加 history（`board-and-lights.md`）。
+
+## 驗證者問「為什麼這樣寫」
+用 `answer_verifier_question` 或 PR 留言回答具體理由；成立就補一行白話註解或測試，答不出就改寫得更直白；不因被問而擴大範圍（`clean-code.md`）。
