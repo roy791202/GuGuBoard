@@ -1,7 +1,7 @@
 {
     "version":  1,
     "project":  "GuGuBoard",
-    "updatedAt":  "2026-11-21T00:54:38+08:00",
+    "updatedAt":  "2026-11-21T11:28:00+08:00",
     "items":  [
                   {
                       "id":  "E-DL",
@@ -2359,6 +2359,130 @@
                                         "text":  "Backfilled card for work merged in PR #5; user asked to add it."
                                     }
                                 ]
+                  },
+                  {
+                      "id": "E-INST",
+                      "level": "Epic",
+                      "title": "發佈與安裝（GuGuBoard 看板＋ai-dev 技能的 Windows 安裝檔）",
+                      "parentId": null,
+                      "status": "In Progress",
+                      "light": "Green",
+                      "createdAt": "2026-11-21T11:28:00+08:00",
+                      "updatedAt": "2026-11-21T11:28:00+08:00",
+                      "remark": "事後補卡（回補治理鏈）：installer 打包工作已在分支 feature/installer-packaging（commit 4dd20d4，PR #6）完成。範圍：installer/manifest.psd1、installer/guguboard.nsi、installer/build-installer.ps1、產出 depo/GuGuBoard-Setup-0.0.0.exe。"
+                  },
+                  {
+                      "id": "F-INST-1",
+                      "level": "Feature",
+                      "title": "NSIS 安裝檔可重現 build（看板＋5 支 ai-dev 技能）",
+                      "parentId": "E-INST",
+                      "status": "In Progress",
+                      "light": "Green",
+                      "createdAt": "2026-11-21T11:28:00+08:00",
+                      "updatedAt": "2026-11-21T11:28:00+08:00"
+                  },
+                  {
+                      "id": "S-INST-1-1",
+                      "level": "Story",
+                      "title": "作為要在新電腦裝 GuGuBoard 的使用者，我想用一個安裝檔就把看板與 5 支 ai-dev 技能裝好、升級時不弄丟看板資料，以便不必手動複製 repo 檔案",
+                      "parentId": "F-INST-1",
+                      "status": "In Progress",
+                      "light": "Yellow",
+                      "lightReason": "實作與 build／試裝驗證已做；等 admin 經情境端點把 S-INST-1-1-1~5 標 Green（dev-agent 不可標）",
+                      "estimate": {
+                          "storyPoints": 3
+                      },
+                      "bdd": [
+                          {
+                              "id": "S-INST-1-1-1",
+                              "title": "Given repo 完整且已安裝 NSIS When 執行 installer/build-installer.ps1 Then 產出 depo/GuGuBoard-Setup-<版本>.exe 存在且大小非零",
+                              "status": "None",
+                              "tests": [
+                                  "build-installer.ps1 建置後驗證（Test-Path + Length>0）"
+                              ]
+                          },
+                          {
+                              "id": "S-INST-1-1-2",
+                              "title": "Given 尚未安裝 When 以 /S 靜默安裝 Then 看板裝到 %LOCALAPPDATA%\\GuGuBoard，且 5 支 ai-dev 技能同時裝在安裝目錄 .claude\\skills 與 ~/.claude/skills",
+                              "status": "None",
+                              "tests": [
+                                  "靜默試裝：388 檔、技能兩處皆存在"
+                              ]
+                          },
+                          {
+                              "id": "S-INST-1-1-3",
+                              "title": "Given 已安裝且 .ai-board 內有帳號／專案／卡片資料 When 以新版安裝檔升級 Then .ai-board 原樣保留",
+                              "status": "None",
+                              "tests": [
+                                  "升級試裝：.ai-board 保留"
+                              ]
+                          },
+                          {
+                              "id": "S-INST-1-1-4",
+                              "title": "Given repo 內有 .bak／.pyc／__pycache__ When 打包 Then 安裝檔不含這些檔",
+                              "status": "None",
+                              "tests": [
+                                  "7z l depo/GuGuBoard-Setup-0.0.0.exe：395 項、.bak/.pyc/__pycache__ 0 筆"
+                              ]
+                          },
+                          {
+                              "id": "S-INST-1-1-5",
+                              "title": "Given 已安裝舊版 When 再次執行安裝檔 Then RemovePrev 先清除舊版程式檔（保留 .ai-board）再安裝新版",
+                              "status": "None",
+                              "tests": [
+                                  "升級試裝：RemovePrev 路徑執行、.ai-board 保留（舊檔被清除尚未單獨斷言）"
+                              ]
+                          }
+                      ],
+                      "createdAt": "2026-11-21T11:28:00+08:00",
+                      "updatedAt": "2026-11-21T11:28:00+08:00"
+                  },
+                  {
+                      "id": "T-INST-1a",
+                      "level": "Task",
+                      "title": "NSIS 安裝檔：manifest 清單、MUI2 精靈（RemovePrev 升級保留 .ai-board、卸載器）、build 腳本與產出",
+                      "parentId": "S-INST-1-1",
+                      "status": "In Review",
+                      "light": "Yellow",
+                      "lightReason": "實作與 build／試裝驗證已做；等 admin 經情境端點把 S-INST-1-1-1~5 標 Green（dev-agent 不可標）",
+                      "estimate": {
+                          "hours": 4
+                      },
+                      "dependsOn": [],
+                      "scenarioIds": [
+                          "S-INST-1-1-1",
+                          "S-INST-1-1-2",
+                          "S-INST-1-1-3",
+                          "S-INST-1-1-4",
+                          "S-INST-1-1-5"
+                      ],
+                      "tdd": "None",
+                      "tests": {
+                          "status": "Pending",
+                          "passed": 4,
+                          "failed": 0
+                      },
+                      "prUrl": "https://github.com/roy791202/GuGuBoard/pull/6",
+                      "createdAt": "2026-11-21T11:28:00+08:00",
+                      "updatedAt": "2026-11-21T11:28:00+08:00",
+                      "startedAt": "2026-11-21T11:28:00+08:00",
+                      "remark": "事後補卡：實作已存在，不重寫。可改：installer/manifest.psd1（打包清單單一事實來源）、installer/guguboard.nsi、installer/build-installer.ps1、depo/GuGuBoard-Setup-0.0.0.exe。TDD 清單（對應情境）：#1 exe 存在且非零（S-INST-1-1-1）；#2 技能裝兩處（-2）；#3 升級保留 .ai-board（-3）；#4 排除 .bak/.pyc/__pycache__（-4）；#5 RemovePrev 清舊（-5）。已驗證：#1–#4（build 驗證、靜默試裝 388 檔、升級保留、7z 列檔 0 筆垃圾檔）；#5 只觀察到升級路徑保留 .ai-board，舊檔被清除未單獨斷言。注意：現有 exe 是在合併 PR #5（skills 索引化）前建的，內含舊版技能，合併後應重 build。未測：非 Windows、互動精靈 UI、卸載器。",
+                      "history": [
+                          {
+                              "at": "2026-11-21T11:28:00+08:00",
+                              "from": "(new)",
+                              "to": "In Review / Yellow",
+                              "by": "claude-code（dev-agent）",
+                              "reason": "回補治理鏈：installer 工作已 commit（4dd20d4）並送 PR #6；等驗證者／admin 標情境 Green 後才能 tdd Green。"
+                          }
+                      ],
+                      "notes": [
+                          {
+                              "at": "2026-11-21T11:28:00+08:00",
+                              "by": "claude-code（dev-agent）",
+                              "text": "補卡給 PR #6 的 AI Dev Guard 對應用（PR 標題含 T-INST-1a）。剩人工：admin 經 POST /api/p/22/scenario 標 S-INST-1-1-1~5 Green → tdd=Green、燈號轉綠（加 history）→ guard 綠 → 人合併 → 人移 Done/藍燈。"
+                          }
+                      ]
                   }
               ],
     "sprints":  [
@@ -2384,5 +2508,5 @@
                         "goal":  "對外帳號:註冊/登入工作階段/登出改密,防列舉、防暴力、逾時與稽核"
                     }
                 ],
-    "revision":  25
+    "revision":  26
 }
